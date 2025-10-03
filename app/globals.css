@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Sentient';
+  src: url('/Sentient-Extralight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sentient';
+  src: url('/Sentient-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #FFC700;
+  --primary-foreground: #ffffff;
+  --border: #424242;
+}
+
+/* Custom container utility */
+.container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding-inline: 3rem;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#webgl {
+  top: 0;
+  left: 0;
+  position: fixed;
+  height: 100svh;
+  width: 100%;
+}
+
+#webgl canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom slash pulse animation */
+@keyframes slashPulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
