@@ -143,6 +143,14 @@ export default function Home() {
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
+      {/* SOZU CAPITAL Logo - Top Left */}
+      <div className="absolute top-6 left-6 z-50">
+        <img 
+          src="/android-chrome-192x192.png" 
+          alt="SOZU CAPITAL" 
+          className="w-12 h-12 md:w-16 md:h-16"
+        />
+      </div>
       {/* Preloader */}
       {isLoading && (
         <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center z-20">
