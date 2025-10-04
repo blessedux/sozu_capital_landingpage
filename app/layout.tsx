@@ -10,7 +10,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SOZU CAPITAL",
   description: "Site Under Construction",
-  generator: 'v0.app',
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },

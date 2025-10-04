@@ -145,11 +145,18 @@ export default function Home() {
     <div className="relative w-full h-screen overflow-hidden">
       {/* SOZU CAPITAL Logo - Top Left */}
       <div className="absolute top-6 left-6 z-50">
-        <img 
-          src="/android-chrome-192x192.png" 
-          alt="SOZU CAPITAL" 
-          className="w-12 h-12 md:w-16 md:h-16"
-        />
+        <a 
+          href="https://www.x.com/sozucapital" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block hover:opacity-80 transition-opacity duration-300"
+        >
+          <img 
+            src="/sozucapital_logo_tb.png" 
+            alt="SOZU CAPITAL" 
+            className="w-12 h-12 md:w-16 md:h-16"
+          />
+        </a>
       </div>
       {/* Preloader */}
       {isLoading && (
