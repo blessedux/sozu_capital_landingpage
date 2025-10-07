@@ -18,7 +18,11 @@ export function WaitlistForm({ isVisible }: WaitlistFormProps) {
     setIsLoading(true)
     
     try {
-      const response = await fetch('http://localhost:3001/api/waitlist', {
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? '/api/waitlist' 
+        : 'http://localhost:3001/api/waitlist';
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

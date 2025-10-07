@@ -11,8 +11,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize SQLite database
-const dbPath = path.join(__dirname, 'waitlist.db');
+// Initialize SQLite database - Vercel compatible
+const dbPath = process.env.NODE_ENV === 'production' 
+  ? '/tmp/waitlist.db' 
+  : path.join(__dirname, 'waitlist.db');
 const db = new sqlite3.Database(dbPath);
 
 // Create waitlist table if it doesn't exist
@@ -85,22 +87,27 @@ app.get('/api/waitlist/count', (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 SOZU Capital Backend running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`📧 Waitlist API: http://localhost:${PORT}/api/waitlist`);
-});
+// Export for Vercel serverless
+module.exports = app;
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down server...');
-  db.close((err) => {
-    if (err) {
-      console.error('Error closing database:', err);
-    } else {
-      console.log('✅ Database connection closed');
-    }
-    process.exit(0);
+// Start server only if not in Vercel environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 SOZU Capital Backend running on port ${PORT}`);
+    console.log(`📊 Health check: http://localhost:${PORT}/health`);
+    console.log(`📧 Waitlist API: http://localhost:${PORT}/api/waitlist`);
   });
-});
+
+  // Graceful shutdown
+  process.on('SIGINT', () => {
+    console.log('\n🛑 Shutting down server...');
+    db.close((err) => {
+      if (err) {
+        console.error('Error closing database:', err);
+      } else {
+        console.log('✅ Database connection closed');
+      }
+      process.exit(0);
+    });
+  });
+}
