@@ -36,9 +36,10 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
     setIsLoading(true)
     
     try {
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/waitlist' 
-        : 'http://localhost:3001/api/waitlist';
+      // Use relative URL for production, absolute for development
+      const apiUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+        ? 'http://localhost:3001/api/waitlist'
+        : '/api/waitlist';
       
       const response = await fetch(apiUrl, {
         method: 'POST',
