@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 interface BackgroundTextRevealSVGProps {
   texts: string[];
   className?: string;
+  style?: React.CSSProperties;
 }
 
 interface Position {
@@ -21,7 +22,7 @@ interface HaikuVisibility {
   fadeOutStage: number; // 0 = normal, 1 = starting fade, 2 = fading, 3 = faded
 }
 
-export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTextRevealSVGProps) {
+export function BackgroundTextRevealSVG({ texts, className = '', style }: BackgroundTextRevealSVGProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const [haikuPositions, setHaikuPositions] = useState<Position[]>([]);
@@ -244,13 +245,40 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
   useEffect(() => {
     if (!isClient || haikuPositions.length === 0) return;
     
-    console.log('🎨 Adding global mouse event listeners, haiku positions:', haikuPositions.length);
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('click', handleClick);
+    console.log('🎨 Adding custom mouse event listeners, haiku positions:', haikuPositions.length);
+    
+    const handleCustomMouseMove = (e: CustomEvent) => {
+      const { clientX, clientY } = e.detail;
+      console.log('🎨 Custom mouse event received:', clientX, clientY);
+      // Create a synthetic mouse event
+      const syntheticEvent = {
+        clientX,
+        clientY,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as MouseEvent;
+      handleMouseMove(syntheticEvent);
+    };
+    
+    const handleCustomClick = (e: CustomEvent) => {
+      const { clientX, clientY } = e.detail;
+      // Create a synthetic mouse event
+      const syntheticEvent = {
+        clientX,
+        clientY,
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as MouseEvent;
+      handleClick(syntheticEvent);
+    };
+    
+    document.addEventListener('haiku-mousemove', handleCustomMouseMove as EventListener);
+    document.addEventListener('haiku-click', handleCustomClick as EventListener);
+    
     return () => {
-      console.log('🎨 Removing global mouse event listeners');
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('click', handleClick);
+      console.log('🎨 Removing custom mouse event listeners');
+      document.removeEventListener('haiku-mousemove', handleCustomMouseMove as EventListener);
+      document.removeEventListener('haiku-click', handleCustomClick as EventListener);
     };
   }, [handleMouseMove, handleClick, isClient, haikuPositions.length]);
 
@@ -274,6 +302,7 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
       <svg
         ref={svgRef}
         className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        style={style}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
@@ -366,6 +395,7 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
       <svg
         ref={svgRef}
         className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        style={style}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >

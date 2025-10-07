@@ -43,22 +43,25 @@ export default function Home() {
     };
     document.head.appendChild(script);
 
-        // Set a timeout to hide preloader after 2 seconds regardless of Spline status
-        const timeout = setTimeout(() => {
-          setIsLoading(false);
-        }, 2000);
+    // Set a minimum preloader duration of 2 seconds to ensure it's visible
+    const minTimeout = setTimeout(() => {
+      // Only hide if Spline has loaded or there's an error
+      if (splineLoaded || hasError) {
+        setIsLoading(false);
+      }
+    }, 2000);
 
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(minTimeout);
       // Clean up script if component unmounts
       if (document.head.contains(script)) {
         document.head.removeChild(script);
       }
     };
-  }, []);
+  }, [splineLoaded, hasError]);
 
   const handleSplineLoad = () => {
-    console.log('🎯 Spline loaded successfully!');
+    console.log('🎯 Spline scene loaded successfully!');
     setSplineLoaded(true);
     
     // Add a delay to ensure the Spline canvas is fully rendered
@@ -68,6 +71,15 @@ export default function Home() {
       console.log('🎯 Spline element found:', splineElement);
       
       if (splineElement) {
+        console.log('🎯 Spline element properties:', {
+          url: splineElement.url,
+          loaded: splineElement.loaded,
+          ready: splineElement.ready,
+          application: !!splineElement.application,
+          spline: !!splineElement.spline,
+          _spline: !!splineElement._spline
+        });
+        
         // Try different ways to access the Spline instance
         if (splineElement.spline) {
           splineRef.current = splineElement.spline;
@@ -87,10 +99,34 @@ export default function Home() {
         // Function to attach event listeners to canvas
         const attachCanvasEvents = (canvas: HTMLCanvasElement, source: string) => {
           console.log(`🎯 Canvas found in ${source}, adding event listeners`);
+          console.log(`🎯 Canvas dimensions: ${canvas.width}x${canvas.height}`);
+          console.log(`🎯 Canvas style:`, canvas.style.cssText);
+          
           canvas.addEventListener('mouseenter', () => console.log('🎯 Canvas mouse enter'));
           canvas.addEventListener('mouseleave', () => console.log('🎯 Canvas mouse leave'));
-          canvas.addEventListener('mousemove', (e: MouseEvent) => console.log('🎯 Canvas mouse move:', e.clientX, e.clientY));
+          canvas.addEventListener('mousemove', (e: MouseEvent) => {
+            console.log('🎯 Canvas mouse move:', e.clientX, e.clientY);
+            // Check if Spline is responding to mouse events
+            console.log('🎯 Canvas mouse event details:', {
+              target: e.target,
+              currentTarget: e.currentTarget,
+              bubbles: e.bubbles,
+              cancelable: e.cancelable
+            });
+          });
           canvas.addEventListener('click', (e: MouseEvent) => console.log('🎯 Canvas click:', e.clientX, e.clientY));
+          
+          // Also try to access Spline's internal event system
+          if (splineRef.current) {
+            console.log('🎯 Spline instance available:', splineRef.current);
+            // Try to access Spline's event system
+            if (splineRef.current.addEventListener) {
+              console.log('🎯 Spline has addEventListener method');
+            }
+            if (splineRef.current.on) {
+              console.log('🎯 Spline has on method');
+            }
+          }
         };
 
         // Try to find the canvas with multiple attempts
@@ -136,55 +172,33 @@ export default function Home() {
       }
     }, 1000); // Wait 1 second for full rendering
     
-    // Add a small delay to ensure smooth transition
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
+    // Note: Preloader hiding is now handled by the main useEffect with minimum duration
   };
 
   // Fallback: Set spline loaded to true after 5 seconds regardless
   useEffect(() => {
     const fallbackTimeout = setTimeout(() => {
       if (!splineLoaded) {
-        console.log('🎯 Fallback: Setting spline loaded to true');
         setSplineLoaded(true);
-        setIsLoading(false);
+        // Preloader will be hidden by the main useEffect when splineLoaded becomes true
       }
     }, 5000);
 
     return () => clearTimeout(fallbackTimeout);
   }, [splineLoaded]);
 
-  // Add periodic debugging to check Spline status
+  // Handle preloader hiding when Spline loads or error occurs
   useEffect(() => {
-    const debugInterval = setInterval(() => {
-      const splineElement = document.querySelector('spline-viewer');
-      const canvas = document.querySelector('spline-viewer canvas');
-      console.log('🔍 Debug check - Spline element:', !!splineElement, 'Canvas:', !!canvas);
-      
-      if (splineElement && !canvas) {
-        // Try to find canvas in shadow DOM
-        const shadowRoot = splineElement.shadowRoot;
-        if (shadowRoot) {
-          const shadowCanvas = shadowRoot.querySelector('canvas');
-          console.log('🔍 Shadow DOM canvas:', !!shadowCanvas);
-          if (shadowCanvas) {
-            console.log('🔍 Canvas found in shadow DOM!');
-          }
-        } else {
-          console.log('🔍 No shadow DOM found');
-        }
-      }
-      
-      if (splineElement && canvas) {
-        console.log('🔍 Both Spline and canvas found, checking event listeners');
-        // Check if canvas has event listeners
-        console.log('🔍 Canvas has addEventListener: Yes');
-      }
-    }, 3000); // Check every 3 seconds
+    if (splineLoaded || hasError) {
+      // Add a small delay to ensure smooth transition
+      const hideTimeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 300); // Small delay for smooth transition
 
-    return () => clearInterval(debugInterval);
-  }, []);
+      return () => clearTimeout(hideTimeout);
+    }
+  }, [splineLoaded, hasError]);
+
 
 
   // Wheel-based waitlist form trigger (viewport stays fixed)
@@ -236,19 +250,12 @@ export default function Home() {
   ];
 
   // Debug loading state (commented out for production)
-  // console.log('🔍 Loading state:', isLoading);
+  // console.log('🔍 Loading state:', isLoading, 'Spline loaded:', splineLoaded, 'Has error:', hasError);
 
   return (
     <div 
       className="relative w-full h-screen overflow-hidden"
-      onMouseMove={(e) => {
-        // Main page mouse tracking - track overall mouse movement
-        console.log('📄 Main page mouse move:', e.clientX, e.clientY);
-      }}
-      onClick={(e) => {
-        // Main page click tracking (commented out for production)
-        // console.log('📄 Main page click:', e.clientX, e.clientY);
-      }}
+      style={{ pointerEvents: 'none' }}
     >
       {/* SOZU CAPITAL Logo - Top Left */}
       {!isLoading && (
@@ -281,12 +288,22 @@ export default function Home() {
       )}
       {/* Preloader */}
       {isLoading && (
-        <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center z-20">
+        <div 
+          className="fixed inset-0 w-full h-full bg-black flex items-center justify-center"
+          style={{ 
+            zIndex: 9999,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0
+          }}
+        >
           <div className="font-mono text-white text-3xl tracking-wider">
             {Array.from({ length: 6 }).map((_, i) => (
               <span
                 key={i}
-                className="inline-block opacity-30 transition-opacity duration-200"
+                className="inline-block opacity-30"
                 style={{
                   animation: `slashPulse 1s ease-in-out infinite`,
                   animationDelay: `${i * 0.1}s`,
@@ -308,43 +325,24 @@ export default function Home() {
         style={{ 
           pointerEvents: 'auto'
         }}
-        onMouseEnter={() => {
-          // Spline container mouse enter
-          console.log('🖱️ Spline container mouse enter');
-        }}
-        onMouseLeave={() => {
-          // Spline container mouse leave
-          console.log('🖱️ Spline container mouse leave');
-        }}
         onMouseMove={(e) => {
-          // Pass mouse events to spline canvas for cursor interaction
-          console.log('🖱️ Spline container mouse move:', e.clientX, e.clientY);
+          // Forward mouse events to haiku component via custom event
+          console.log('📄 Spline container mouse move:', e.clientX, e.clientY);
+          const customEvent = new CustomEvent('haiku-mousemove', {
+            detail: { clientX: e.clientX, clientY: e.clientY }
+          });
+          document.dispatchEvent(customEvent);
         }}
         onClick={(e) => {
-          // Spline container click (commented out for production)
-          // console.log('🖱️ Spline container click:', e.clientX, e.clientY);
+          // Forward click events to haiku component via custom event
+          const customEvent = new CustomEvent('haiku-click', {
+            detail: { clientX: e.clientX, clientY: e.clientY }
+          });
+          document.dispatchEvent(customEvent);
         }}
       >
         {!hasError ? (
-          <div 
-            className="w-full h-full scale-150 origin-center"
-            onMouseEnter={() => {
-              // Spline wrapper mouse enter
-              console.log('🖱️ Spline wrapper mouse enter');
-            }}
-            onMouseLeave={() => {
-              // Spline wrapper mouse leave
-              console.log('🖱️ Spline wrapper mouse leave');
-            }}
-            onMouseMove={(e) => {
-              // Pass mouse events to spline canvas for cursor interaction
-              console.log('🖱️ Spline wrapper mouse move:', e.clientX, e.clientY);
-            }}
-            onClick={(e) => {
-              // Spline wrapper click (commented out for production)
-              // console.log('🖱️ Spline wrapper click:', e.clientX, e.clientY);
-            }}
-          >
+          <div className="w-full h-full scale-150 origin-center">
             <spline-viewer 
               url="https://prod.spline.design/qJMdOHKop06FuXNN/scene.splinecode"
               style={{ 
@@ -363,10 +361,20 @@ export default function Home() {
         )}
       </div>
 
-      {/* Background Text Reveal Effect - positioned below Spline canvas */}
+
+      {/* Background Text Reveal Effect - positioned above Spline canvas */}
       <BackgroundTextRevealSVG 
         texts={backgroundTexts}
         className="opacity-20"
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 105,
+          pointerEvents: 'none' // Don't interfere with mouse events
+        }}
       />
 
       {/* Minimal Waitlist Form */}
