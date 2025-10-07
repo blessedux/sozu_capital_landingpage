@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { WaitlistForm } from '../components/waitlist-form';
 import { BackgroundTextRevealSVG } from '../components/background-text-reveal';
 
@@ -24,10 +24,7 @@ export default function Home() {
   const [splineLoaded, setSplineLoaded] = useState(false);
   const splineRef = useRef<any>(null);
   // Text-related state removed for clean animation testing
-  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isAtMaxScroll, setIsAtMaxScroll] = useState(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [splineAnimationState, setSplineAnimationState] = useState({
     isAnimating: false,
     currentAnimation: null as string | null,
@@ -220,48 +217,18 @@ export default function Home() {
 
 
 
-  // Wheel-based scroll progress tracking with waitlist form logic
+  // Wheel-based scroll progress tracking
   useEffect(() => {
     const maxScrollProgress = 1;
-    const waitlistDelay = 2000; // 2 seconds delay
 
     const handleWheel = (e: WheelEvent) => {
       // Calculate scroll progress based on wheel delta
       const delta = e.deltaY;
-      const scrollSpeed = 0.02; // More sensitive scrolling
+      const scrollSpeed = 0.01; // Half as sensitive scrolling
       
       setScrollProgress(prev => {
         const newProgress = prev + delta * scrollSpeed;
         const clampedProgress = Math.max(0, Math.min(maxScrollProgress, newProgress));
-        
-        // Check if we're at 100% scroll
-        const atMaxScroll = clampedProgress >= 0.99; // Use 0.99 for tolerance
-        
-        if (atMaxScroll && !isAtMaxScroll) {
-          // Just reached 100% - start the 2-second timer
-          setIsAtMaxScroll(true);
-          
-          // Clear any existing timeout
-          if (scrollTimeoutRef.current) {
-            clearTimeout(scrollTimeoutRef.current);
-          }
-          
-          // Set new timeout for waitlist form
-          scrollTimeoutRef.current = setTimeout(() => {
-            setShowWaitlistForm(true);
-          }, waitlistDelay);
-          
-        } else if (!atMaxScroll && isAtMaxScroll) {
-          // Scrolled away from 100% - immediately hide waitlist form
-          setIsAtMaxScroll(false);
-          setShowWaitlistForm(false);
-          
-          // Clear the timeout
-          if (scrollTimeoutRef.current) {
-            clearTimeout(scrollTimeoutRef.current);
-            scrollTimeoutRef.current = null;
-          }
-        }
         
         return clampedProgress;
       });
@@ -272,12 +239,8 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      // Clean up timeout on unmount
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
     };
-  }, [isAtMaxScroll]);
+  }, []);
 
   // Background haiku content
   const backgroundTexts = [
@@ -404,8 +367,18 @@ export default function Home() {
         }}
       />
 
-      {/* Waitlist Form - Only renders in DOM when visible */}
-      {showWaitlistForm && <WaitlistForm isVisible={showWaitlistForm} />}
+      {/* Waitlist Form - Always rendered, opacity directly tied to scroll progress */}
+      <motion.div
+        animate={{ opacity: scrollProgress }}
+        transition={{ duration: 0.1, ease: "easeOut" }}
+        style={{ 
+          pointerEvents: 'none', // Don't block mouse events
+          zIndex: 100 // Below Spline scene (z-[110])
+        }}
+      >
+        <WaitlistForm isVisible={scrollProgress > 0.5} />
+      </motion.div>
+      
 
     </div>
   );

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface WaitlistFormProps {
   isVisible: boolean
@@ -12,6 +12,21 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Global keyboard listener to always receive input
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // If Enter is pressed and we have an email, submit the form
+      if (e.key === 'Enter' && email && !isLoading && !isSubmitted) {
+        e.preventDefault()
+        handleSubmit(e as any)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [email, isLoading, isSubmitted])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,7 +67,7 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
 
   if (isSubmitted) {
     return (
-      <div className="fixed inset-0 flex items-center justify-end z-[200] transition-opacity duration-500 ease-in-out opacity-100" style={{ pointerEvents: 'auto' }}>
+      <div className="fixed inset-0 flex items-center justify-end z-[200]" style={{ pointerEvents: 'none' }}>
         <div className="text-right max-w-sm w-full mx-8">
           <h2 className="text-xl font-sans font-medium text-white mb-4">
             Welcome to the new economy.
@@ -74,13 +89,13 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-end z-[200] transition-opacity duration-500 ease-in-out opacity-100" style={{ pointerEvents: 'auto' }}>
+    <div className="fixed inset-0 flex items-center justify-end z-[200]" style={{ pointerEvents: 'none' }}>
       <div className="text-right max-w-sm w-full mx-8">
         <h1 className="text-xl font-sans font-medium text-white mb-6">
           Join the Movement
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" style={{ pointerEvents: 'auto' }}>
           <input
             type="email"
             value={email}
@@ -91,6 +106,7 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
             required
             className="w-full px-0 py-3 bg-transparent border-b border-white/30 text-white placeholder-white/50 font-sans text-sm focus:outline-none focus:border-white/60 transition-colors duration-200"
             style={{ pointerEvents: 'auto' }}
+            ref={inputRef}
           />
           
           <button
