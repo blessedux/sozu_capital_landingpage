@@ -1,15 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Simple in-memory storage for demo purposes
-// In production, this should be replaced with a proper database
-let waitlistEmails: Array<{ id: number; email: string; created_at: string }> = [];
+import { supabase, NewWaitlistEntry } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    console.log('GET /api/waitlist - Fetching waitlist');
+    console.log('GET /api/waitlist - Fetching waitlist from Supabase');
+    
+    const { data, error, count } = await supabase
+      .from('waitlist')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return NextResponse.json({ 
+        error: 'Failed to fetch waitlist',
+        waitlist: [],
+        count: 0
+      }, { status: 500 });
+    }
+
     return NextResponse.json({ 
-      waitlist: waitlistEmails || [],
-      count: (waitlistEmails || []).length 
+      waitlist: data || [],
+      count: count || 0
     });
   } catch (error) {
     console.error('Error fetching waitlist:', error);
@@ -34,7 +46,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid JSON in request body' }, { status: 400 });
     }
 
-    const { email } = body;
+    const { email, source = 'website', metadata = {} } = body;
 
     // Validate email
     if (!email || typeof email !== 'string') {
@@ -49,30 +61,50 @@ export async function POST(request: NextRequest) {
 
     const trimmedEmail = email.trim().toLowerCase();
 
-    // Initialize array if it doesn't exist (serverless safety)
-    if (!waitlistEmails) {
-      waitlistEmails = [];
-    }
+    // Check if email already exists in Supabase
+    const { data: existingEntry } = await supabase
+      .from('waitlist')
+      .select('id')
+      .eq('email', trimmedEmail)
+      .single();
 
-    // Check if email already exists
-    if (waitlistEmails.some(entry => entry.email.toLowerCase() === trimmedEmail)) {
+    if (existingEntry) {
       return NextResponse.json({ error: 'Email already exists in waitlist' }, { status: 409 });
     }
 
-    // Add email to waitlist
-    const newEntry = {
-      id: waitlistEmails.length + 1,
+    // Add email to Supabase
+    const newEntry: NewWaitlistEntry = {
       email: trimmedEmail,
-      created_at: new Date().toISOString()
+      source,
+      metadata: {
+        ...metadata,
+        userAgent: request.headers.get('user-agent'),
+        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+        timestamp: new Date().toISOString()
+      }
     };
-    
-    waitlistEmails.push(newEntry);
-    console.log(`Successfully added email: ${trimmedEmail}`);
+
+    const { data, error } = await supabase
+      .from('waitlist')
+      .insert([newEntry])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase insert error:', error);
+      return NextResponse.json({ 
+        error: 'Failed to add email to waitlist',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      }, { status: 500 });
+    }
+
+    console.log(`Successfully added email to Supabase: ${trimmedEmail}`);
 
     return NextResponse.json({ 
       success: true, 
       message: 'Successfully added to waitlist',
-      id: newEntry.id 
+      id: data.id,
+      email: data.email
     });
   } catch (error) {
     console.error('Error adding to waitlist:', error);
