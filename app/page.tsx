@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
-// import { WaitlistForm } from '../components/waitlist-form'; // Temporarily disabled for debugging
+import { WaitlistForm } from '../components/waitlist-form';
 import { BackgroundTextRevealSVG } from '../components/background-text-reveal';
 
 // Declare custom element for TypeScript
@@ -24,9 +24,59 @@ export default function Home() {
   const [splineLoaded, setSplineLoaded] = useState(false);
   const splineRef = useRef<any>(null);
   // Text-related state removed for clean animation testing
-  // const [showWaitlistForm, setShowWaitlistForm] = useState(false); // Temporarily disabled for debugging
+  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isAtMaxScroll, setIsAtMaxScroll] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [splineAnimationState, setSplineAnimationState] = useState({
+    isAnimating: false,
+    currentAnimation: null as string | null,
+    animationProgress: 0,
+    lastAnimationComplete: null as { timestamp: number; data: any } | null
+  });
 
   // All text and typewriter effects removed for clean animation testing
+
+  // Spline animation event handlers
+  const onSplineAnimationComplete = (eventData: any) => {
+    setSplineAnimationState(prev => ({
+      ...prev,
+      isAnimating: false,
+      currentAnimation: null,
+      animationProgress: 1,
+      lastAnimationComplete: {
+        timestamp: Date.now(),
+        data: eventData
+      }
+    }));
+    
+    // Trigger your custom logic here
+    // For example, show waitlist form, trigger haiku effects, etc.
+    handleAnimationComplete(eventData);
+  };
+
+  const onSplineStateChange = (eventData: any) => {
+    setSplineAnimationState(prev => ({
+      ...prev,
+      isAnimating: eventData.isAnimating || false,
+      currentAnimation: eventData.animationName || null,
+      animationProgress: eventData.progress || 0
+    }));
+  };
+
+  const handleAnimationComplete = (eventData: any) => {
+    // Custom logic when animation completes
+    // This is where you can trigger other effects, show UI elements, etc.
+    
+    // Example: Show waitlist form after animation completes
+    // setShowWaitlistForm(true);
+    
+    // Example: Trigger haiku effects
+    // triggerHaikuEffects();
+    
+    // Example: Update scroll behavior
+    // setScrollProgress(1);
+  };
 
   useEffect(() => {
     // Load the Spline viewer script
@@ -59,8 +109,89 @@ export default function Home() {
     };
   }, [splineLoaded, hasError]);
 
+  // Method 4: Polling approach for animation detection
+  useEffect(() => {
+    if (!splineLoaded) return;
+
+    const pollAnimationState = () => {
+      const splineElement = document.querySelector('spline-viewer') as any;
+      if (splineElement && splineElement.application) {
+        const app = splineElement.application;
+        
+        // Check if there are any active animations
+        if (app.mixer && app.mixer._actions) {
+          const activeActions = app.mixer._actions.filter((action: any) => action.isRunning());
+          
+          if (activeActions.length > 0) {
+            // Animation is running
+            setSplineAnimationState(prev => ({
+              ...prev,
+              isAnimating: true,
+              currentAnimation: activeActions[0]._clip.name || 'Unknown',
+              animationProgress: activeActions[0].time / activeActions[0]._clip.duration
+            }));
+          } else {
+            // No animations running
+            setSplineAnimationState(prev => ({
+              ...prev,
+              isAnimating: false,
+              currentAnimation: null,
+              animationProgress: 0
+            }));
+          }
+        }
+      }
+    };
+
+    // Poll every 100ms for animation state
+    const pollInterval = setInterval(pollAnimationState, 100);
+
+    return () => clearInterval(pollInterval);
+  }, [splineLoaded]);
+
   const handleSplineLoad = () => {
     setSplineLoaded(true);
+    
+    // Wait for Spline to fully initialize, then set up event listeners
+    setTimeout(() => {
+      const splineElement = document.querySelector('spline-viewer') as any;
+      if (splineElement) {
+        // Method 1: Listen to Spline's internal events
+        if (splineElement.addEventListener) {
+          // Listen for animation events
+          splineElement.addEventListener('animationcomplete', (event: any) => {
+            // Trigger your custom logic here
+            onSplineAnimationComplete(event.detail);
+          });
+          
+          // Listen for state changes
+          splineElement.addEventListener('statechange', (event: any) => {
+            onSplineStateChange(event.detail);
+          });
+        }
+        
+        // Method 2: Access Spline's internal application
+        if (splineElement.application) {
+          const app = splineElement.application;
+          splineRef.current = app;
+          
+          // Listen to Three.js scene events
+          if (app.scene) {
+            app.scene.addEventListener('animationcomplete', (event: any) => {
+              onSplineAnimationComplete(event);
+            });
+          }
+        }
+        
+        // Method 3: Monitor canvas for animation end events
+        const canvas = splineElement.querySelector('canvas');
+        if (canvas) {
+          canvas.addEventListener('animationend', (event: any) => {
+            onSplineAnimationComplete({ type: 'canvas', animationName: event.animationName });
+          });
+        }
+      }
+    }, 1000); // Wait 1 second for full initialization
   };
 
   // Fallback: Set spline loaded to true after 5 seconds regardless
@@ -89,28 +220,51 @@ export default function Home() {
 
 
 
-  // Wheel-based waitlist form trigger (viewport stays fixed)
+  // Wheel-based scroll progress tracking with waitlist form logic
   useEffect(() => {
-    let scrollProgress = 0;
     const maxScrollProgress = 1;
+    const waitlistDelay = 2000; // 2 seconds delay
 
     const handleWheel = (e: WheelEvent) => {
       // Calculate scroll progress based on wheel delta
       const delta = e.deltaY;
-      const scrollSpeed = 0.005; // Slower speed for better control
+      const scrollSpeed = 0.02; // More sensitive scrolling
       
-      scrollProgress += delta * scrollSpeed;
-      scrollProgress = Math.max(0, Math.min(maxScrollProgress, scrollProgress));
-      
-      // Scroll progress tracking (internal only)
-      
-      // Show waitlist form only at 99-100% progress - Temporarily disabled for debugging
-      // if (scrollProgress >= 0.99) {
-      //   setShowWaitlistForm(true);
-      //   console.log('📋 Waitlist form should be visible');
-      // } else {
-      //   setShowWaitlistForm(false);
-      // }
+      setScrollProgress(prev => {
+        const newProgress = prev + delta * scrollSpeed;
+        const clampedProgress = Math.max(0, Math.min(maxScrollProgress, newProgress));
+        
+        // Check if we're at 100% scroll
+        const atMaxScroll = clampedProgress >= 0.99; // Use 0.99 for tolerance
+        
+        if (atMaxScroll && !isAtMaxScroll) {
+          // Just reached 100% - start the 2-second timer
+          setIsAtMaxScroll(true);
+          
+          // Clear any existing timeout
+          if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current);
+          }
+          
+          // Set new timeout for waitlist form
+          scrollTimeoutRef.current = setTimeout(() => {
+            setShowWaitlistForm(true);
+          }, waitlistDelay);
+          
+        } else if (!atMaxScroll && isAtMaxScroll) {
+          // Scrolled away from 100% - immediately hide waitlist form
+          setIsAtMaxScroll(false);
+          setShowWaitlistForm(false);
+          
+          // Clear the timeout
+          if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current);
+            scrollTimeoutRef.current = null;
+          }
+        }
+        
+        return clampedProgress;
+      });
     };
 
     // Add wheel event listener (no preventDefault to keep viewport fixed)
@@ -118,8 +272,12 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
+      // Clean up timeout on unmount
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
     };
-  }, []);
+  }, [isAtMaxScroll]);
 
   // Background haiku content
   const backgroundTexts = [
@@ -205,11 +363,15 @@ export default function Home() {
       {/* Background Color Layer */}
       <div className="fixed inset-0 w-full h-full bg-black z-[90]" />
 
+
+
       {/* Spline Scene */}
       <div 
-        className="fixed inset-0 w-full h-full overflow-hidden z-[110]"
+        className="fixed inset-0 w-full h-full overflow-hidden z-[110] transition-all duration-300 ease-out"
         style={{ 
-          pointerEvents: 'auto'
+          pointerEvents: 'auto',
+          opacity: 1 - (scrollProgress * 0.3), // Subtle fade as you scroll
+          transform: `scale(${1 + scrollProgress * 0.05})` // Subtle zoom as you scroll
         }}
       >
         {!hasError ? (
@@ -236,11 +398,14 @@ export default function Home() {
       {/* Background Text Reveal Effect - positioned above Spline canvas */}
       <BackgroundTextRevealSVG 
         texts={backgroundTexts}
-        className="opacity-20"
+        className="transition-all duration-300 ease-out"
+        style={{ 
+          opacity: 0.2 + (scrollProgress * 0.3) // Becomes more visible as you scroll
+        }}
       />
 
-      {/* Minimal Waitlist Form - Temporarily disabled for debugging */}
-      {/* <WaitlistForm isVisible={showWaitlistForm} /> */}
+      {/* Waitlist Form - Only renders in DOM when visible */}
+      {showWaitlistForm && <WaitlistForm isVisible={showWaitlistForm} />}
 
     </div>
   );
