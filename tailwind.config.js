@@ -15,8 +15,8 @@ module.exports = {
         border: 'var(--border)',
       },
       fontFamily: {
-        mono: ['var(--font-geist-mono)', 'monospace'],
-        sentient: ['Sentient', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
       },
       boxShadow: {
         glow: '0 0 8px 2px var(--tw-shadow-color)',

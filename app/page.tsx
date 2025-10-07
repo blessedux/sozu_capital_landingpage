@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { motion } from 'motion/react';
+import { WaitlistForm } from '../components/waitlist-form';
+import { BackgroundTextRevealSVG } from '../components/background-text-reveal';
 
 // Declare custom element for TypeScript
 declare global {
@@ -19,78 +22,12 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [splineLoaded, setSplineLoaded] = useState(false);
-  const [allLines, setAllLines] = useState<string[]>([]);
-  const [currentLineText, setCurrentLineText] = useState('');
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [showBlessedux, setShowBlessedux] = useState(false);
-  const [blesseduxVisible, setBlesseduxVisible] = useState(false);
-  const typewriterRef = useRef({ charIndex: 0, intervalId: null as NodeJS.Timeout | null });
+  // Text-related state removed for clean animation testing
+  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  // typewriterRef removed - no longer needed
+  const splineRef = useRef<any>(null);
 
-  const lines = useMemo(() => [
-    "sozu capital is currently under construction....",
-    "свобода важнее денег"
-  ], []);
-
-  useEffect(() => {
-    // Typewriter effect - start after loading is done, regardless of Spline
-    if (!isLoading) {
-      // Reset typewriter state
-      setCurrentLineIndex(0);
-      setCurrentLineText('');
-      setAllLines([]);
-      setShowBlessedux(false);
-      setBlesseduxVisible(false);
-      typewriterRef.current = { charIndex: 0, intervalId: null };
-
-      let lineIndex = 0;
-      let charIndex = 0;
-
-      const typeNextChar = () => {
-        if (lineIndex < lines.length) {
-          const targetLineText = lines[lineIndex];
-          
-          if (charIndex < targetLineText.length) {
-            // Still typing current line
-            setCurrentLineText(targetLineText.substring(0, charIndex + 1));
-            charIndex++;
-          } else {
-            // Current line is complete
-            setAllLines(prev => [...prev, targetLineText]);
-            setCurrentLineText('');
-            
-            // Move to next line
-            lineIndex++;
-            charIndex = 0;
-            
-            // If there are more lines, start typing the next one after a delay
-            if (lineIndex < lines.length) {
-              setTimeout(() => {
-                typewriterRef.current.intervalId = setInterval(typeNextChar, 100);
-              }, 2000);
-            } else {
-              // All lines done, show blessedux link with fade-in
-              setTimeout(() => {
-                setShowBlessedux(true);
-                // Add a small delay for smooth fade-in
-                setTimeout(() => {
-                  setBlesseduxVisible(true);
-                }, 100);
-              }, 1000);
-            }
-          }
-        }
-      };
-
-      // Start typing the first line
-      typewriterRef.current.intervalId = setInterval(typeNextChar, 100);
-
-      return () => {
-        if (typewriterRef.current.intervalId) {
-          clearInterval(typewriterRef.current.intervalId);
-        }
-      };
-    }
-  }, [isLoading, lines]);
+  // All text and typewriter effects removed for clean animation testing
 
   useEffect(() => {
     // Load the Spline viewer script
@@ -122,7 +59,84 @@ export default function Home() {
   }, []);
 
   const handleSplineLoad = () => {
+    console.log('🎯 Spline loaded successfully!');
     setSplineLoaded(true);
+    
+    // Add a delay to ensure the Spline canvas is fully rendered
+    setTimeout(() => {
+      // Try multiple ways to get the Spline instance
+      const splineElement = document.querySelector('spline-viewer') as any;
+      console.log('🎯 Spline element found:', splineElement);
+      
+      if (splineElement) {
+        // Try different ways to access the Spline instance
+        if (splineElement.spline) {
+          splineRef.current = splineElement.spline;
+          console.log('🎯 Spline instance found via .spline');
+        } else if (splineElement._spline) {
+          splineRef.current = splineElement._spline;
+          console.log('🎯 Spline instance found via ._spline');
+        } else if (splineElement.application) {
+          splineRef.current = splineElement.application;
+          console.log('🎯 Spline instance found via .application');
+        } else {
+          // Try to access it directly
+          splineRef.current = splineElement;
+          console.log('🎯 Using spline element directly');
+        }
+        
+        // Function to attach event listeners to canvas
+        const attachCanvasEvents = (canvas: HTMLCanvasElement, source: string) => {
+          console.log(`🎯 Canvas found in ${source}, adding event listeners`);
+          canvas.addEventListener('mouseenter', () => console.log('🎯 Canvas mouse enter'));
+          canvas.addEventListener('mouseleave', () => console.log('🎯 Canvas mouse leave'));
+          canvas.addEventListener('mousemove', (e: MouseEvent) => console.log('🎯 Canvas mouse move:', e.clientX, e.clientY));
+          canvas.addEventListener('click', (e: MouseEvent) => console.log('🎯 Canvas click:', e.clientX, e.clientY));
+        };
+
+        // Try to find the canvas with multiple attempts
+        let canvas = splineElement.querySelector('canvas');
+        
+        // Also try to find canvas in shadow DOM
+        if (!canvas) {
+          const shadowRoot = splineElement.shadowRoot;
+          if (shadowRoot) {
+            canvas = shadowRoot.querySelector('canvas');
+            if (canvas) {
+              console.log('🎯 Canvas found in shadow DOM!');
+              attachCanvasEvents(canvas, 'shadow DOM');
+            }
+          }
+        } else {
+          attachCanvasEvents(canvas, 'regular DOM');
+        }
+        
+        if (!canvas) {
+          // Try again after a short delay
+          setTimeout(() => {
+            canvas = splineElement.querySelector('canvas');
+            if (!canvas) {
+              const shadowRoot = splineElement.shadowRoot;
+              if (shadowRoot) {
+                canvas = shadowRoot.querySelector('canvas');
+                if (canvas) {
+                  attachCanvasEvents(canvas, 'shadow DOM (second attempt)');
+                }
+              }
+            } else {
+              attachCanvasEvents(canvas, 'regular DOM (second attempt)');
+            }
+            
+            if (!canvas) {
+              console.log('🎯 No canvas found even on second attempt');
+            }
+          }, 1000);
+        }
+      } else {
+        console.log('🎯 No spline element found');
+      }
+    }, 1000); // Wait 1 second for full rendering
+    
     // Add a small delay to ensure smooth transition
     setTimeout(() => {
       setIsLoading(false);
@@ -133,6 +147,7 @@ export default function Home() {
   useEffect(() => {
     const fallbackTimeout = setTimeout(() => {
       if (!splineLoaded) {
+        console.log('🎯 Fallback: Setting spline loaded to true');
         setSplineLoaded(true);
         setIsLoading(false);
       }
@@ -141,23 +156,126 @@ export default function Home() {
     return () => clearTimeout(fallbackTimeout);
   }, [splineLoaded]);
 
+  // Add periodic debugging to check Spline status
+  useEffect(() => {
+    const debugInterval = setInterval(() => {
+      const splineElement = document.querySelector('spline-viewer');
+      const canvas = document.querySelector('spline-viewer canvas');
+      console.log('🔍 Debug check - Spline element:', !!splineElement, 'Canvas:', !!canvas);
+      
+      if (splineElement && !canvas) {
+        // Try to find canvas in shadow DOM
+        const shadowRoot = splineElement.shadowRoot;
+        if (shadowRoot) {
+          const shadowCanvas = shadowRoot.querySelector('canvas');
+          console.log('🔍 Shadow DOM canvas:', !!shadowCanvas);
+          if (shadowCanvas) {
+            console.log('🔍 Canvas found in shadow DOM!');
+          }
+        } else {
+          console.log('🔍 No shadow DOM found');
+        }
+      }
+      
+      if (splineElement && canvas) {
+        console.log('🔍 Both Spline and canvas found, checking event listeners');
+        // Check if canvas has event listeners
+        console.log('🔍 Canvas has addEventListener: Yes');
+      }
+    }, 3000); // Check every 3 seconds
+
+    return () => clearInterval(debugInterval);
+  }, []);
+
+  // Wheel-based waitlist form trigger (viewport stays fixed)
+  useEffect(() => {
+    let scrollProgress = 0;
+    const maxScrollProgress = 1;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Calculate scroll progress based on wheel delta
+      const delta = e.deltaY;
+      const scrollSpeed = 0.005; // Slower speed for better control
+      
+      scrollProgress += delta * scrollSpeed;
+      scrollProgress = Math.max(0, Math.min(maxScrollProgress, scrollProgress));
+      
+      // Scroll progress tracking (internal only)
+      
+      // Show waitlist form only at 99-100% progress
+      if (scrollProgress >= 0.99) {
+        setShowWaitlistForm(true);
+        console.log('📋 Waitlist form should be visible');
+      } else {
+        setShowWaitlistForm(false);
+      }
+    };
+
+    // Add wheel event listener (no preventDefault to keep viewport fixed)
+    window.addEventListener('wheel', handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
+
+  // Background haiku content
+  const backgroundTexts = [
+    'Code, not empty vows\nA peer-to-peer world now blooms\nSovereign standard',
+    'Arbitrage anchor\nJunior tranche absorbs the shock\nResilient by design',
+    'Not a dying dollar\nBread and energy define\nTrue and stable worth',
+    'Their tax has no reach\nTheir printing press now is mute\nWe built a new world',
+    'A public ledger?\nYour life is not for their eyes\nPrivate by default',
+    'The vault does not sleep\nIt works and grows for the net\nYield builds the bedrock',
+    'Tap your screen and send\nLike passing paper, but strong\nYour value now flows',
+    'Not here to protest\nWe build a better system\nThe ultimate leave',
+    'No lobbyist hand\nJust service, a product\'s worth\nReal capitalism',
+    'Beyond the border\nOne stable core for billions\nA neutral new ground',
+    'Money should be like\nWater that flows, peer to peer\nFor the hustler\'s hands',
+    'Digital cash flows\nUncensored, private, and strong\nThe future is here'
+  ];
+
+  // Debug loading state (commented out for production)
+  // console.log('🔍 Loading state:', isLoading);
+
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div 
+      className="relative w-full h-screen overflow-hidden"
+      onMouseMove={(e) => {
+        // Main page mouse tracking (commented out for production)
+        // console.log('📄 Main page mouse move:', e.clientX, e.clientY);
+      }}
+      onClick={(e) => {
+        // Main page click tracking (commented out for production)
+        // console.log('📄 Main page click:', e.clientX, e.clientY);
+      }}
+    >
       {/* SOZU CAPITAL Logo - Top Left */}
-      <div className="absolute top-6 left-6 z-50">
-        <a 
-          href="https://www.x.com/sozucapital" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block hover:opacity-80 transition-opacity duration-300"
+      {!isLoading && (
+        <motion.div 
+          className="fixed top-6 left-6 z-[110]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ 
+            duration: 1.5, 
+            ease: "easeOut",
+            delay: 0.5 
+          }}
         >
-          <img 
-            src="/sozucapital_logo_tb.png" 
-            alt="SOZU CAPITAL" 
-            className="w-12 h-12 md:w-16 md:h-16"
-          />
-        </a>
-      </div>
+          <a 
+            href="https://www.x.com/sozucapital" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block hover:opacity-80 transition-opacity duration-300"
+          >
+            <img 
+              src="/sozucapital_logo_tb.png" 
+              alt="SOZU CAPITAL" 
+              className="w-12 h-12 md:w-16 md:h-16"
+            />
+          </a>
+        </motion.div>
+      )}
       {/* Preloader */}
       {isLoading && (
         <div className="absolute inset-0 w-full h-full bg-black flex items-center justify-center z-20">
@@ -179,12 +297,57 @@ export default function Home() {
       )}
 
       {/* Spline Scene or Black Background */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
+      <div 
+        className="fixed inset-0 w-full h-full overflow-hidden z-[100]"
+        style={{ 
+          pointerEvents: 'auto'
+        }}
+        onMouseEnter={() => {
+          // Spline container mouse enter (commented out for production)
+          // console.log('🖱️ Spline container mouse enter');
+        }}
+        onMouseLeave={() => {
+          // Spline container mouse leave (commented out for production)
+          // console.log('🖱️ Spline container mouse leave');
+        }}
+        onMouseMove={(e) => {
+          // Reduced logging - we know canvas is in shadow DOM
+          // console.log('🖱️ Spline container mouse move:', e.clientX, e.clientY);
+        }}
+        onClick={(e) => {
+          // Spline container click (commented out for production)
+          // console.log('🖱️ Spline container click:', e.clientX, e.clientY);
+        }}
+      >
         {!hasError ? (
-          <div className="w-full h-full scale-150 origin-center">
+          <div 
+            className="w-full h-full scale-150 origin-center"
+            onMouseEnter={() => {
+              // Spline wrapper mouse enter (commented out for production)
+              // console.log('🖱️ Spline wrapper mouse enter');
+            }}
+            onMouseLeave={() => {
+              // Spline wrapper mouse leave (commented out for production)
+              // console.log('🖱️ Spline wrapper mouse leave');
+            }}
+            onMouseMove={(e) => {
+              // Reduced logging - we know canvas is in shadow DOM
+              // console.log('🖱️ Spline wrapper mouse move:', e.clientX, e.clientY);
+            }}
+            onClick={(e) => {
+              // Spline wrapper click (commented out for production)
+              // console.log('🖱️ Spline wrapper click:', e.clientX, e.clientY);
+            }}
+          >
             <spline-viewer 
               url="https://prod.spline.design/qJMdOHKop06FuXNN/scene.splinecode"
-              style={{ width: '100%', height: '100%' }}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                pointerEvents: 'auto',
+                position: 'relative',
+                zIndex: 1
+              }}
               onLoad={handleSplineLoad}
             />
           </div>
@@ -193,46 +356,15 @@ export default function Home() {
         )}
       </div>
 
-          {/* Typewriter Text - Bottom Center */}
-          {!isLoading && (
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center z-50 pointer-events-none w-full max-w-4xl px-4">
-              <div className="font-mono text-white text-lg md:text-xl leading-relaxed bg-black/30 backdrop-blur-sm px-6 py-3 rounded-lg">
-                {/* Reserve space for all lines to prevent vertical movement */}
-                {lines.map((_, index) => (
-                  <div key={index} className="mb-2 break-words min-h-[1.5rem]">
-                    {/* Show completed line if it exists */}
-                    {allLines[index] && (
-                      <span>{allLines[index]}</span>
-                    )}
-                    {/* Show current typing line if it's this line */}
-                    {index === allLines.length && currentLineText && (
-                      <span>
-                        {currentLineText}
-                        <span className="animate-pulse">|</span>
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-              
-              {/* Reserve space for blessedux button to prevent layout shift */}
-              <div className="mt-4 text-center min-h-[2rem]">
-                {/* Show blessedux link - Third line with smooth fade-in */}
-                {showBlessedux && (
-                  <div className={`transition-opacity duration-1000 ${blesseduxVisible ? 'opacity-100' : 'opacity-0'}`}>
-                    <a 
-                      href="https://blessedux.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-purple-400 hover:text-purple-300 transition-colors duration-300 font-mono text-sm bg-black/20 backdrop-blur-sm px-3 py-1 rounded pointer-events-auto"
-                    >
-                      blessedux
-                    </a>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+      {/* Background Text Reveal Effect - positioned below Spline canvas */}
+      <BackgroundTextRevealSVG 
+        texts={backgroundTexts}
+        className="opacity-20"
+      />
+
+      {/* Minimal Waitlist Form */}
+      <WaitlistForm isVisible={showWaitlistForm} />
+
     </div>
   );
 }
