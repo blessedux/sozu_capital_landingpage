@@ -7,6 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Add request logging for debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 // In-memory storage for emails (for demo - replace with database later)
 let waitlistEmails = [];
 
@@ -76,6 +82,17 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
     console.log(`📧 Waitlist API: http://localhost:${PORT}/api/waitlist`);
   });
 }
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
 
 // Export for Vercel
 module.exports = app;
