@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { WaitlistForm } from '../components/waitlist-form';
 import { BackgroundTextRevealSVG } from '../components/background-text-reveal';
 
@@ -22,10 +22,9 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [splineLoaded, setSplineLoaded] = useState(false);
+  const splineRef = useRef<any>(null);
   // Text-related state removed for clean animation testing
   const [showWaitlistForm, setShowWaitlistForm] = useState(false);
-  // typewriterRef removed - no longer needed
-  const splineRef = useRef<any>(null);
 
   // All text and typewriter effects removed for clean animation testing
 
@@ -187,6 +186,7 @@ export default function Home() {
     return () => clearInterval(debugInterval);
   }, []);
 
+
   // Wheel-based waitlist form trigger (viewport stays fixed)
   useEffect(() => {
     let scrollProgress = 0;
@@ -242,8 +242,8 @@ export default function Home() {
     <div 
       className="relative w-full h-screen overflow-hidden"
       onMouseMove={(e) => {
-        // Main page mouse tracking (commented out for production)
-        // console.log('📄 Main page mouse move:', e.clientX, e.clientY);
+        // Main page mouse tracking - track overall mouse movement
+        console.log('📄 Main page mouse move:', e.clientX, e.clientY);
       }}
       onClick={(e) => {
         // Main page click tracking (commented out for production)
@@ -253,14 +253,17 @@ export default function Home() {
       {/* SOZU CAPITAL Logo - Top Left */}
       {!isLoading && (
         <motion.div 
-          className="fixed top-6 left-6 z-[110]"
+          className="fixed top-6 left-6 z-[130] cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ 
             duration: 1.5, 
             ease: "easeOut",
-            delay: 0.5 
+            delay: 0.5
           }}
+          onClick={() => console.log('🏠 Header icon clicked!')}
+          onMouseEnter={() => console.log('🏠 Header icon mouse enter')}
+          onMouseLeave={() => console.log('🏠 Header icon mouse leave')}
         >
           <a 
             href="https://www.x.com/sozucapital" 
@@ -296,23 +299,26 @@ export default function Home() {
         </div>
       )}
 
-      {/* Spline Scene or Black Background */}
+      {/* Background Color Layer */}
+      <div className="fixed inset-0 w-full h-full bg-black z-[90]" />
+
+      {/* Spline Scene */}
       <div 
         className="fixed inset-0 w-full h-full overflow-hidden z-[100]"
         style={{ 
           pointerEvents: 'auto'
         }}
         onMouseEnter={() => {
-          // Spline container mouse enter (commented out for production)
-          // console.log('🖱️ Spline container mouse enter');
+          // Spline container mouse enter
+          console.log('🖱️ Spline container mouse enter');
         }}
         onMouseLeave={() => {
-          // Spline container mouse leave (commented out for production)
-          // console.log('🖱️ Spline container mouse leave');
+          // Spline container mouse leave
+          console.log('🖱️ Spline container mouse leave');
         }}
         onMouseMove={(e) => {
-          // Reduced logging - we know canvas is in shadow DOM
-          // console.log('🖱️ Spline container mouse move:', e.clientX, e.clientY);
+          // Pass mouse events to spline canvas for cursor interaction
+          console.log('🖱️ Spline container mouse move:', e.clientX, e.clientY);
         }}
         onClick={(e) => {
           // Spline container click (commented out for production)
@@ -323,16 +329,16 @@ export default function Home() {
           <div 
             className="w-full h-full scale-150 origin-center"
             onMouseEnter={() => {
-              // Spline wrapper mouse enter (commented out for production)
-              // console.log('🖱️ Spline wrapper mouse enter');
+              // Spline wrapper mouse enter
+              console.log('🖱️ Spline wrapper mouse enter');
             }}
             onMouseLeave={() => {
-              // Spline wrapper mouse leave (commented out for production)
-              // console.log('🖱️ Spline wrapper mouse leave');
+              // Spline wrapper mouse leave
+              console.log('🖱️ Spline wrapper mouse leave');
             }}
             onMouseMove={(e) => {
-              // Reduced logging - we know canvas is in shadow DOM
-              // console.log('🖱️ Spline wrapper mouse move:', e.clientX, e.clientY);
+              // Pass mouse events to spline canvas for cursor interaction
+              console.log('🖱️ Spline wrapper mouse move:', e.clientX, e.clientY);
             }}
             onClick={(e) => {
               // Spline wrapper click (commented out for production)
@@ -346,7 +352,8 @@ export default function Home() {
                 height: '100%', 
                 pointerEvents: 'auto',
                 position: 'relative',
-                zIndex: 1
+                zIndex: 1,
+                background: 'transparent'
               }}
               onLoad={handleSplineLoad}
             />

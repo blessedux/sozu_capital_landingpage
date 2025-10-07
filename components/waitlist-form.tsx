@@ -13,6 +13,7 @@ export function WaitlistForm({ isVisible }: WaitlistFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('📧 Waitlist form submitted with email:', email);
     if (!email) return
 
     setIsLoading(true)

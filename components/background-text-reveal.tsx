@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 interface BackgroundTextRevealSVGProps {
   texts: string[];
@@ -28,9 +28,19 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
   const [haikuVisibility, setHaikuVisibility] = useState<HaikuVisibility[]>([]);
   const [ripplePosition, setRipplePosition] = useState({ cx: "50%", cy: "50%" });
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  console.log('🎨 BackgroundTextRevealSVG rendered with:', {
+    textsCount: texts.length,
+    haikuPositionsCount: haikuPositions.length,
+    haikuVisibilityCount: haikuVisibility.length,
+    isInitialized,
+    isClient
+  });
 
   // Generate non-colliding positions for haikus
   const generateNonCollidingPositions = useCallback((count: number): Position[] => {
+    console.log('🎨 generateNonCollidingPositions called with count:', count);
     const positions: Position[] = [];
     const centerRadius = 3; // 6% diameter circle in center - reduced for testing
     const minDistance = 8; // Minimum distance between haikus
@@ -70,6 +80,7 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
 
           if (valid) {
             positions.push(position);
+            console.log(`🎨 Added position ${i}:`, position);
           }
         }
 
@@ -77,12 +88,23 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
       }
     }
 
+    console.log('🎨 Final positions array:', positions);
     return positions;
+  }, []);
+
+  // Set client state to prevent hydration mismatch
+  useEffect(() => {
+    console.log('🎨 Setting isClient to true');
+    setIsClient(true);
   }, []);
 
   // Initialize haiku positions and visibility
   useEffect(() => {
+    if (!isClient) return; // Only run on client side
+    console.log('🎨 Initializing haiku positions and visibility...', { textsLength: texts.length, isClient });
+    
     const positions = generateNonCollidingPositions(texts.length);
+    console.log('🎨 Generated positions:', positions);
     setHaikuPositions(positions);
     setHaikuVisibility(positions.map(() => ({
       visible: false,
@@ -91,10 +113,12 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
       pinnedTimer: null,
       fadeOutStage: 0
     })));
-  }, [texts.length, generateNonCollidingPositions]);
+    console.log('🎨 Set haiku positions and visibility states');
+  }, [texts.length, generateNonCollidingPositions, isClient]);
 
   // Handle mouse movement and haiku visibility
   const handleMouseMove = useCallback((e: MouseEvent) => {
+    
     setCursor({ x: e.clientX, y: e.clientY });
     
     // Update ripple position
@@ -155,6 +179,8 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
 
   // Handle click to pin haiku
   const handleClick = useCallback((e: MouseEvent) => {
+    if (!isClient) return; // Only run on client side
+    
     const clickX = (e.clientX / window.innerWidth) * 100;
     const clickY = (e.clientY / window.innerHeight) * 100;
     
@@ -212,17 +238,21 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
         }));
       }
     });
-  }, [haikuPositions]);
+  }, [haikuPositions, isClient]);
 
-  // Add event listeners
+  // Add global event listeners for haiku interactions
   useEffect(() => {
+    if (!isClient || haikuPositions.length === 0) return;
+    
+    console.log('🎨 Adding global mouse event listeners, haiku positions:', haikuPositions.length);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('click', handleClick);
     return () => {
+      console.log('🎨 Removing global mouse event listeners');
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('click', handleClick);
     };
-  }, [handleMouseMove, handleClick]);
+  }, [handleMouseMove, handleClick, isClient, haikuPositions.length]);
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -238,13 +268,107 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
     };
   }, [haikuVisibility]);
 
+  // Don't render interactive elements on server side
+  if (!isClient) {
+    return (
+      <svg
+        ref={svgRef}
+        className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          {/* Static gradients for SSR */}
+          <radialGradient
+            id="magicalGradient"
+            gradientUnits="userSpaceOnUse"
+            r="25%"
+            cx="50%"
+            cy="50%"
+          >
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="30%" stopColor="#ffffff" />
+            <stop offset="70%" stopColor="#f0f0f0" />
+            <stop offset="100%" stopColor="#e0e0e0" />
+          </radialGradient>
+
+          <radialGradient
+            id="directRippleMask"
+            gradientUnits="userSpaceOnUse"
+            r="30%"
+            cx="50%"
+            cy="50%"
+          >
+            <stop offset="0%" stopColor="white" />
+            <stop offset="70%" stopColor="white" />
+            <stop offset="100%" stopColor="black" />
+          </radialGradient>
+
+          <mask id="magicalRevealMask">
+            <rect
+              x="0"
+              y="0"
+              width="100"
+              height="100"
+              fill="white"
+            />
+            <circle
+              cx="50%"
+              cy="50%"
+              r="25%"
+              fill="url(#directRippleMask)"
+            />
+          </mask>
+        </defs>
+      </svg>
+    );
+  }
+
+  console.log('🎨 Rendering BackgroundTextRevealSVG with:', {
+    haikuPositionsLength: haikuPositions.length,
+    haikuVisibilityLength: haikuVisibility.length,
+    isClient
+  });
+
   return (
-    <svg
-      ref={svgRef}
-      className={`fixed inset-0 w-full h-full pointer-events-none z-[120] ${className}`}
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-    >
+    <>
+      {/* Precise haiku interaction areas - only around actual haiku text */}
+      {haikuPositions.map((pos, index) => (
+        <div
+          key={`haiku-area-${index}`}
+          className="absolute pointer-events-auto z-[105]"
+          style={{
+            left: `${pos.x}%`,
+            top: `${pos.y}%`,
+            width: '6%',
+            height: '6%',
+            transform: 'translate(-50%, -50%)',
+            background: 'transparent',
+            cursor: 'pointer'
+          }}
+          onMouseMove={(e) => {
+            console.log(`🎨 HAIKU ${index} - Mouse move:`, e.clientX, e.clientY);
+            handleMouseMove(e as any);
+          }}
+          onClick={(e) => {
+            console.log(`🎨 HAIKU ${index} - Click:`, e.clientX, e.clientY);
+            handleClick(e as any);
+          }}
+          onMouseEnter={() => {
+            console.log(`🎨 HAIKU ${index} - Mouse enter`);
+          }}
+          onMouseLeave={() => {
+            console.log(`🎨 HAIKU ${index} - Mouse leave`);
+          }}
+        />
+      ))}
+
+      <svg
+        ref={svgRef}
+        className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
       <defs>
         {/* Magical ripple gradient */}
         <motion.radialGradient
@@ -289,11 +413,11 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
             y="0"
             width="100"
             height="100"
-            fill="black"
+            fill="white"
           />
           <circle
-            cx={ripplePosition.cx}
-            cy={ripplePosition.cy}
+            cx={ripplePosition.cx || "50%"}
+            cy={ripplePosition.cy || "50%"}
             r="25%"
             fill="url(#directRippleMask)"
           />
@@ -360,5 +484,6 @@ export function BackgroundTextRevealSVG({ texts, className = '' }: BackgroundTex
         );
       })}
     </svg>
+    </>
   );
 }
