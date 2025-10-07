@@ -31,17 +31,9 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
   const [isInitialized, setIsInitialized] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  console.log('🎨 BackgroundTextRevealSVG rendered with:', {
-    textsCount: texts.length,
-    haikuPositionsCount: haikuPositions.length,
-    haikuVisibilityCount: haikuVisibility.length,
-    isInitialized,
-    isClient
-  });
 
   // Generate non-colliding positions for haikus
   const generateNonCollidingPositions = useCallback((count: number): Position[] => {
-    console.log('🎨 generateNonCollidingPositions called with count:', count);
     const positions: Position[] = [];
     const centerRadius = 3; // 6% diameter circle in center - reduced for testing
     const minDistance = 8; // Minimum distance between haikus
@@ -81,7 +73,6 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
 
           if (valid) {
             positions.push(position);
-            console.log(`🎨 Added position ${i}:`, position);
           }
         }
 
@@ -89,23 +80,19 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
       }
     }
 
-    console.log('🎨 Final positions array:', positions);
     return positions;
   }, []);
 
   // Set client state to prevent hydration mismatch
   useEffect(() => {
-    console.log('🎨 Setting isClient to true');
     setIsClient(true);
   }, []);
 
   // Initialize haiku positions and visibility
   useEffect(() => {
     if (!isClient) return; // Only run on client side
-    console.log('🎨 Initializing haiku positions and visibility...', { textsLength: texts.length, isClient });
     
     const positions = generateNonCollidingPositions(texts.length);
-    console.log('🎨 Generated positions:', positions);
     setHaikuPositions(positions);
     setHaikuVisibility(positions.map(() => ({
       visible: false,
@@ -114,7 +101,6 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
       pinnedTimer: null,
       fadeOutStage: 0
     })));
-    console.log('🎨 Set haiku positions and visibility states');
   }, [texts.length, generateNonCollidingPositions, isClient]);
 
   // Handle mouse movement and haiku visibility
@@ -185,17 +171,14 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
     const clickX = (e.clientX / window.innerWidth) * 100;
     const clickY = (e.clientY / window.innerHeight) * 100;
     
-    console.log('🎯 Click detected at:', clickX, clickY);
     
     haikuPositions.forEach((position, index) => {
       const distance = Math.sqrt(
         Math.pow(clickX - position.x, 2) + Math.pow(clickY - position.y, 2)
       );
       
-      console.log(`🎯 Haiku ${index} at (${position.x}, ${position.y}), distance: ${distance.toFixed(2)}`);
       
       if (distance < 15) { // Within haiku area - increased radius for easier testing
-        console.log(`🎯 Pinning haiku ${index} for 5 seconds`);
         setHaikuVisibility(prev => prev.map((visibility, i) => {
           if (i === index) {
             // Clear existing timers
@@ -203,14 +186,12 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
             if (visibility.pinnedTimer) clearTimeout(visibility.pinnedTimer);
             
             // Pin this haiku for 5 seconds
-            console.log(`🎯 Setting haiku ${index} to pinned: true`);
             return {
               visible: true,
               timer: null,
               pinned: true,
               fadeOutStage: 0,
               pinnedTimer: setTimeout(() => {
-                console.log(`🎯 Starting modular fade-out for haiku ${index}`);
                 // Start the modular fade-out process
                 setHaikuVisibility(prev => prev.map((v, idx) => 
                   idx === index ? { ...v, pinned: false, pinnedTimer: null, fadeOutStage: 1 } : v
@@ -245,40 +226,14 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
   useEffect(() => {
     if (!isClient || haikuPositions.length === 0) return;
     
-    console.log('🎨 Adding custom mouse event listeners, haiku positions:', haikuPositions.length);
     
-    const handleCustomMouseMove = (e: CustomEvent) => {
-      const { clientX, clientY } = e.detail;
-      console.log('🎨 Custom mouse event received:', clientX, clientY);
-      // Create a synthetic mouse event
-      const syntheticEvent = {
-        clientX,
-        clientY,
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      } as MouseEvent;
-      handleMouseMove(syntheticEvent);
-    };
-    
-    const handleCustomClick = (e: CustomEvent) => {
-      const { clientX, clientY } = e.detail;
-      // Create a synthetic mouse event
-      const syntheticEvent = {
-        clientX,
-        clientY,
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      } as MouseEvent;
-      handleClick(syntheticEvent);
-    };
-    
-    document.addEventListener('haiku-mousemove', handleCustomMouseMove as EventListener);
-    document.addEventListener('haiku-click', handleCustomClick as EventListener);
+    // Use passive listeners to not interfere with Spline interactions
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.addEventListener('click', handleClick, { passive: true });
     
     return () => {
-      console.log('🎨 Removing custom mouse event listeners');
-      document.removeEventListener('haiku-mousemove', handleCustomMouseMove as EventListener);
-      document.removeEventListener('haiku-click', handleCustomClick as EventListener);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('click', handleClick);
     };
   }, [handleMouseMove, handleClick, isClient, haikuPositions.length]);
 
@@ -301,7 +256,7 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
     return (
       <svg
         ref={svgRef}
-        className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        className={`fixed inset-0 w-full h-full pointer-events-none z-[112] ${className}`}
         style={style}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
@@ -353,11 +308,6 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
     );
   }
 
-  console.log('🎨 Rendering BackgroundTextRevealSVG with:', {
-    haikuPositionsLength: haikuPositions.length,
-    haikuVisibilityLength: haikuVisibility.length,
-    isClient
-  });
 
   return (
     <>
@@ -365,7 +315,7 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
       {haikuPositions.map((pos, index) => (
         <div
           key={`haiku-area-${index}`}
-          className="absolute pointer-events-auto z-[105]"
+          className="absolute pointer-events-auto z-[115]"
           style={{
             left: `${pos.x}%`,
             top: `${pos.y}%`,
@@ -376,25 +326,21 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
             cursor: 'pointer'
           }}
           onMouseMove={(e) => {
-            console.log(`🎨 HAIKU ${index} - Mouse move:`, e.clientX, e.clientY);
             handleMouseMove(e as any);
           }}
           onClick={(e) => {
-            console.log(`🎨 HAIKU ${index} - Click:`, e.clientX, e.clientY);
             handleClick(e as any);
           }}
           onMouseEnter={() => {
-            console.log(`🎨 HAIKU ${index} - Mouse enter`);
           }}
           onMouseLeave={() => {
-            console.log(`🎨 HAIKU ${index} - Mouse leave`);
           }}
         />
       ))}
 
       <svg
         ref={svgRef}
-        className={`fixed inset-0 w-full h-full pointer-events-none z-[102] ${className}`}
+        className={`fixed inset-0 w-full h-full pointer-events-none z-[112] ${className}`}
         style={style}
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
@@ -469,7 +415,6 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
         
         // Debug logging for all haikus
         if (isPinned || fadeOutStage > 0) {
-          console.log(`🎯 HAIKU ${index} - visible: ${isVisible}, pinned: ${isPinned}, fadeOutStage: ${fadeOutStage}`);
         }
 
         return (

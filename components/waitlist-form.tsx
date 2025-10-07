@@ -4,9 +4,11 @@ import { useState } from 'react'
 
 interface WaitlistFormProps {
   isVisible: boolean
+  onEmailFocus?: () => void
+  onEmailBlur?: () => void
 }
 
-export function WaitlistForm({ isVisible }: WaitlistFormProps) {
+export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistFormProps) {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -50,7 +52,7 @@ export function WaitlistForm({ isVisible }: WaitlistFormProps) {
 
   if (isSubmitted) {
     return (
-      <div className={`fixed inset-0 flex items-center justify-end z-[130] transition-opacity duration-500 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`fixed inset-0 flex items-center justify-end z-[200] transition-opacity duration-500 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`} style={{ pointerEvents: 'auto' }}>
         <div className="text-right max-w-sm w-full mx-8">
           <h2 className="text-xl font-sans font-medium text-white mb-4">
             Welcome to the new economy.
@@ -72,7 +74,7 @@ export function WaitlistForm({ isVisible }: WaitlistFormProps) {
   }
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-end z-[130] transition-opacity duration-500 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`fixed inset-0 flex items-center justify-end z-[200] transition-opacity duration-500 ease-in-out ${isVisible ? 'opacity-100' : 'opacity-0'}`} style={{ pointerEvents: 'auto' }}>
       <div className="text-right max-w-sm w-full mx-8">
         <h1 className="text-xl font-sans font-medium text-white mb-6">
           Join the Waitlist
@@ -83,15 +85,19 @@ export function WaitlistForm({ isVisible }: WaitlistFormProps) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onFocus={onEmailFocus}
+            onBlur={onEmailBlur}
             placeholder="Enter your email"
             required
             className="w-full px-0 py-3 bg-transparent border-b border-white/30 text-white placeholder-white/50 font-sans text-sm focus:outline-none focus:border-white/60 transition-colors duration-200"
+            style={{ pointerEvents: 'auto' }}
           />
           
           <button
             type="submit"
             disabled={isLoading || !email}
             className="w-full py-3 bg-white text-black font-sans font-medium text-sm hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            style={{ pointerEvents: 'auto' }}
           >
             {isLoading ? 'Joining...' : 'Join Waitlist'}
           </button>

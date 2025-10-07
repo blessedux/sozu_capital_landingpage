@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { WaitlistForm } from '../components/waitlist-form';
+// import { WaitlistForm } from '../components/waitlist-form'; // Temporarily disabled for debugging
 import { BackgroundTextRevealSVG } from '../components/background-text-reveal';
 
 // Declare custom element for TypeScript
@@ -24,7 +24,7 @@ export default function Home() {
   const [splineLoaded, setSplineLoaded] = useState(false);
   const splineRef = useRef<any>(null);
   // Text-related state removed for clean animation testing
-  const [showWaitlistForm, setShowWaitlistForm] = useState(false);
+  // const [showWaitlistForm, setShowWaitlistForm] = useState(false); // Temporarily disabled for debugging
 
   // All text and typewriter effects removed for clean animation testing
 
@@ -34,7 +34,6 @@ export default function Home() {
     script.type = 'module';
     script.src = 'https://unpkg.com/@splinetool/viewer@1.10.74/build/spline-viewer.js';
     script.onload = () => {
-      console.log('Spline viewer script loaded');
     };
     script.onerror = () => {
       console.error('Failed to load Spline viewer script');
@@ -61,118 +60,7 @@ export default function Home() {
   }, [splineLoaded, hasError]);
 
   const handleSplineLoad = () => {
-    console.log('🎯 Spline scene loaded successfully!');
     setSplineLoaded(true);
-    
-    // Add a delay to ensure the Spline canvas is fully rendered
-    setTimeout(() => {
-      // Try multiple ways to get the Spline instance
-      const splineElement = document.querySelector('spline-viewer') as any;
-      console.log('🎯 Spline element found:', splineElement);
-      
-      if (splineElement) {
-        console.log('🎯 Spline element properties:', {
-          url: splineElement.url,
-          loaded: splineElement.loaded,
-          ready: splineElement.ready,
-          application: !!splineElement.application,
-          spline: !!splineElement.spline,
-          _spline: !!splineElement._spline
-        });
-        
-        // Try different ways to access the Spline instance
-        if (splineElement.spline) {
-          splineRef.current = splineElement.spline;
-          console.log('🎯 Spline instance found via .spline');
-        } else if (splineElement._spline) {
-          splineRef.current = splineElement._spline;
-          console.log('🎯 Spline instance found via ._spline');
-        } else if (splineElement.application) {
-          splineRef.current = splineElement.application;
-          console.log('🎯 Spline instance found via .application');
-        } else {
-          // Try to access it directly
-          splineRef.current = splineElement;
-          console.log('🎯 Using spline element directly');
-        }
-        
-        // Function to attach event listeners to canvas
-        const attachCanvasEvents = (canvas: HTMLCanvasElement, source: string) => {
-          console.log(`🎯 Canvas found in ${source}, adding event listeners`);
-          console.log(`🎯 Canvas dimensions: ${canvas.width}x${canvas.height}`);
-          console.log(`🎯 Canvas style:`, canvas.style.cssText);
-          
-          canvas.addEventListener('mouseenter', () => console.log('🎯 Canvas mouse enter'));
-          canvas.addEventListener('mouseleave', () => console.log('🎯 Canvas mouse leave'));
-          canvas.addEventListener('mousemove', (e: MouseEvent) => {
-            console.log('🎯 Canvas mouse move:', e.clientX, e.clientY);
-            // Check if Spline is responding to mouse events
-            console.log('🎯 Canvas mouse event details:', {
-              target: e.target,
-              currentTarget: e.currentTarget,
-              bubbles: e.bubbles,
-              cancelable: e.cancelable
-            });
-          });
-          canvas.addEventListener('click', (e: MouseEvent) => console.log('🎯 Canvas click:', e.clientX, e.clientY));
-          
-          // Also try to access Spline's internal event system
-          if (splineRef.current) {
-            console.log('🎯 Spline instance available:', splineRef.current);
-            // Try to access Spline's event system
-            if (splineRef.current.addEventListener) {
-              console.log('🎯 Spline has addEventListener method');
-            }
-            if (splineRef.current.on) {
-              console.log('🎯 Spline has on method');
-            }
-          }
-        };
-
-        // Try to find the canvas with multiple attempts
-        let canvas = splineElement.querySelector('canvas');
-        
-        // Also try to find canvas in shadow DOM
-        if (!canvas) {
-          const shadowRoot = splineElement.shadowRoot;
-          if (shadowRoot) {
-            canvas = shadowRoot.querySelector('canvas');
-            if (canvas) {
-              console.log('🎯 Canvas found in shadow DOM!');
-              attachCanvasEvents(canvas, 'shadow DOM');
-            }
-          }
-        } else {
-          attachCanvasEvents(canvas, 'regular DOM');
-        }
-        
-        if (!canvas) {
-          // Try again after a short delay
-          setTimeout(() => {
-            canvas = splineElement.querySelector('canvas');
-            if (!canvas) {
-              const shadowRoot = splineElement.shadowRoot;
-              if (shadowRoot) {
-                canvas = shadowRoot.querySelector('canvas');
-                if (canvas) {
-                  attachCanvasEvents(canvas, 'shadow DOM (second attempt)');
-                }
-              }
-            } else {
-              attachCanvasEvents(canvas, 'regular DOM (second attempt)');
-            }
-            
-            if (!canvas) {
-              console.log('🎯 No canvas found even on second attempt');
-            }
-          }, 1000);
-        }
-      } else {
-        console.log('🎯 No spline element found');
-      }
-    }, 1000); // Wait 1 second for full rendering
-    
-    // Note: Preloader hiding is now handled by the main useEffect with minimum duration
   };
 
   // Fallback: Set spline loaded to true after 5 seconds regardless
@@ -216,13 +104,13 @@ export default function Home() {
       
       // Scroll progress tracking (internal only)
       
-      // Show waitlist form only at 99-100% progress
-      if (scrollProgress >= 0.99) {
-        setShowWaitlistForm(true);
-        console.log('📋 Waitlist form should be visible');
-      } else {
-        setShowWaitlistForm(false);
-      }
+      // Show waitlist form only at 99-100% progress - Temporarily disabled for debugging
+      // if (scrollProgress >= 0.99) {
+      //   setShowWaitlistForm(true);
+      //   console.log('📋 Waitlist form should be visible');
+      // } else {
+      //   setShowWaitlistForm(false);
+      // }
     };
 
     // Add wheel event listener (no preventDefault to keep viewport fixed)
@@ -250,12 +138,10 @@ export default function Home() {
   ];
 
   // Debug loading state (commented out for production)
-  // console.log('🔍 Loading state:', isLoading, 'Spline loaded:', splineLoaded, 'Has error:', hasError);
 
   return (
     <div 
       className="relative w-full h-screen overflow-hidden"
-      style={{ pointerEvents: 'none' }}
     >
       {/* SOZU CAPITAL Logo - Top Left */}
       {!isLoading && (
@@ -268,9 +154,9 @@ export default function Home() {
             ease: "easeOut",
             delay: 0.5
           }}
-          onClick={() => console.log('🏠 Header icon clicked!')}
-          onMouseEnter={() => console.log('🏠 Header icon mouse enter')}
-          onMouseLeave={() => console.log('🏠 Header icon mouse leave')}
+          onClick={() => {}}
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
         >
           <a 
             href="https://www.x.com/sozucapital" 
@@ -321,24 +207,9 @@ export default function Home() {
 
       {/* Spline Scene */}
       <div 
-        className="fixed inset-0 w-full h-full overflow-hidden z-[100]"
+        className="fixed inset-0 w-full h-full overflow-hidden z-[110]"
         style={{ 
           pointerEvents: 'auto'
-        }}
-        onMouseMove={(e) => {
-          // Forward mouse events to haiku component via custom event
-          console.log('📄 Spline container mouse move:', e.clientX, e.clientY);
-          const customEvent = new CustomEvent('haiku-mousemove', {
-            detail: { clientX: e.clientX, clientY: e.clientY }
-          });
-          document.dispatchEvent(customEvent);
-        }}
-        onClick={(e) => {
-          // Forward click events to haiku component via custom event
-          const customEvent = new CustomEvent('haiku-click', {
-            detail: { clientX: e.clientX, clientY: e.clientY }
-          });
-          document.dispatchEvent(customEvent);
         }}
       >
         {!hasError ? (
@@ -350,7 +221,7 @@ export default function Home() {
                 height: '100%', 
                 pointerEvents: 'auto',
                 position: 'relative',
-                zIndex: 1,
+                zIndex: 10,
                 background: 'transparent'
               }}
               onLoad={handleSplineLoad}
@@ -366,19 +237,10 @@ export default function Home() {
       <BackgroundTextRevealSVG 
         texts={backgroundTexts}
         className="opacity-20"
-        style={{ 
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 105,
-          pointerEvents: 'none' // Don't interfere with mouse events
-        }}
       />
 
-      {/* Minimal Waitlist Form */}
-      <WaitlistForm isVisible={showWaitlistForm} />
+      {/* Minimal Waitlist Form - Temporarily disabled for debugging */}
+      {/* <WaitlistForm isVisible={showWaitlistForm} /> */}
 
     </div>
   );
