@@ -233,9 +233,12 @@ export default function Home() {
   // Scroll progress tracking (wheel + touch support)
   useEffect(() => {
     const maxScrollProgress = 1;
-    const scrollSpeed = 0.01;
+    // Different scroll speeds for mobile vs desktop
+    const desktopScrollSpeed = 0.01;
+    const mobileScrollSpeed = 0.003; // Much slower on mobile for longer scroll distance
 
-    const updateScrollProgress = (delta: number) => {
+    const updateScrollProgress = (delta: number, isMobile: boolean) => {
+      const scrollSpeed = isMobile ? mobileScrollSpeed : desktopScrollSpeed;
       setScrollProgress(prev => {
         const newProgress = prev + delta * scrollSpeed;
         const clampedProgress = Math.max(0, Math.min(maxScrollProgress, newProgress));
@@ -245,7 +248,7 @@ export default function Home() {
 
     // Desktop wheel events
     const handleWheel = (e: WheelEvent) => {
-      updateScrollProgress(e.deltaY);
+      updateScrollProgress(e.deltaY, false);
     };
 
     // Mobile touch events
@@ -258,7 +261,7 @@ export default function Home() {
       e.preventDefault(); // Prevent default scrolling
       const touchCurrentY = e.touches[0].clientY;
       const deltaY = touchStartY - touchCurrentY; // Inverted for natural feel
-      updateScrollProgress(deltaY);
+      updateScrollProgress(deltaY, true); // Pass true for mobile
       touchStartY = touchCurrentY;
     };
 
