@@ -389,7 +389,13 @@ export default function Home() {
         }}
       >
         {!hasError ? (
-          <div className="w-full h-full scale-150 origin-center">
+          <div 
+            className="w-full h-full origin-center"
+            style={{
+              transform: isMobile ? 'scale(1.2)' : 'scale(1.5)', // Smaller scale on mobile
+              transformOrigin: 'center center'
+            }}
+          >
             <spline-viewer 
               url="https://prod.spline.design/qJMdOHKop06FuXNN/scene.splinecode"
               style={{ 

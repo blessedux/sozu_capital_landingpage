@@ -382,8 +382,8 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
           id="magicalGradient"
           gradientUnits="userSpaceOnUse"
           r="25%"
-          cx={ripplePosition.cx}
-          cy={ripplePosition.cy}
+          cx={ripplePosition.cx || "50%"}
+          cy={ripplePosition.cy || "50%"}
           animate={isInitialized ? ripplePosition : { cx: "50%", cy: "50%" }}
           transition={{ duration: 0.3, ease: "circOut" }}
         >
@@ -398,8 +398,8 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
           id="directRippleMask"
           gradientUnits="userSpaceOnUse"
           r="30%"
-          cx={ripplePosition.cx}
-          cy={ripplePosition.cy}
+          cx={ripplePosition.cx || "50%"}
+          cy={ripplePosition.cy || "50%"}
           animate={isInitialized ? ripplePosition : { cx: "50%", cy: "50%" }}
           transition={{
             duration: 0.4,
@@ -440,9 +440,9 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
 
         const lines = text.split('\n');
         const { x, y } = position;
-        const isVisible = visibility.visible;
-        const isPinned = visibility.pinned;
-        const fadeOutStage = visibility.fadeOutStage;
+        const isVisible = visibility?.visible || false;
+        const isPinned = visibility?.pinned || false;
+        const fadeOutStage = visibility?.fadeOutStage || 0;
         
         // Debug logging for all haikus
         if (isPinned || fadeOutStage > 0) {

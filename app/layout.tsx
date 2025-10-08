@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sozu.capital'),
   title: "The Economy of the Future | SOZU CAPITAL",
-  description: "The Entrepreneur's Operating System for the new economy. Join the future of decentralized finance and peer-to-peer value creation.",
+  description: "The entrepreneur's OS for the global economy. Sozu provides a private, borderless financial stack, from payments to treasury management, free from intermediaries and built for business sovereignty.",
   keywords: ["decentralized finance", "entrepreneur", "peer-to-peer", "cryptocurrency", "blockchain", "DeFi", "future economy", "sovereign finance"],
   authors: [{ name: "SOZU CAPITAL" }],
   creator: "SOZU CAPITAL",
@@ -24,8 +25,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://sozu.capital',
     siteName: 'SOZU CAPITAL',
-    title: 'The Economy of the Future | SOZU CAPITAL',
-    description: 'The Entrepreneur\'s Operating System for the new economy. Join the future of decentralized finance and peer-to-peer value creation.',
+    title: 'SOZU CAPITAL | The Entrepreneur\'s Operating System',
+    description: 'The entrepreneur's OS for the global economy. Sozu provides a private, borderless financial stack—from payments to treasury management—free from intermediaries and built for business sovereignty.,
     images: [
       {
         url: '/sozucapital_logo_tb.png',
