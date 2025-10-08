@@ -25,6 +25,7 @@ export default function Home() {
   const splineRef = useRef<any>(null);
   // Text-related state removed for clean animation testing
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const [splineAnimationState, setSplineAnimationState] = useState({
     isAnimating: false,
     currentAnimation: null as string | null,
@@ -217,28 +218,59 @@ export default function Home() {
 
 
 
-  // Wheel-based scroll progress tracking
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Scroll progress tracking (wheel + touch support)
   useEffect(() => {
     const maxScrollProgress = 1;
+    const scrollSpeed = 0.01;
 
-    const handleWheel = (e: WheelEvent) => {
-      // Calculate scroll progress based on wheel delta
-      const delta = e.deltaY;
-      const scrollSpeed = 0.01; // Half as sensitive scrolling
-      
+    const updateScrollProgress = (delta: number) => {
       setScrollProgress(prev => {
         const newProgress = prev + delta * scrollSpeed;
         const clampedProgress = Math.max(0, Math.min(maxScrollProgress, newProgress));
-        
         return clampedProgress;
       });
     };
 
-    // Add wheel event listener (no preventDefault to keep viewport fixed)
+    // Desktop wheel events
+    const handleWheel = (e: WheelEvent) => {
+      updateScrollProgress(e.deltaY);
+    };
+
+    // Mobile touch events
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault(); // Prevent default scrolling
+      const touchCurrentY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchCurrentY; // Inverted for natural feel
+      updateScrollProgress(deltaY);
+      touchStartY = touchCurrentY;
+    };
+
+    // Add event listeners
     window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
   }, []);
 
@@ -332,7 +364,7 @@ export default function Home() {
       <div 
         className="fixed inset-0 w-full h-full overflow-hidden z-[110] transition-all duration-300 ease-out"
         style={{ 
-          pointerEvents: 'auto',
+          pointerEvents: isMobile ? 'none' : 'auto', // Disable interactions on mobile
           opacity: 1 - (scrollProgress * 0.3), // Subtle fade as you scroll
           transform: `scale(${1 + scrollProgress * 0.05})` // Subtle zoom as you scroll
         }}

@@ -30,6 +30,7 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
   const [ripplePosition, setRipplePosition] = useState({ cx: "50%", cy: "50%" });
   const [isInitialized, setIsInitialized] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
 
   // Generate non-colliding positions for haikus
@@ -86,6 +87,15 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
   // Set client state to prevent hydration mismatch
   useEffect(() => {
     setIsClient(true);
+    
+    // Detect mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Initialize haiku positions and visibility
@@ -226,16 +236,37 @@ export function BackgroundTextRevealSVG({ texts, className = '', style }: Backgr
   useEffect(() => {
     if (!isClient || haikuPositions.length === 0) return;
     
-    
-    // Use passive listeners to not interfere with Spline interactions
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('click', handleClick, { passive: true });
-    
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('click', handleClick);
-    };
-  }, [handleMouseMove, handleClick, isClient, haikuPositions.length]);
+    if (isMobile) {
+      // Mobile: Use touch events for tap interactions
+      const handleTouch = (e: TouchEvent) => {
+        // Convert TouchEvent to MouseEvent format
+        const touch = e.touches[0];
+        const mouseEvent = {
+          ...e,
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          button: 0,
+          buttons: 1
+        } as unknown as MouseEvent;
+        handleClick(mouseEvent);
+      };
+      
+      document.addEventListener('touchstart', handleTouch, { passive: true });
+      
+      return () => {
+        document.removeEventListener('touchstart', handleTouch);
+      };
+    } else {
+      // Desktop: Use mouse events for hover interactions
+      document.addEventListener('mousemove', handleMouseMove, { passive: true });
+      document.addEventListener('click', handleClick, { passive: true });
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('click', handleClick);
+      };
+    }
+  }, [handleMouseMove, handleClick, isClient, haikuPositions.length, isMobile]);
 
   // Cleanup timers on unmount
   useEffect(() => {
