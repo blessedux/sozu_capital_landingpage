@@ -233,9 +233,9 @@ export default function Home() {
   // Scroll progress tracking (wheel + touch support)
   useEffect(() => {
     const maxScrollProgress = 1;
-    // Different scroll speeds for mobile vs desktop
+    // Optimized scroll speeds for better mobile experience
     const desktopScrollSpeed = 0.01;
-    const mobileScrollSpeed = 0.003; // Much slower on mobile for longer scroll distance
+    const mobileScrollSpeed = 0.008; // Faster than before but still requires more scrolling
 
     const updateScrollProgress = (delta: number, isMobile: boolean) => {
       const scrollSpeed = isMobile ? mobileScrollSpeed : desktopScrollSpeed;
@@ -251,29 +251,45 @@ export default function Home() {
       updateScrollProgress(e.deltaY, false);
     };
 
-    // Mobile touch events
+    // Mobile touch events - improved handling
     let touchStartY = 0;
+    let isScrolling = false;
+    
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
+      isScrolling = true;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      e.preventDefault(); // Prevent default scrolling
+      if (!isScrolling) return;
+      
+      // Only prevent default if we're actively scrolling our custom scroll
       const touchCurrentY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchCurrentY; // Inverted for natural feel
-      updateScrollProgress(deltaY, true); // Pass true for mobile
-      touchStartY = touchCurrentY;
+      const deltaY = touchStartY - touchCurrentY;
+      
+      // Only prevent default if there's significant movement
+      if (Math.abs(deltaY) > 5) {
+        e.preventDefault();
+        updateScrollProgress(deltaY, true);
+        touchStartY = touchCurrentY;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isScrolling = false;
     };
 
     // Add event listeners
     window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, []);
 
