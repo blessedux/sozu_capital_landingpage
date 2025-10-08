@@ -29,10 +29,10 @@ export const metadata: Metadata = {
     description: 'The entrepreneur\'s OS for the global economy. Sozu provides a private, borderless financial stack—from payments to treasury management—free from intermediaries and built for business sovereignty.',
     images: [
       {
-        url: '/sozucapital_logo_tb.png',
-        width: 1200,
-        height: 630,
-        alt: 'SOZU CAPITAL - The Economy of the Future',
+        url: '/android-chrome-192x192.png',
+        width: 192,
+        height: 192,
+        alt: 'SOZU CAPITAL - The Entrepreneur\'s Operating System',
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'The Economy of the Future | SOZU CAPITAL',
     description: 'The entrepreneur\'s OS for the global economy. Sozu provides a private, borderless financial stack—from payments to treasury management—free from intermediaries and built for business sovereignty.',
-    images: ['/sozucapital_logo_tb.png'],
+    images: ['/android-chrome-192x192.png'],
     creator: '@sozucapital',
   },
   icons: {
