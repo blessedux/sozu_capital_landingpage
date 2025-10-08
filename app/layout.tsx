@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://sozucapital.com',
+    url: 'https://sozu.capital',
     siteName: 'SOZU CAPITAL',
     title: 'The Economy of the Future | SOZU CAPITAL',
     description: 'The Entrepreneur\'s Operating System for the new economy. Join the future of decentralized finance and peer-to-peer value creation.',

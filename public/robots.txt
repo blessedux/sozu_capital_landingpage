@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sozucapital.com/sitemap.xml
+Sitemap: https://sozu.capital/sitemap.xml
