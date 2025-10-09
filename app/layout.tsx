@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Economy of the Future | SOZU CAPITAL',
+    title: 'SOZU CAPITAL | The Entrepreneur\'s Operating System',
     description: 'The entrepreneur\'s OS for the global economy. Sozu provides a private, borderless financial stack—from payments to treasury management—free from intermediaries and built for business sovereignty.',
     images: ['/android-chrome-192x192.png'],
     creator: '@sozucapital',

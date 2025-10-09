@@ -69,20 +69,33 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
   if (isSubmitted) {
     return (
       <div className="fixed inset-0 flex items-center justify-end z-[200]" style={{ pointerEvents: 'none' }}>
-        <div className="text-right max-w-sm w-full mx-8">
-          <h2 className="text-xl font-sans font-medium text-white mb-4">
-            Welcome to the new economy.
-          </h2>
-          <div className="text-white/70 font-sans text-sm space-y-3">
-            <p>
-              We will only contact you with info related to your account and only if you want, updates on progress towards our goals as an organization.
-            </p>
-            <p>
-              We are happy to have you here.
-            </p>
-            <p className="text-white/80 font-medium">
-              Let's build internet-native cryptographically secure and privacy-first money together.
-            </p>
+        <div className="text-right max-w-sm w-full mx-8 relative">
+          {/* Blurred glass card backdrop */}
+          <div 
+            className="absolute inset-0 backdrop-blur-lg bg-black/30 border border-white/20 rounded-2xl"
+            style={{ 
+              pointerEvents: 'none',
+              background: 'linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)',
+              backdropFilter: 'blur(12px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(180%)'
+            }}
+          />
+          
+          <div className="relative z-10 p-8">
+            <h2 className="text-xl font-sans font-medium text-white mb-4">
+              Welcome to the new economy.
+            </h2>
+            <div className="text-white/70 font-sans text-sm space-y-3">
+              <p>
+                We will only contact you with info related to your account and only if you want, updates on progress towards our goals as an organization.
+              </p>
+              <p>
+                We are happy to have you here.
+              </p>
+              <p className="text-white/80 font-medium">
+                Let's build internet-native cryptographically secure and privacy-first money together.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -91,34 +104,47 @@ export function WaitlistForm({ isVisible, onEmailFocus, onEmailBlur }: WaitlistF
 
   return (
     <div className="fixed inset-0 flex items-center justify-end z-[200]" style={{ pointerEvents: 'none' }}>
-      <div className="text-right max-w-sm w-full mx-8">
-        <h1 className="text-xl font-sans font-medium text-white mb-6">
-          Join the Movement
-        </h1>
+      <div className="text-right max-w-sm w-full mx-8 relative">
+        {/* Blurred glass card backdrop */}
+        <div 
+          className="absolute inset-0 backdrop-blur-lg bg-black/30 border border-white/20 rounded-2xl"
+          style={{ 
+            pointerEvents: 'none',
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)',
+            backdropFilter: 'blur(12px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(12px) saturate(180%)'
+          }}
+        />
+        
+        <div className="relative z-10 p-8">
+          <h1 className="text-xl font-sans font-medium text-white mb-6">
+            Join the Movement
+          </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4" style={{ pointerEvents: 'auto' }}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onFocus={onEmailFocus}
-            onBlur={onEmailBlur}
-            placeholder="Enter an email"
-            required
-            className="w-full px-0 py-3 bg-transparent border-b border-white/30 text-white placeholder-white/50 font-sans text-sm focus:outline-none focus:border-white/60 transition-colors duration-200"
-            style={{ pointerEvents: 'auto' }}
-            ref={inputRef}
-          />
-          
-          <button
-            type="submit"
-            disabled={isLoading || !email}
-            className="w-full py-3 bg-white text-black font-sans font-medium text-sm hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-            style={{ pointerEvents: 'auto' }}
-          >
-            {isLoading ? 'Joining waitlist...' : 'Get exclusive access'}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4" style={{ pointerEvents: 'auto' }}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onFocus={onEmailFocus}
+              onBlur={onEmailBlur}
+              placeholder="Enter an email"
+              required
+              className="w-full px-0 py-3 bg-transparent border-b border-white/30 text-white placeholder-white/50 font-sans text-sm focus:outline-none focus:border-white/60 transition-colors duration-200"
+              style={{ pointerEvents: 'auto' }}
+              ref={inputRef}
+            />
+            
+            <button
+              type="submit"
+              disabled={isLoading || !email}
+              className="w-full py-3 bg-white text-black font-sans font-medium text-sm hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              style={{ pointerEvents: 'auto' }}
+            >
+              {isLoading ? 'Joining waitlist...' : 'Get exclusive access'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
