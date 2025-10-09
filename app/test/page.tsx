@@ -96,11 +96,20 @@ export default function TestPage() {
     };
   }, []);
 
-  // Test background texts for different animation approaches
+  // All haiku texts from the main landing page
   const testBackgroundTexts = [
-    'Test Animation 1\nNew approach here\nExperimental design',
-    'Test Animation 2\nDifferent logic\nAlternative method',
-    'Test Animation 3\nCreative approach\nInnovative solution',
+    'Code, not empty vows\nA peer-to-peer world now blooms\nSovereign standard',
+    'Arbitrage anchor\nJunior tranche absorbs the shock\nResilient by design',
+    'Not a dying dollar\nBread and energy define\nTrue and stable worth',
+    'Their tax has no reach\nTheir printing press now is mute\nWe built a new world',
+    'A public ledger?\nYour life is not for their eyes\nPrivate by default',
+    'The vault does not sleep\nIt works and grows for the net\nYield builds the bedrock',
+    'Tap your screen and send\nLike passing paper, but strong\nYour value now flows',
+    'Not here to protest\nWe build a better system\nThe ultimate leave',
+    'No lobbyist hand\nJust service, a product\'s worth\nReal capitalism',
+    'Beyond the border\nOne stable core for billions\nA neutral new ground',
+    'Money should be like\nWater that flows, peer to peer\nFor the hustler\'s hands',
+    'Digital cash flows\nUncensored, private, and strong\nThe future is here'
   ];
 
   if (isLoading) {
