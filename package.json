@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@dannymichel/proxima-nova": "^4.5.2",
     "@supabase/supabase-js": "^2.74.0",
     "autoprefixer": "^10.4.16",
     "motion": "^12.23.22",
