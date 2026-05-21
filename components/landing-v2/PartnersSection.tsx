@@ -9,7 +9,7 @@ export function PartnersSection({ copy }: Props) {
     <section
       id="partners"
       aria-label={copy.ariaLabel}
-      className="flex flex-col items-center gap-12 !bg-transparent py-24"
+      className="flex flex-col items-center gap-8 !bg-background py-24"
     >
       <p className="max-w-md text-center text-sm font-medium uppercase leading-5 tracking-[0.2em] text-[#6b7280]">
         {copy.heading}

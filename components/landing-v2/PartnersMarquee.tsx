@@ -101,7 +101,9 @@ export function PartnersMarquee({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "5.5rem",
+        minHeight: "7.5rem",
+        paddingTop: "1.75rem",
+        paddingBottom: "1.75rem",
         perspective: `${PERSPECTIVE}px`,
       }}
     >
@@ -155,21 +157,43 @@ export function PartnersMarquee({
         </div>
       </div>
 
-      {/* Edge fades — match page background, not white */}
+      {/* Horizontal edge fades */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-10"
         style={{
           background:
             "linear-gradient(90deg, var(--background) 0%, transparent 18%, transparent 82%, var(--background) 100%)",
         }}
       />
+
+      {/* Top edge — blur + fade into page background */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 h-10"
         style={{
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          maskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 30%, transparent 100%)",
           background:
-            "linear-gradient(180deg, var(--background) 0%, transparent 25%, transparent 75%, var(--background) 100%)",
+            "linear-gradient(to bottom, var(--background) 0%, transparent 100%)",
+        }}
+      />
+
+      {/* Bottom edge — blur + fade into page background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-10"
+        style={{
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          maskImage: "linear-gradient(to top, black 30%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to top, black 30%, transparent 100%)",
+          background:
+            "linear-gradient(to top, var(--background) 0%, transparent 100%)",
         }}
       />
     </div>
