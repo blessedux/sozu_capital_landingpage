@@ -11,19 +11,19 @@ export function WhySozuSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <div className="grid gap-6 md:grid-cols-2 max-w-4xl">
-        <blockquote className="rounded-2xl border border-border/60 p-8 md:p-10 bg-surface-elevated/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-          <p className="text-lg md:text-xl text-foreground/90 leading-snug font-medium text-pretty">
+      <div className="grid max-w-4xl gap-6 md:grid-cols-2">
+        <blockquote className="rounded-[32px] border border-white/5 bg-[#111] p-8 md:p-10">
+          <p className="text-lg font-medium leading-snug text-white md:text-xl">
             {copy.quoteLead}
-            <span className="text-primary">{copy.quoteHighlight}</span>
+            <span className="text-[#ff8000]">{copy.quoteHighlight}</span>
             {copy.quoteRest}
           </p>
         </blockquote>
-        <div className="rounded-2xl border border-border/60 p-8 md:p-10 bg-surface/60">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
+        <div className="rounded-[32px] border border-white/5 bg-white/[0.03] p-8 md:p-10">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
             {copy.feelEyebrow}
           </p>
-          <p className="text-muted text-sm leading-relaxed">{copy.feelBody}</p>
+          <p className="text-sm leading-relaxed text-white/55">{copy.feelBody}</p>
         </div>
       </div>
     </Section>

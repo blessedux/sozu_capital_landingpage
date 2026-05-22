@@ -11,14 +11,14 @@ export function FinancingBnplSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-        <div className="rounded-2xl border border-border/50 bg-surface-elevated/35 p-6 md:p-8 border-l-[3px] border-l-primary">
-          <h3 className="font-semibold text-lg mb-3">{copy.bnplTitle}</h3>
-          <p className="text-muted text-sm leading-relaxed">{copy.bnplBody}</p>
+      <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+        <div className="rounded-[32px] border border-l-[3px] border-white/5 border-l-[#ff8000] bg-[#111] p-8 transition-[box-shadow] duration-300 hover:shadow-[0_0_48px_rgba(255,128,0,0.1)]">
+          <h3 className="mb-3 text-lg font-semibold text-white">{copy.bnplTitle}</h3>
+          <p className="text-sm leading-relaxed text-white/55">{copy.bnplBody}</p>
         </div>
-        <div className="rounded-2xl border border-border/50 bg-surface-elevated/35 p-6 md:p-8">
-          <h3 className="font-semibold text-lg mb-3">{copy.wcTitle}</h3>
-          <p className="text-muted text-sm leading-relaxed">{copy.wcBody}</p>
+        <div className="rounded-[32px] border border-white/5 bg-[#111] p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#ff8000]/20 hover:shadow-[0_0_48px_rgba(255,128,0,0.08)]">
+          <h3 className="mb-3 text-lg font-semibold text-white">{copy.wcTitle}</h3>
+          <p className="text-sm leading-relaxed text-white/55">{copy.wcBody}</p>
         </div>
       </div>
     </Section>

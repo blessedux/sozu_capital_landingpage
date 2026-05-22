@@ -15,12 +15,12 @@ export function CoreBenefitsSection({ copy }: Props) {
         {copy.items.map((b) => (
           <div
             key={b.title}
-            className="rounded-2xl border border-border/60 bg-surface-elevated/40 p-8 md:p-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+            className="rounded-[32px] border border-white/5 bg-[#111] p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#ff8000]/20 hover:shadow-[0_0_40px_rgba(255,128,0,0.07)] md:p-10"
           >
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
+            <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
               {b.title}
             </h3>
-            <p className="text-muted leading-relaxed">{b.body}</p>
+            <p className="leading-relaxed text-white/55">{b.body}</p>
           </div>
         ))}
       </div>

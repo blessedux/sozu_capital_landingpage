@@ -2,8 +2,19 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/landing-v2/SiteHeader";
 import { getLandingCopy } from "@/lib/landing-copy";
 
-export default function OnboardingPage() {
-  const copy = getLandingCopy("es");
+type Props = {
+  searchParams: Promise<{ tag?: string; domain?: string }>;
+};
+
+export default async function OnboardingPage({ searchParams }: Props) {
+  const copy = getLandingCopy("en");
+  const params = await searchParams;
+  const reserved =
+    params.tag != null
+      ? `$${params.tag.replace(/^\$/, "")}`
+      : params.domain != null
+        ? params.domain
+        : null;
 
   return (
     <div className="landing-v2-grain min-h-dvh bg-background text-foreground">
@@ -13,17 +24,20 @@ export default function OnboardingPage() {
           Onboarding
         </p>
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-          Creación de billetera
+          Create your wallet
         </h1>
+        {reserved ? (
+          <p className="mb-4 font-mono text-lg text-[#ff8000]">{reserved}</p>
+        ) : null}
         <p className="text-muted leading-relaxed mb-10">
-          Este flujo estará disponible pronto. Aquí podrás completar el onboarding y
-          asociar tu Sozu Tag a tu billetera no custodial.
+          Wallet creation is coming soon. You&apos;ll finish onboarding here and link
+          {reserved ? " this name" : " your Sozu Tag or domain"} to a non-custodial wallet.
         </p>
         <Link
           href="/"
           className="inline-flex font-mono text-sm uppercase tracking-wide text-primary hover:text-primary/80 transition-colors"
         >
-          ← Volver al inicio
+          ← Back to home
         </Link>
       </main>
     </div>

@@ -15,10 +15,10 @@ export function SmartDollarsSection({ copy }: Props) {
         {copy.cards.map((item) => (
           <li
             key={item.title}
-            className="rounded-2xl border border-border/60 p-6 md:p-8 bg-surface-elevated/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+            className="group rounded-[32px] border border-white/5 bg-[#111] p-8 transition-[border-color,box-shadow] duration-300 hover:border-[#ff8000]/20 hover:shadow-[0_0_40px_rgba(255,128,0,0.08)]"
           >
-            <h3 className="font-medium text-lg text-foreground mb-3">{item.title}</h3>
-            <p className="text-sm text-muted leading-relaxed">{item.body}</p>
+            <h3 className="mb-3 text-lg font-semibold text-white">{item.title}</h3>
+            <p className="text-sm leading-relaxed text-white/55">{item.body}</p>
           </li>
         ))}
       </ul>

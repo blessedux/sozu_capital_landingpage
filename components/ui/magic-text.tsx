@@ -19,6 +19,8 @@ export interface MagicTextProps {
   lineCount?: number;
   wordOffset?: number;
   totalWords?: number;
+  /** When true, words render full white (no dim-to-white reveal). */
+  solidWhite?: boolean;
 }
 
 interface WordProps {
@@ -26,6 +28,7 @@ interface WordProps {
   progress: MotionValue<number>;
   range: [number, number];
   wordClassName?: string;
+  solidWhite?: boolean;
 }
 
 const Word: React.FC<WordProps> = ({
@@ -33,24 +36,32 @@ const Word: React.FC<WordProps> = ({
   progress,
   range,
   wordClassName,
+  solidWhite = false,
 }) => {
-  const opacity = useTransform(progress, range, [0, 1], { clamp: true });
+  const color = useTransform(
+    progress,
+    range,
+    ["rgba(255,255,255,0.25)", "rgba(255,255,255,1)"],
+    { clamp: true }
+  );
 
-  return (
-    <span
-      className={`relative mr-[0.25em] inline-block ${wordClassName ?? ""}`}
-    >
-      <span className={`text-white/25 ${wordClassName ?? ""}`} aria-hidden>
-        {children}
-      </span>
-      <motion.span
-        style={{ opacity }}
-        className={`absolute left-0 top-0 text-white ${wordClassName ?? ""}`}
-        aria-hidden
+  if (solidWhite) {
+    return (
+      <span
+        className={`mr-[0.25em] inline-block text-white ${wordClassName ?? ""}`}
       >
         {children}
-      </motion.span>
-    </span>
+      </span>
+    );
+  }
+
+  return (
+    <motion.span
+      style={{ color }}
+      className={`mr-[0.25em] inline-block ${wordClassName ?? ""}`}
+    >
+      {children}
+    </motion.span>
   );
 };
 
@@ -69,6 +80,7 @@ function MagicTextContent({
   lineCount = 1,
   wordOffset = 0,
   totalWords,
+  solidWhite = false,
 }: MagicTextContentProps) {
   const words = text.split(/\s+/).filter(Boolean);
   const useGlobal = totalWords != null && totalWords > 0;
@@ -81,8 +93,10 @@ function MagicTextContent({
 
         if (useGlobal) {
           const globalIndex = wordOffset + i;
-          start = globalIndex / totalWords;
-          end = (globalIndex + 1) / totalWords;
+          const slice = 1 / totalWords;
+          // Slight overlap so each word visibly fades in during scroll
+          start = Math.max(0, globalIndex * slice - slice * 0.15);
+          end = Math.min(1, (globalIndex + 1) * slice + slice * 0.35);
         } else {
           const lineSlice = 1 / lineCount;
           const lineStart = lineIndex * lineSlice;
@@ -98,6 +112,7 @@ function MagicTextContent({
             progress={progress}
             range={[start, Math.min(1, end)]}
             wordClassName={wordClassName}
+            solidWhite={solidWhite}
           >
             {word}
           </Word>

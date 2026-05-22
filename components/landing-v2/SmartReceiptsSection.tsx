@@ -11,34 +11,34 @@ export function SmartReceiptsSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <p className="mb-10 text-xl md:text-2xl font-semibold text-foreground text-balance max-w-2xl">
+      <p className="mb-10 max-w-2xl text-xl font-semibold leading-snug text-white md:text-2xl">
         {copy.pullQuote}
       </p>
 
-      <div className="grid md:grid-cols-2 gap-4 mb-12">
+      <div className="mb-8 grid gap-4 md:grid-cols-2">
         {copy.features.map((f) => (
           <div
             key={f.title}
-            className="rounded-2xl border border-border/60 bg-surface-elevated/40 p-6 md:p-8"
+            className="rounded-[32px] border border-white/5 bg-[#111] p-8 transition-[border-color] duration-300 hover:border-[#ff8000]/20"
           >
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-3">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
               {f.title}
             </h3>
-            <p className="text-muted text-sm leading-relaxed">{f.body}</p>
+            <p className="text-sm leading-relaxed text-white/55">{f.body}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4 max-w-4xl">
+      <div className="grid max-w-4xl gap-4 sm:grid-cols-2">
         {copy.benefits.map((b) => (
-          <div key={b.title} className="rounded-xl border border-border/50 p-5 bg-surface/40">
-            <h3 className="font-medium text-foreground mb-2">{b.title}</h3>
-            <p className="text-muted text-sm leading-relaxed">{b.body}</p>
+          <div key={b.title} className="rounded-2xl border border-white/5 bg-white/[0.03] p-6">
+            <h3 className="mb-2 font-semibold text-white">{b.title}</h3>
+            <p className="text-sm leading-relaxed text-white/55">{b.body}</p>
           </div>
         ))}
       </div>
 
-      <p className="mt-10 text-sm text-muted max-w-2xl leading-relaxed italic">
+      <p className="mt-10 max-w-2xl text-sm italic leading-relaxed text-white/35">
         {copy.footnote}
       </p>
     </Section>

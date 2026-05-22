@@ -63,6 +63,16 @@ export function NetworkLayerSection({ copy }: Props) {
           <p className="mx-auto mb-6 max-w-[54rem] text-lg leading-[34px] text-white/70 md:text-[22px]">
             {copy.description}
           </p>
+          {copy.bullets && copy.bullets.length > 0 && (
+            <ul className="mx-auto mb-8 flex max-w-[44rem] flex-col gap-3 text-left">
+              {copy.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-center gap-3">
+                  <span className="size-1.5 shrink-0 rounded-full bg-[#ff8000]" aria-hidden />
+                  <span className="text-base leading-6 text-white/50">{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          )}
           <p className="text-lg leading-7 text-white/40">{copy.tagline}</p>
         </header>
 

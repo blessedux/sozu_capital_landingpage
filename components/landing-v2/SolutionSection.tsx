@@ -11,7 +11,7 @@ const ORANGE_GLOW =
   "radial-gradient(circle, rgba(255,128,0,0.05) 0%, rgba(255,128,0,0) 70%)";
 
 const STICKY_TOP = 96;
-const CARD_STACK_OFFSET = 12;
+const CARD_STACK_OFFSET = 20;
 
 function SolutionCard({
   icon,
@@ -47,21 +47,23 @@ export function SolutionSection({ copy }: Props) {
     <section
       id="solution"
       aria-label={copy.ariaLabel}
-      className="relative overflow-x-clip !bg-[#0d0d0d] px-6 py-24 md:px-[7.5rem] md:py-40"
+      className="relative z-[1] overflow-x-clip !bg-[#0d0d0d] rounded-t-[2.5rem] px-6 py-24 md:px-[7.5rem] md:py-40"
+      style={{ boxShadow: "0 -32px 64px rgba(0,0,0,0.55)" }}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 z-0 w-screen max-w-none -translate-x-1/2"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
         <Image
-          src="/figma/solution/solution_background2.webp"
+          src="/sozubg_5.webp"
           alt=""
-          width={1920}
-          height={720}
-          className="block h-auto w-full opacity-90"
+          fill
+          className="object-cover object-center opacity-90"
           sizes="100vw"
           priority={false}
         />
+        <div className="absolute inset-0 bg-[#0d0d0d]/30" />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0d0d0d] to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#0d0d0d] md:h-32" />
       </div>
 
@@ -106,22 +108,29 @@ export function SolutionSection({ copy }: Props) {
             ))}
           </div>
 
-          <ContainerScroll className="hidden lg:block">
-            {copy.cards.map((card, index) => (
-              <CardSticky
-                key={card.title}
-                index={index}
-                baseTop={STICKY_TOP}
-                incrementY={CARD_STACK_OFFSET}
-                incrementZ={10}
-                className={cn(
-                  "mb-6",
-                  index === cardCount - 1 && "pb-[min(12rem,15vh)]"
-                )}
-              >
-                <SolutionCard {...card} />
-              </CardSticky>
-            ))}
+          <ContainerScroll className="hidden min-w-0 lg:block">
+            {copy.cards.map((card, index) => {
+              const isLast = index === cardCount - 1;
+              // Reversed top: later cards (higher z-index) are higher on screen.
+              // Last card sits at STICKY_TOP; each earlier card peeks out below it.
+              const cardTop = STICKY_TOP + (cardCount - 1 - index) * CARD_STACK_OFFSET;
+              return (
+                <CardSticky
+                  key={card.title}
+                  index={index}
+                  baseTop={STICKY_TOP}
+                  incrementY={CARD_STACK_OFFSET}
+                  incrementZ={10}
+                  style={{ top: cardTop }}
+                  className={cn(
+                    "mb-6",
+                    isLast && "pb-[min(20rem,28vh)]"
+                  )}
+                >
+                  <SolutionCard {...card} />
+                </CardSticky>
+              );
+            })}
           </ContainerScroll>
         </div>
       </div>

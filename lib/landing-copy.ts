@@ -56,11 +56,32 @@ export type LandingCopy = {
     ariaLabel: string;
     line1: string;
     line2: string;
-    line3: string;
-    line4: string;
-    line5: string;
-    bodyLead: string;
-    bodyClose: string;
+    benefits: string[];
+    taglineSimple: string;
+    taglinePowerful: string;
+  };
+  voiceDemoTeaser: {
+    ariaLabel: string;
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    taglineSimple: string;
+    taglinePowerful: string;
+    cta: string;
+    turns: { intentId: string; userText?: string }[];
+  };
+  voiceDemo: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    emptyHint: string;
+    micLabel: string;
+    micHint: string;
+    listening: string;
+    thinking: string;
+    reset: string;
+    ctaFull: string;
+    prompts: { intentId: string; label: string }[];
   };
   solution: {
     ariaLabel: string;
@@ -101,14 +122,22 @@ export type LandingCopy = {
     cards: { title: string; body: string }[];
   };
   tagSearch: {
-    label: string;
-    placeholder: string;
-    hint: string;
+    cardTitle: string;
+    cardDescription: string;
+    modeTag: string;
+    modeDomain: string;
+    labelTag: string;
+    labelDomain: string;
+    placeholderTag: string;
+    placeholderDomain: string;
+    hintTag: string;
+    hintDomain: string;
     checking: string;
     errorGeneric: string;
     errorNetwork: string;
     createWalletCta: string;
     createWalletHint: string;
+    examplesLabel: string;
   };
   sozuTags: {
     eyebrow: string;
@@ -194,11 +223,18 @@ export type LandingCopy = {
     feelEyebrow: string;
     feelBody: string;
   };
+  whitepaperPage: {
+    developersEyebrow: string;
+    developersTitle: string;
+    developersDescription: string;
+    developersCta: string;
+  };
   networkLayer: {
     ariaLabel: string;
     eyebrow: string;
     title: string;
     description: string;
+    bullets?: string[];
     tagline: string;
     cards: {
       icon: string;
@@ -270,9 +306,9 @@ export type LandingCopy = {
 const en: LandingCopy = {
   nav: [
     { href: "/product", label: "Product" },
-    { href: "/product#why-sozu", label: "Whitepaper" },
+    { href: "#sozu-tags", label: "Card" },
+    { href: "/whitepaper", label: "Whitepaper" },
     { href: "/product#financing-bnpl", label: "Vaults" },
-    { href: "/product#pay-receipt-flow", label: "Developers" },
   ],
   lang: {
     otherLocaleLabel: "ES",
@@ -289,11 +325,11 @@ const en: LandingCopy = {
   },
   hero: {
     scrollHint: "Scroll",
-    betaBadge: "Apply for private beta",
-    title: "Your Financial OS for the Internet Economy",
-    body: "Move money globally with USDC, earn yield on idle balances, access credit, and off-ramp to local currency in minutes.",
+    betaBadge: "Private beta",
+    title: "Global\npayments\nat internet speed.",
+    body: "Get paid globally in seconds. Track spending privately. Move money instantly. Manage your finances with AI.",
     ctaPrimary: "Get Early Access",
-    ctaSecondary: "Watch Demo",
+    ctaSecondary: "Try the Demo",
     stats: {
       capitalLabel: "Capital efficiency",
       capitalValue: "$356,810.10",
@@ -343,21 +379,64 @@ const en: LandingCopy = {
     },
   },
   problem: {
-    ariaLabel: "The problem with traditional finance",
-    line1: "Sozu tracks your runway and burn rate",
-    line2: "it understands your financial life and helps make better decisions",
-    line3: "without losing custody of your money",
-    line4: "or your data.",
-    line5:
-      "We also help you receive online payments quickly and easily—in minutes, not days.",
-    bodyLead:
-      "Traditional banking systems were built for a slower world: business hours, expensive intermediaries, international friction, delayed settlements, and idle capital earning nothing.",
-    bodyClose:
-      "Sozu replaces fragmented financial tools with programmable money infrastructure designed for modern internet-native businesses.",
+    ariaLabel: "Why money still feels slow",
+    line1: "Money is still too slow.",
+    line2: "Payments, borders, and spreadsheets weren't built for how you earn today.",
+    benefits: [
+      "Waiting days to get paid",
+      "Complex banking systems",
+      "Broken international transfers",
+      "Confusing financial tools",
+    ],
+    taglineSimple: "SOZU turns finance into a real-time conversation.",
+    taglinePowerful: "Voice-native. Math you can trust.",
+  },
+  voiceDemoTeaser: {
+    ariaLabel: "Live voice demo preview",
+    eyebrow: "Agentic personal finance",
+    title: "Let your money talk.",
+    subtitle:
+      "Your private AI assistant understands your ledger in real time — helping you track spending, manage runway, automate recurring payments, and move money globally in seconds.",
+    taglineSimple: "Simple conversation on the surface.",
+    taglinePowerful:
+      "Private, biometric-secured financial infrastructure underneath.",
+    cta: "Try the full demo",
+    turns: [
+      { intentId: "runway" },
+      { intentId: "uber_spend" },
+      { intentId: "send_javier", userText: "Send $12 to Javier." },
+      {
+        intentId: "afford_trip",
+        userText:
+          "Trip to Buenos Aires — what would a weekend escape to BA cost me?",
+      },
+    ],
+  },
+  voiceDemo: {
+    eyebrow: "Voice demo",
+    title: "Talk to your money",
+    subtitle: "Conversational finance — runway, spending, transfers, and goals.",
+    emptyHint: "Tap the mic or try a prompt below.",
+    micLabel: "Start voice demo",
+    micHint: "Scripted demo — simulates listening, then responds.",
+    listening: "Listening…",
+    thinking: "Checking your finances…",
+    reset: "Clear conversation",
+    ctaFull: "Open full demo",
+    prompts: [
+      { intentId: "runway", label: "What's my runway this month?" },
+      { intentId: "food_spend", label: "How much on food?" },
+      { intentId: "send_javier", label: "Send $12 to Javier" },
+      { intentId: "afford_trip", label: "Trip to Buenos Aires?" },
+      { intentId: "uber_spend", label: "Uber spend this month?" },
+      { intentId: "afford_weekend", label: "Spend $400 this weekend?" },
+      { intentId: "send_camila", label: "Send Camila $20" },
+      { intentId: "eating_out", label: "Eating out spend?" },
+    ],
   },
   solution: {
     ariaLabel: "The Sozu solution",
-    eyebrow: "The Solution",
+    eyebrow: "Real-time financial infrastructure",
     title: "Money should move as fast as the internet.",
     cards: [
       {
@@ -480,36 +559,45 @@ const en: LandingCopy = {
     ],
   },
   tagSearch: {
-    label: "Check a Sozu Tag",
-    placeholder: "yourname or tienda.cl",
-    hint: "Type without the dollar sign—we format it. Demo registry only; availability will follow product launch rules.",
+    cardTitle: "Claim your name on Sozu",
+    cardDescription:
+      "Check a social tag or a domain-style handle before you create your wallet. Demo registry only—final rules ship at launch.",
+    modeTag: "Social tag",
+    modeDomain: "Domain",
+    labelTag: "Sozu Tag",
+    labelDomain: "Domain handle",
+    placeholderTag: "joaquin",
+    placeholderDomain: "cafe.noma or tienda.cl",
+    hintTag: "Letters, numbers, and dots. We add the $ prefix.",
+    hintDomain: "Your public handle or domain-style name (e.g. cafe.noma).",
     checking: "Checking…",
     errorGeneric: "Couldn’t check right now. Try again.",
     errorNetwork: "Network error. Try again.",
-    createWalletCta: "Create wallet & continue",
-    createWalletHint: "Start onboarding to claim your tag and receive payments.",
+    createWalletCta: "Create wallet",
+    createWalletHint: "Onboarding links your tag or domain to a non-custodial wallet.",
+    examplesLabel: "Examples",
   },
   sozuTags: {
     eyebrow: "Sozu Tags",
-    title: "Send money with a name. Not a form.",
+    title: "One tag. Any payment.",
     description:
-      "No account numbers. No personal data in the thread. Search a name, confirm the tag, send instantly—on the same non-custodial, global smart-money rails you use everywhere else.",
+      "SOZU replaces account numbers, transfer forms, and banking friction with a universal payment identity for modern businesses and global money movement.",
     benefits: [
       {
-        title: "No mistakes",
-        body: "No more copying long account numbers—or fat-fingering the one digit that breaks everything.",
+        title: "Universal Receiving",
+        body: "Accept payments from banks, wallets, and global rails through one simple identity layer. One tag. Any payment.",
       },
       {
-        title: "No personal data sharing",
-        body: "No RUT dumps. No bank details in the chat. The tag is the address; you choose what else to share.",
+        title: "Instant Resolution",
+        body: "Search a person or business by tag and send money in seconds — no bank details required. Payments that feel like messaging.",
       },
       {
-        title: "Instant payments",
-        body: "Search → tap → send. The flow should feel like messaging, not like filing a wire request.",
+        title: "Private by Default",
+        body: "Your tag replaces sensitive banking information in chats, invoices, and payment requests. No more sharing account details.",
       },
       {
-        title: "Works globally",
-        body: "Same tag anywhere your counterparty uses Sozu—one identity layer on global rails.",
+        title: "Merchant Ready",
+        body: "QR codes, NFC, payment links, and verified business tags make accepting money as simple as sharing a username. Built for modern commerce.",
       },
     ],
     mustHaves: [
@@ -518,21 +606,21 @@ const en: LandingCopy = {
       { title: "QR tied to tag", body: "Scan in store; pay resolves to the same tag behind the scenes." },
       {
         title: "Payment links",
-        body: "Share sozu.app/@yourname or your $tag—pay lands in your wallet, not a form.",
+        body: "Share sozu.app/@yourname or your $tag — pay lands in your wallet, not a form.",
       },
     ],
-    identityLead: "Sozu Tags are your",
-    identityLayer: "identity layer",
-    identityAnd: " and a ",
-    identityMoat: "network moat",
+    identityLead: "Payment identities are sticky — just like",
+    identityLayer: "@handles, $cashtags, and domains",
+    identityAnd: ". Once businesses start printing their tag on invoices, packaging, and social media, they’ve built ",
+    identityMoat: "identity-layer lock-in",
     identityRest:
-      "—the same playbook that made $cashtags and @handles feel inevitable, but built for money that stays yours: non-custodial, global, and tied to smart dollars—not a custodial ledger in someone else’s app.",
-    killerEyebrow: "Killer combo",
-    killerTitle: "Tag + QR + NFC = checkout without the POS baggage.",
+      " — the same network moat that makes phone numbers and email addresses impossible to abandon. That’s very valuable.",
+    killerEyebrow: "The bridge",
+    killerTitle: "Someone can pay from a traditional bank transfer while you receive digital dollars. Automatically.",
     killerBody:
-      "Dedicated terminals, thermal paper, and bolt-on acquirer UX made sense a decade ago. For most merchants today it’s unnecessary cost and friction. Sozu is the in-person stack you already carry: tap, scan, or pay a tag—then a digital receipt both sides can trust (see ",
+      "This is the bridge between the fiat world and the stablecoin world — without forcing users to care. Fast on-ramping and global settlement happen behind the scenes. Less friction, fewer failed payments, faster access to funds. See ",
     killerReceiptsLink: "Smart Receipts",
-    killerBodyAfter: ").",
+    killerBodyAfter: " for how both sides stay in sync.",
   },
   smartReceipts: {
     eyebrow: "Smart Receipts",
@@ -701,39 +789,53 @@ const en: LandingCopy = {
     feelBody:
       "Global. Intelligent. Reliable. Frictionless. Powerful. Modern—we build like a product team that respects your time: show how it works, be blunt about tradeoffs, and earn trust in the first scroll, not the fifth sales call.",
   },
+  whitepaperPage: {
+    developersEyebrow: "Build on Sozu",
+    developersTitle: "Developers",
+    developersDescription:
+      "Integration surfaces, payment flows, and technical product detail—everything you need to ship on non-custodial rails.",
+    developersCta: "Developers",
+  },
   networkLayer: {
     ariaLabel: "Sozu network layer",
     eyebrow: "Network Layer",
-    title: "We got your back.",
+    title: "Money works better together.",
     description:
-      "Sozu is not just a payments app. It’s a financial network where businesses can move capital faster, support each other’s growth, unlock shared liquidity, and reduce financial friction together.",
-    tagline: "The stronger the network, the more efficient capital becomes for everyone inside it.",
+      "Sozu turns idle balances into active network liquidity; helping businesses move faster, access shared capital, and coordinate treasury operations in real time.",
+    bullets: [
+      "instant liquidity access",
+      "automated treasury strategies",
+      "shared vaults",
+      "decentralized credit coordination",
+      "collective financial resilience",
+    ],
+    tagline: "The stronger the network becomes, the more useful capital becomes for every participant.",
     cards: [
       {
         icon: "/figma/network/icon-shared.svg",
-        title: "Shared Liquidity",
+        title: "Shared Vaults",
         description:
-          "Access deep pools of capital maintained by the collective network, ensuring you're never illiquid during peak expansion.",
+          "Create private or community vaults where businesses can securely store capital together, automate treasury management, and coordinate shared liquidity. Some vaults can also unlock member-based credit access backed by the vault's collective reserves.",
         statIcon: "/figma/network/stat-up.svg",
-        statLabel: "+24% Efficiency Gain",
+        statLabel: "Community-powered liquidity",
         statTone: "emerald",
       },
       {
         icon: "/figma/network/icon-growth.svg",
-        title: "Collaborative Growth",
+        title: "Active Capital",
         description:
-          "Support peer businesses within the Sozu ecosystem through automated vaults for secure decentralized credit facilities.",
+          "Money deposited into SOZU can participate in network liquidity strategies automatically — putting treasury balances to work the moment they arrive.",
         statIcon: "/figma/network/stat-cooperative.svg",
-        statLabel: "Active Cooperative",
+        statLabel: "Idle money becomes productive",
         statTone: "orange",
       },
       {
         icon: "/figma/network/icon-friction.svg",
-        title: "Reduced Friction",
+        title: "Instant Coordination",
         description:
-          "By transacting within a unified ledger system, settlement happens instantly, removing traditional bank delay and fees.",
+          "Businesses inside the network can move capital between each other instantly, eliminating banking delays, wire friction, and fragmented treasury operations.",
         statIcon: "/figma/network/stat-settlement.svg",
-        statLabel: "Instant Settlement",
+        statLabel: "Real-time settlement",
         statTone: "muted",
       },
     ],
@@ -763,30 +865,30 @@ const en: LandingCopy = {
     uptimeValue: "99.99%",
   },
   strategicFinance: {
-    ariaLabel: "Strategic finance features",
-    title: "Strategic Finance for Modern Ventures",
+    ariaLabel: "Lending and borrowing features",
+    title: "Lend, Borrow, and Earn On-Chain",
     description:
-      "Tailored financial tools designed to simplify management, boost efficiency, and support your business's growth.",
+      "Modular DeFi Pools built on defindex give you institutional-grade lending and borrowing — fully composable, non-custodial, and always on.",
     cards: [
       {
-        title: "Global Capital Deployment",
+        title: "Borrow Against Your Assets",
         description:
-          "Connect effortlessly with any payment gateway to accept payments seamlessly and keep transactions running smoothly.",
+          "Unlock on-chain credit using your crypto holdings as collateral. No banks, no paperwork — instant liquidity at programmable rates.",
       },
       {
-        title: "Unrestricted Liquidity",
+        title: "Earn with Modular DeFi Pools",
         description:
-          "Send and receive payments anytime, anywhere, without restrictions — empowering your business to operate freely.",
+          "Deploy capital into composable liquidity pools powered by defindex architecture. Set your strategy and let automated vaults optimize yield across protocols.",
       },
       {
-        title: "Automated Portfolio Management",
+        title: "Automated Lending Strategies",
         description:
-          "Schedule payments in advance and automate recurring bills to stay organized and never miss a due date.",
+          "Dynamic allocation across Stellar's DeFi lending ecosystem. Your assets compound continuously, with risk parameters you control.",
       },
       {
-        title: "Real-Time Performance Analytics",
+        title: "Collateral Health in Real Time",
         description:
-          "Monitor every expense as it happens, giving you instant clarity and full control over your spending.",
+          "Track loan-to-value ratios, liquidation thresholds, and yield performance with live on-chain analytics built into your dashboard.",
       },
     ],
     paymentLogos: [
@@ -848,8 +950,10 @@ const en: LandingCopy = {
         title: "System",
         links: [
           { label: "Principles", href: "/product#core-benefits" },
+          { label: "Whitepaper", href: "/whitepaper" },
           { label: "Tactical View", href: "/product#pay-receipt-flow" },
           { label: "Vault Engine", href: "/product#financing-bnpl" },
+          { label: "Sozu Tags & Federation", href: "/docs/sozu-tags" },
         ],
       },
       {
@@ -875,9 +979,9 @@ const en: LandingCopy = {
 const es: LandingCopy = {
   nav: [
     { href: "/product", label: "Producto" },
-    { href: "/product#why-sozu", label: "Whitepaper" },
+    { href: "#sozu-tags", label: "Card" },
+    { href: "/whitepaper", label: "Whitepaper" },
     { href: "/product#financing-bnpl", label: "Bóvedas" },
-    { href: "/product#pay-receipt-flow", label: "Desarrolladores" },
   ],
   lang: {
     otherLocaleLabel: "EN",
@@ -894,11 +998,11 @@ const es: LandingCopy = {
   },
   hero: {
     scrollHint: "Desliza",
-    betaBadge: "Postula al beta privado",
+    betaBadge: "Beta privado",
     title: "Tu sistema financiero para la economía de internet",
-    body: "Mueve dinero global con USDC, genera rendimiento en saldos ociosos, accede a crédito y retira a moneda local en minutos.",
+    body: "Cobrá global en segundos. Seguí gastos en privado. Mové plata al instante. Gestioná tus finanzas con IA.",
     ctaPrimary: "Acceso anticipado",
-    ctaSecondary: "Ver demo",
+    ctaSecondary: "Probar demo",
     stats: {
       capitalLabel: "Eficiencia de capital",
       capitalValue: "$356,810.10",
@@ -948,21 +1052,64 @@ const es: LandingCopy = {
     },
   },
   problem: {
-    ariaLabel: "El problema de la finanza tradicional",
-    line1: "Sozu sigue tu runway y burn rate",
-    line2: "entiende tu vida financiera y ayuda a tomar mejores decisiones",
-    line3: "sin perder custodia de tu dinero",
-    line4: "ni de tus datos.",
-    line5:
-      "Además te ayudamos a recibir pagos online de forma rápida y sencilla, en minutos, no días.",
-    bodyLead:
-      "La banca tradicional se construyó para un mundo más lento: horarios de oficina, intermediarios caros, fricción internacional, liquidaciones demoradas y capital ocioso sin rendimiento.",
-    bodyClose:
-      "Sozu reemplaza herramientas financieras fragmentadas con infraestructura de dinero programable para negocios nativos de internet.",
+    ariaLabel: "Por qué el dinero sigue lento",
+    line1: "El dinero sigue siendo demasiado lento.",
+    line2: "Pagos, fronteras y planillas no fueron hechos para cómo cobrás hoy.",
+    benefits: [
+      "Esperar días para cobrar",
+      "Sistemas bancarios complejos",
+      "Transferencias internacionales rotas",
+      "Herramientas financieras confusas",
+    ],
+    taglineSimple: "SOZU convierte las finanzas en una conversación en tiempo real.",
+    taglinePowerful: "Voz nativa. Matemática en la que podés confiar.",
+  },
+  voiceDemoTeaser: {
+    ariaLabel: "Vista previa demo de voz",
+    eyebrow: "Finanzas personales agénticas",
+    title: "Deja que el dinero te hable.",
+    subtitle:
+      "Tu asistente de IA privado entiende tu ledger en tiempo real — te ayuda a seguir gastos, gestionar runway, automatizar pagos recurrentes y mover plata globalmente en segundos.",
+    taglineSimple: "Conversación simple en la superficie.",
+    taglinePowerful:
+      "Infraestructura financiera privada y protegida por biometría por debajo.",
+    cta: "Probar demo completa",
+    turns: [
+      { intentId: "runway" },
+      { intentId: "uber_spend" },
+      { intentId: "send_javier", userText: "Enviá $12 a Javier." },
+      {
+        intentId: "afford_trip",
+        userText:
+          "Viaje a Buenos Aires — ¿cuánto me costaría un finde en BA?",
+      },
+    ],
+  },
+  voiceDemo: {
+    eyebrow: "Demo de voz",
+    title: "Hablá con tu plata",
+    subtitle: "Finanzas conversacionales — runway, gastos, transferencias y metas.",
+    emptyHint: "Tocá el micrófono o probá un prompt abajo.",
+    micLabel: "Iniciar demo de voz",
+    micHint: "Demo guiada — simula escucha y responde.",
+    listening: "Escuchando…",
+    thinking: "Revisando tus finanzas…",
+    reset: "Limpiar conversación",
+    ctaFull: "Abrir demo completa",
+    prompts: [
+      { intentId: "runway", label: "¿Cuánto runway tengo?" },
+      { intentId: "food_spend", label: "¿Cuánto en comida?" },
+      { intentId: "send_javier", label: "Enviá $12 a Javier" },
+      { intentId: "afford_trip", label: "¿Viaje a Buenos Aires?" },
+      { intentId: "uber_spend", label: "¿Cuánto en Uber?" },
+      { intentId: "afford_weekend", label: "¿$400 este finde?" },
+      { intentId: "send_camila", label: "Enviá $20 a Camila" },
+      { intentId: "eating_out", label: "¿Cuánto comiendo fuera?" },
+    ],
   },
   solution: {
     ariaLabel: "La solución Sozu",
-    eyebrow: "La solución",
+    eyebrow: "Infraestructura financiera en tiempo real",
     title: "El dinero debería moverse tan rápido como internet.",
     cards: [
       {
@@ -1085,36 +1232,45 @@ const es: LandingCopy = {
     ],
   },
   tagSearch: {
-    label: "Busca un Sozu Tag",
-    placeholder: "tunombre o tienda.cl",
-    hint: "Escribe sin el signo $—nosotros lo formateamos. Registro demo; la disponibilidad final seguirá reglas del producto.",
+    cardTitle: "Reserva tu nombre en Sozu",
+    cardDescription:
+      "Revisa un tag social o un dominio antes de crear tu billetera. Registro demo—las reglas finales llegan al lanzamiento.",
+    modeTag: "Tag social",
+    modeDomain: "Dominio",
+    labelTag: "Sozu Tag",
+    labelDomain: "Dominio",
+    placeholderTag: "joaquin",
+    placeholderDomain: "cafe.noma o tienda.cl",
+    hintTag: "Letras, números y puntos. Nosotros agregamos el $.",
+    hintDomain: "Tu handle público o estilo dominio (ej. cafe.noma).",
     checking: "Buscando…",
     errorGeneric: "No pudimos verificar ahora. Intenta de nuevo.",
     errorNetwork: "Error de red. Intenta de nuevo.",
-    createWalletCta: "Crear billetera y continuar",
-    createWalletHint: "Inicia el onboarding para reservar tu tag y recibir pagos.",
+    createWalletCta: "Crear billetera",
+    createWalletHint: "El onboarding vincula tu tag o dominio a una billetera no custodial.",
+    examplesLabel: "Ejemplos",
   },
   sozuTags: {
     eyebrow: "Sozu Tags",
-    title: "Envía dinero con un nombre. No con un formulario.",
+    title: "Un tag. Cualquier pago.",
     description:
-      "Sin números de cuenta largos. Sin datos personales en el chat. Buscas un nombre, confirmas el tag y envías al instante—sobre los mismos rieles globales no custodiales de dinero smart.",
+      "SOZU reemplaza los números de cuenta, formularios bancarios y fricciones con una identidad de pago universal para negocios modernos y movimiento de dinero global.",
     benefits: [
       {
-        title: "Sin errores",
-        body: "Se acabó copiar números interminables—y el dígito mal tipeado que lo arruina todo.",
+        title: "Recepción universal",
+        body: "Acepta pagos desde bancos, billeteras y rieles globales a través de una sola capa de identidad. Un tag. Cualquier pago.",
       },
       {
-        title: "Sin compartir datos personales",
-        body: "Sin RUT en el hilo. Sin datos bancarios en el chat. El tag es la dirección; tú decides qué más compartir.",
+        title: "Resolución instantánea",
+        body: "Busca a una persona o negocio por tag y envía dinero en segundos — sin datos bancarios. Pagos que se sienten como mensajes.",
       },
       {
-        title: "Pagos al instante",
-        body: "Buscar → tocar → enviar. Debe sentirse como un mensaje, no como una carta de instrucciones al banco.",
+        title: "Privado por defecto",
+        body: "Tu tag reemplaza datos bancarios sensibles en chats, facturas y solicitudes de pago. Sin compartir números de cuenta.",
       },
       {
-        title: "Funciona en todo el mundo",
-        body: "El mismo tag donde tu contraparte use Sozu—una capa de identidad sobre rieles globales.",
+        title: "Listo para comercios",
+        body: "Códigos QR, NFC, links de pago y tags de negocio verificados hacen que cobrar sea tan simple como compartir un nombre de usuario. Construido para el comercio moderno.",
       },
     ],
     mustHaves: [
@@ -1123,21 +1279,21 @@ const es: LandingCopy = {
       { title: "QR ligado al tag", body: "Escaneas en tienda; el pago resuelve al mismo tag detrás de escena." },
       {
         title: "Links de pago",
-        body: "Comparte sozu.app/@tunombre o tu $tag—el pago cae en tu billetera, no en un formulario.",
+        body: "Comparte sozu.app/@tunombre o tu $tag — el pago cae en tu billetera, no en un formulario.",
       },
     ],
-    identityLead: "Los Sozu Tags son tu",
-    identityLayer: "capa de identidad",
-    identityAnd: " y tu ",
-    identityMoat: "foso de red",
+    identityLead: "Las identidades de pago son persistentes — igual que los",
+    identityLayer: "@handles, $cashtags y dominios",
+    identityAnd: ". Cuando los negocios imprimen su tag en facturas, empaques y redes sociales, construyen ",
+    identityMoat: "lock-in de capa de identidad",
     identityRest:
-      "—el mismo guion que hizo inevitables los $cashtags y los @, pero para plata que sigue siendo tuya: no custodial, global y atada a dinero smart—no a un libro mayor custodial en la app de otro.",
-    killerEyebrow: "Combo ganador",
-    killerTitle: "Tag + QR + NFC = cobro sin el lastre del POS clásico.",
+      " — el mismo foso de red que hace imposible abandonar los números de teléfono y el correo electrónico. Eso es muy valioso.",
+    killerEyebrow: "El puente",
+    killerTitle: "Alguien puede pagarte desde una transferencia bancaria tradicional mientras tú recibes dólares digitales. Automáticamente.",
     killerBody:
-      "Terminales dedicados, rollo térmico y UX acoplada tuvieron sentido hace diez años. Hoy, para la mayoría de los comercios, es costo y fricción de más. Sozu es el stack en persona que ya llevas: tocar, escanear o pagar un tag—y luego un comprobante digital en el que ambos confían (ver ",
+      "Este es el puente entre el mundo fiat y el mundo de las stablecoins — sin forzar a los usuarios a que les importe. El on-ramping rápido y la liquidación global ocurren entre bastidores. Menos fricción, menos pagos fallidos, acceso más rápido a fondos. Ver ",
     killerReceiptsLink: "Smart Receipts",
-    killerBodyAfter: ").",
+    killerBodyAfter: " para saber cómo ambos lados se mantienen sincronizados.",
   },
   smartReceipts: {
     eyebrow: "Smart Receipts",
@@ -1306,6 +1462,13 @@ const es: LandingCopy = {
     feelBody:
       "Global. Inteligente. Confiable. Sin fricción. Potente. Moderno—construimos como equipo de producto que respeta tu tiempo: mostrar cómo funciona, ser claros con tradeoffs, y ganar confianza en el primer scroll, no en la quinta llamada comercial.",
   },
+  whitepaperPage: {
+    developersEyebrow: "Construí sobre Sozu",
+    developersTitle: "Desarrolladores",
+    developersDescription:
+      "Superficies de integración, flujos de pago y detalle técnico de producto—todo para shippear sobre rieles no custodiales.",
+    developersCta: "Desarrolladores",
+  },
   networkLayer: {
     ariaLabel: "Capa de red Sozu",
     eyebrow: "Capa de red",
@@ -1368,30 +1531,30 @@ const es: LandingCopy = {
     uptimeValue: "99.99%",
   },
   strategicFinance: {
-    ariaLabel: "Finanzas estratégicas",
-    title: "Finanzas estratégicas para ventures modernos",
+    ariaLabel: "Funciones de lending y borrowing",
+    title: "Presta, toma prestado y genera yield on-chain",
     description:
-      "Herramientas financieras a medida para simplificar gestión, impulsar eficiencia y apoyar el crecimiento de tu negocio.",
+      "Los Pools DeFi modulares de defindex te dan préstamos y créditos de nivel institucional — completamente componibles, sin custodia y siempre activos.",
     cards: [
       {
-        title: "Despliegue de capital global",
+        title: "Toma prestado sobre tus activos",
         description:
-          "Conecta con cualquier gateway de pago para cobrar sin fricción y mantener transacciones fluidas.",
+          "Accede a crédito on-chain usando tus criptoactivos como colateral. Sin bancos, sin papeleo — liquidez instantánea a tasas programables.",
       },
       {
-        title: "Liquidez sin restricciones",
+        title: "Genera yield con Pools DeFi modulares",
         description:
-          "Envía y recibe pagos en cualquier momento y lugar, sin restricciones, para operar con libertad.",
+          "Despliega capital en pools de liquidez componibles impulsados por arquitectura defindex. Define tu estrategia y deja que los vaults automatizados optimicen el rendimiento.",
       },
       {
-        title: "Gestión de portafolio automatizada",
+        title: "Estrategias de lending automatizadas",
         description:
-          "Programa pagos y automatiza cuentas recurrentes para no perder fechas de vencimiento.",
+          "Asignación dinámica en el ecosistema de préstamos DeFi de Stellar. Tus activos se componen continuamente, con parámetros de riesgo que tú controlas.",
       },
       {
-        title: "Analítica de performance en tiempo real",
+        title: "Salud del colateral en tiempo real",
         description:
-          "Monitorea cada gasto al instante, con claridad y control total sobre tu spending.",
+          "Monitorea ratios loan-to-value, umbrales de liquidación y rendimiento con analítica on-chain en vivo integrada en tu dashboard.",
       },
     ],
     paymentLogos: [
@@ -1453,8 +1616,10 @@ const es: LandingCopy = {
         title: "Sistema",
         links: [
           { label: "Principios", href: "/product#core-benefits" },
+          { label: "Whitepaper", href: "/whitepaper" },
           { label: "Vista táctica", href: "/product#pay-receipt-flow" },
           { label: "Motor de bóvedas", href: "/product#financing-bnpl" },
+          { label: "Sozu Tags y federación", href: "/docs/sozu-tags" },
         ],
       },
       {

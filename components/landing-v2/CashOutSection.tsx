@@ -11,10 +11,10 @@ export function CashOutSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <div className="max-w-2xl space-y-6 text-muted leading-relaxed">
+      <div className="max-w-2xl space-y-6 leading-relaxed text-white/60">
         <p>{copy.p1}</p>
         <p>{copy.p2}</p>
-        <p className="text-sm font-mono text-foreground/40 uppercase tracking-[0.15em]">
+        <p className="font-mono text-xs uppercase tracking-[0.15em] text-white/30">
           {copy.disclaimer}
         </p>
       </div>

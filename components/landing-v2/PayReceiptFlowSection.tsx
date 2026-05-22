@@ -11,38 +11,38 @@ export function PayReceiptFlowSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-14 items-start">
+      <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-6">
+          <h3 className="mb-6 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
             {copy.stepsTitle}
           </h3>
           <ol className="space-y-4">
             {copy.steps.map((step, i) => (
               <li key={step} className="flex gap-4">
-                <span className="font-mono text-sm text-primary shrink-0 w-8">
+                <span className="w-8 shrink-0 font-mono text-sm text-[#ff8000]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-muted leading-relaxed">{step}</span>
+                <span className="leading-relaxed text-white/60">{step}</span>
               </li>
             ))}
           </ol>
-          <p className="mt-8 text-lg font-medium text-foreground text-balance">{copy.tagline}</p>
+          <p className="mt-8 text-lg font-medium text-white">{copy.tagline}</p>
         </div>
 
-        <div className="rounded-2xl border border-border/60 bg-surface-elevated/45 p-6 md:p-8 space-y-6">
+        <div className="space-y-6 rounded-[32px] border border-white/5 bg-[#111] p-8">
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-3">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
               {copy.posTitle}
             </h3>
-            <p className="text-muted text-sm leading-relaxed">{copy.posBody}</p>
+            <p className="text-sm leading-relaxed text-white/55">{copy.posBody}</p>
           </div>
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-3">
+            <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
               {copy.optimizeTitle}
             </h3>
-            <p className="text-muted text-sm leading-relaxed">{copy.optimizeBody}</p>
+            <p className="text-sm leading-relaxed text-white/55">{copy.optimizeBody}</p>
           </div>
-          <p className="text-xs text-foreground/45 font-mono uppercase tracking-wider pt-2 border-t border-border/40">
+          <p className="border-t border-white/10 pt-3 font-mono text-xs uppercase tracking-wider text-white/30">
             {copy.footnote}
           </p>
         </div>

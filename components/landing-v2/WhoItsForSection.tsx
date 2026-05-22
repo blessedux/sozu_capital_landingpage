@@ -11,17 +11,17 @@ export function WhoItsForSection({ copy }: Props) {
       title={copy.title}
       description={copy.description}
     >
-      <ul className="grid sm:grid-cols-2 gap-5 max-w-4xl">
+      <ul className="grid max-w-4xl gap-5 sm:grid-cols-2">
         {copy.personas.map(({ line, detail }) => (
           <li
             key={line}
-            className="rounded-xl border border-border/50 bg-surface-elevated/25 p-5"
+            className="rounded-[24px] border border-white/5 bg-[#111] p-6 transition-[border-color] duration-300 hover:border-[#ff8000]/20"
           >
-            <p className="flex gap-3 items-start font-mono text-sm text-foreground leading-snug">
-              <span className="text-primary shrink-0 mt-0.5">/</span>
+            <p className="flex items-start gap-3 font-mono text-sm leading-snug text-white">
+              <span className="mt-0.5 shrink-0 text-[#ff8000]">/</span>
               <span>{line}</span>
             </p>
-            <p className="mt-3 pl-6 text-xs text-muted leading-relaxed">{detail}</p>
+            <p className="mt-3 pl-6 text-xs leading-relaxed text-white/45">{detail}</p>
           </li>
         ))}
       </ul>

@@ -49,7 +49,6 @@ const CardSticky = React.forwardRef<HTMLDivElement, CardStickyProps>(
     return (
       <motion.div
         ref={ref}
-        layout="position"
         style={{
           top,
           zIndex,

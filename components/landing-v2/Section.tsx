@@ -21,21 +21,21 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "scroll-mt-24 border-b border-border/50 py-20 md:py-28",
+        "scroll-mt-24 border-b border-white/5 bg-[#0a0a0a] py-20 md:py-28",
         className
       )}
     >
-      <div className="container">
+      <div className="mx-auto max-w-[75rem] px-5 md:px-12 xl:px-20">
         {eyebrow ? (
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
             {eyebrow}
           </p>
         ) : null}
-        <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground tracking-tight max-w-3xl text-balance">
+        <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white md:text-[48px] md:leading-[1.1]">
           {title}
         </h2>
         {description ? (
-          <p className="mt-6 text-base md:text-lg text-muted max-w-2xl leading-relaxed text-pretty">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/60">
             {description}
           </p>
         ) : null}

@@ -1,26 +1,10 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
 import type { LandingCopy } from "@/lib/landing-copy";
 
 type Props = {
   copy: LandingCopy["pathways"];
   basePath: string;
-};
-
-const CARD_REVEAL = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.65,
-      delay: index * 0.18,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  }),
 };
 
 function FeatureBullet({
@@ -51,7 +35,6 @@ function PathwayCard({
   ctaHref,
   iconSrc,
   arrowSrc,
-  index,
 }: {
   variant: "individual" | "business";
   label: string;
@@ -62,7 +45,6 @@ function PathwayCard({
   ctaHref: string;
   iconSrc: string;
   arrowSrc: string;
-  index: number;
 }) {
   const isBusiness = variant === "business";
   const labelColor = isBusiness ? "text-[#34d399]" : "text-[#f97316]";
@@ -74,14 +56,7 @@ function PathwayCard({
     : "border border-white/10 bg-white/5 text-white group-hover:border-[#ff8000]/30 group-hover:bg-white/10";
 
   return (
-    <motion.article
-      custom={index}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2, margin: "-60px" }}
-      variants={CARD_REVEAL}
-      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[40px] border border-white/5 bg-[#0d0d0d] transition-[border-color,box-shadow] duration-500 ease-out hover:border-[#ff8000]/25 hover:shadow-[0_0_48px_rgba(255,128,0,0.12)]"
-    >
+    <article className="group relative flex h-full flex-col justify-between overflow-hidden rounded-[40px] border border-white/5 bg-[#0d0d0d] transition-[border-color,box-shadow] duration-500 ease-out hover:border-[#ff8000]/25 hover:shadow-[0_0_48px_rgba(255,128,0,0.12)]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-[40px] bg-gradient-to-br from-[rgba(255,128,0,0.18)] via-[rgba(255,128,0,0.08)] to-[rgba(255,128,0,0.02)] opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100"
@@ -121,7 +96,7 @@ function PathwayCard({
           <Image src={arrowSrc} alt="" width={11} height={12} className="h-3 w-[10.5px]" aria-hidden />
         </Link>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -171,7 +146,6 @@ export function PathwaysSection({ copy, basePath }: Props) {
 
         <div className="relative grid w-full max-w-[75rem] grid-cols-1 gap-10 lg:grid-cols-2">
           <PathwayCard
-            index={0}
             variant="individual"
             label={copy.individuals.label}
             title={copy.individuals.title}
@@ -183,7 +157,6 @@ export function PathwaysSection({ copy, basePath }: Props) {
             arrowSrc="/figma/pathways/arrow-light.svg"
           />
           <PathwayCard
-            index={1}
             variant="business"
             label={copy.businesses.label}
             title={copy.businesses.title}
