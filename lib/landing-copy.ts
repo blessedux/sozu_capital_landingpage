@@ -154,6 +154,7 @@ export type LandingCopy = {
     killerTitle: string;
     killerBody: string;
     killerReceiptsLink: string;
+    killerReceiptsHref: string;
     killerBodyAfter: string;
   };
   smartReceipts: {
@@ -236,6 +237,7 @@ export type LandingCopy = {
     description: string;
     bullets?: string[];
     tagline: string;
+    cta: string;
     cards: {
       icon: string;
       title: string;
@@ -256,7 +258,6 @@ export type LandingCopy = {
     features: { icon: string; label: string }[];
     stackLayers: {
       label: string;
-      icon: string;
       variant: "app" | "intel" | "trust" | "global";
     }[];
     uptimeLabel: string;
@@ -296,6 +297,31 @@ export type LandingCopy = {
     socialProof: string;
     avatars: string[];
   };
+  onboarding: {
+    ariaLabel: string;
+    eyebrow: string;
+    titleLine1: string;
+    titleLine2: string;
+    intro: string;
+    mission: string;
+    reservedLabel: string;
+    benefitsEyebrow: string;
+    benefitsTitle: string;
+    benefits: { title: string; body: string }[];
+    formEyebrow: string;
+    formTitle: string;
+    formHint: string;
+    emailPlaceholder: string;
+    submit: string;
+    loading: string;
+    privacyNote: string;
+    back: string;
+    successTitle: string;
+    successBody: string;
+    successCta: string;
+    errorJoin: string;
+    errorNetwork: string;
+  };
   footer: {
     brand: string;
     copyright: string;
@@ -307,11 +333,11 @@ const en: LandingCopy = {
   nav: [
     { href: "/product", label: "Product" },
     { href: "#sozu-tags", label: "Card" },
-    { href: "/whitepaper", label: "Whitepaper" },
-    { href: "/product#financing-bnpl", label: "Vaults" },
+    { href: "/pricing", label: "Pricing" },
+    { href: "https://docs.sozu.capital", label: "Docs" },
   ],
   lang: {
-    otherLocaleLabel: "ES",
+    otherLocaleLabel: "es",
     otherLocaleHref: "/",
     switchAria: "Switch to Spanish",
   },
@@ -396,7 +422,7 @@ const en: LandingCopy = {
     eyebrow: "Agentic personal finance",
     title: "Let your money talk.",
     subtitle:
-      "Your private AI assistant understands your ledger in real time — helping you track spending, manage runway, automate recurring payments, and move money globally in seconds.",
+      "Your private AI assistant understands your ledger in real time helping you track spending, manage runway, automate recurring payments, and move money globally in seconds.",
     taglineSimple: "Simple conversation on the surface.",
     taglinePowerful:
       "Private, biometric-secured financial infrastructure underneath.",
@@ -620,6 +646,7 @@ const en: LandingCopy = {
     killerBody:
       "This is the bridge between the fiat world and the stablecoin world — without forcing users to care. Fast on-ramping and global settlement happen behind the scenes. Less friction, fewer failed payments, faster access to funds. See ",
     killerReceiptsLink: "Smart Receipts",
+    killerReceiptsHref: "https://docs.sozu.capital/smart-receipts",
     killerBodyAfter: " for how both sides stay in sync.",
   },
   smartReceipts: {
@@ -803,13 +830,14 @@ const en: LandingCopy = {
     description:
       "Sozu turns idle balances into active network liquidity; helping businesses move faster, access shared capital, and coordinate treasury operations in real time.",
     bullets: [
-      "instant liquidity access",
+      "need liquidity? We got you.",
       "automated treasury strategies",
       "shared vaults",
       "decentralized credit coordination",
       "collective financial resilience",
     ],
     tagline: "The stronger the network becomes, the more useful capital becomes for every participant.",
+    cta: "Estimate Loan Terms",
     cards: [
       {
         icon: "/figma/network/icon-shared.svg",
@@ -856,39 +884,39 @@ const en: LandingCopy = {
       { icon: "/figma/infrastructure/icon-4.svg", label: "24/7 Settlement" },
     ],
     stackLayers: [
-      { label: "APPLICATION LAYER", icon: "/figma/infrastructure/icon-5.svg", variant: "app" },
-      { label: "INTELLIGENCE ENGINE", icon: "/figma/infrastructure/icon-6.svg", variant: "intel" },
-      { label: "TRUSTLESS PROTOCOL", icon: "/figma/infrastructure/icon-7.svg", variant: "trust" },
-      { label: "GLOBAL SETTLEMENT", icon: "/figma/infrastructure/icon-8.svg", variant: "global" },
+      { label: "Non-custodial control — your keys, your funds", variant: "app" },
+      { label: "DeFindex vaults — transparent yield strategies", variant: "intel" },
+      { label: "Blend lending — collateral enforced on-chain", variant: "trust" },
+      { label: "Stellar + USDC — final dollar settlement", variant: "global" },
     ],
     uptimeLabel: "SYSTEM UPTIME",
     uptimeValue: "99.99%",
   },
   strategicFinance: {
-    ariaLabel: "Lending and borrowing features",
-    title: "Lend, Borrow, and Earn On-Chain",
+    ariaLabel: "Lend, borrow, and grow your money",
+    title: "Lend, Borrow, and Grow Your Money",
     description:
-      "Modular DeFi Pools built on defindex give you institutional-grade lending and borrowing — fully composable, non-custodial, and always on.",
+      "Move beyond a static bank account. Sozu helps your money earn more, unlock credit when you need it, and stay under your control—without the complexity of traditional banking.",
     cards: [
       {
-        title: "Borrow Against Your Assets",
+        title: "Earn on Your Balance",
         description:
-          "Unlock on-chain credit using your crypto holdings as collateral. No banks, no paperwork — instant liquidity at programmable rates.",
+          "Your balance earns up to 15% APY by default. Custom strategies powered by DeFindex put idle cash to work automatically—no extra steps, no manual rebalancing.",
       },
       {
-        title: "Earn with Modular DeFi Pools",
+        title: "Borrow When You Need To",
         description:
-          "Deploy capital into composable liquidity pools powered by defindex architecture. Set your strategy and let automated vaults optimize yield across protocols.",
+          "Access cash without selling what you've already built. Use your balance as backing for flexible credit—instant decisions, no branch visits, no paperwork.",
       },
       {
-        title: "Automated Lending Strategies",
+        title: "Strategies That Fit You",
         description:
-          "Dynamic allocation across Stellar's DeFi lending ecosystem. Your assets compound continuously, with risk parameters you control.",
+          "Choose how conservative or ambitious you want to be. Sozu adjusts how your money is allocated to balance growth and safety, so you don't have to micromanage it.",
       },
       {
-        title: "Collateral Health in Real Time",
+        title: "Always Know Where You Stand",
         description:
-          "Track loan-to-value ratios, liquidation thresholds, and yield performance with live on-chain analytics built into your dashboard.",
+          "See what you're earning, what you can safely borrow, and how healthy your finances look—updated live in one simple dashboard.",
       },
     ],
     paymentLogos: [
@@ -928,19 +956,64 @@ const en: LandingCopy = {
   },
   finalCta: {
     ariaLabel: "Get early access",
-    titleLine1: "The next generation of",
-    titleLine2: "business banking is already",
-    titleLine3: "here.",
+    titleLine1: "The next generation",
+    titleLine2: "of business banking",
+    titleLine3: "is already here.",
     descriptionLine1: "Join Sozu and start operating with internet money.",
     descriptionLine2: "Take control of your treasury, leverage your network,",
     descriptionLine3: "and move forward with clarity and speed.",
     cta: "Get Early Access",
-    socialProof: "Joined by 300 companies this month",
+    socialProof: "Joined by 30 companies this month",
     avatars: [
       "/figma/cta/avatar-1.jpg",
       "/figma/cta/avatar-2.jpg",
       "/figma/cta/avatar-5.jpg",
     ],
+  },
+  onboarding: {
+    ariaLabel: "Early access onboarding",
+    eyebrow: "Early access",
+    titleLine1: "Help us make economic freedom",
+    titleLine2: "a protocol standard.",
+    intro:
+      "Sozu is building the rails for internet-native money payments, treasury, and credit that work globally at the speed of the web. We're in private beta, and we're inviting a small group of early believers to shape what comes next.",
+    mission:
+      "We're bringing DeFi to the masses, not as jargon, but as everyday tools anyone can use. Early supporters like you are how we get there.\nTo thank you, we're reserving special benefits and cash prizes for founding members who join now.",
+    reservedLabel: "Reserved for you",
+    benefitsEyebrow: "Founding member perks",
+    benefitsTitle: "What early access unlocks",
+    benefits: [
+      {
+        title: "Cash prizes & rewards",
+        body: "Early members are eligible for cash prizes and referral rewards as we grow the network—because your support at this stage matters.",
+      },
+      {
+        title: "Priority beta access",
+        body: "Skip the line. Get first access to Sozu Pay, Sozu Tags, vaults, and AI treasury tools before public launch.",
+      },
+      {
+        title: "Founding member status",
+        body: "Lock in perks, pricing, and identity benefits reserved for the earliest users who help us stress-test the protocol.",
+      },
+      {
+        title: "Shape the product",
+        body: "Direct feedback loops with the team. Your use cases become our roadmap as we make DeFi usable for everyone.",
+      },
+    ],
+    formEyebrow: "Join the waitlist",
+    formTitle: "Claim your spot",
+    formHint: "Enter your email to reserve early access. We'll only reach out with product updates you care about.",
+    emailPlaceholder: "you@company.com",
+    submit: "Get Early Access",
+    loading: "Joining…",
+    privacyNote: "No spam. Unsubscribe anytime. We never sell your data.",
+    back: "← Back to home",
+    successTitle: "You're on the list.",
+    successBody:
+      "Welcome to the founding cohort. We'll email you when your early access window opens—with details on rewards, beta invites, and next steps.",
+    successCta: "Back to home",
+    errorJoin: "Something went wrong. Please try again.",
+    errorNetwork: "Network error. Check your connection and try again.",
   },
   footer: {
     brand: "SOZU",
@@ -980,11 +1053,11 @@ const es: LandingCopy = {
   nav: [
     { href: "/product", label: "Producto" },
     { href: "#sozu-tags", label: "Card" },
-    { href: "/whitepaper", label: "Whitepaper" },
-    { href: "/product#financing-bnpl", label: "Bóvedas" },
+    { href: "/pricing", label: "Precios" },
+    { href: "https://docs.sozu.capital", label: "Docs" },
   ],
   lang: {
-    otherLocaleLabel: "EN",
+    otherLocaleLabel: "en",
     otherLocaleHref: "/en",
     switchAria: "Ver sitio en inglés",
   },
@@ -1293,6 +1366,7 @@ const es: LandingCopy = {
     killerBody:
       "Este es el puente entre el mundo fiat y el mundo de las stablecoins — sin forzar a los usuarios a que les importe. El on-ramping rápido y la liquidación global ocurren entre bastidores. Menos fricción, menos pagos fallidos, acceso más rápido a fondos. Ver ",
     killerReceiptsLink: "Smart Receipts",
+    killerReceiptsHref: "https://docs.sozu.capital/smart-receipts",
     killerBodyAfter: " para saber cómo ambos lados se mantienen sincronizados.",
   },
   smartReceipts: {
@@ -1476,6 +1550,7 @@ const es: LandingCopy = {
     description:
       "Sozu no es solo una app de pagos. Es una red financiera donde los negocios mueven capital más rápido, se apoyan en su crecimiento, desbloquean liquidez compartida y reducen fricción financiera juntos.",
     tagline: "Cuanto más fuerte es la red, más eficiente se vuelve el capital para todos dentro.",
+    cta: "Estimar condiciones del crédito",
     cards: [
       {
         icon: "/figma/network/icon-shared.svg",
@@ -1522,39 +1597,39 @@ const es: LandingCopy = {
       { icon: "/figma/infrastructure/icon-4.svg", label: "Liquidación 24/7" },
     ],
     stackLayers: [
-      { label: "CAPA DE APLICACIÓN", icon: "/figma/infrastructure/icon-5.svg", variant: "app" },
-      { label: "MOTOR DE INTELIGENCIA", icon: "/figma/infrastructure/icon-6.svg", variant: "intel" },
-      { label: "PROTOCOLO TRUSTLESS", icon: "/figma/infrastructure/icon-7.svg", variant: "trust" },
-      { label: "LIQUIDACIÓN GLOBAL", icon: "/figma/infrastructure/icon-8.svg", variant: "global" },
+      { label: "Control no custodial — tus llaves, tus fondos", variant: "app" },
+      { label: "Vaults DeFindex — estrategias de yield transparentes", variant: "intel" },
+      { label: "Lending Blend — colateral exigido on-chain", variant: "trust" },
+      { label: "Stellar + USDC — liquidación final en dólares", variant: "global" },
     ],
     uptimeLabel: "UPTIME DEL SISTEMA",
     uptimeValue: "99.99%",
   },
   strategicFinance: {
-    ariaLabel: "Funciones de lending y borrowing",
-    title: "Presta, toma prestado y genera yield on-chain",
+    ariaLabel: "Presta, pide prestado y haz crecer tu dinero",
+    title: "Presta, pide prestado y haz crecer tu dinero",
     description:
-      "Los Pools DeFi modulares de defindex te dan préstamos y créditos de nivel institucional — completamente componibles, sin custodia y siempre activos.",
+      "Salí de la cuenta bancaria que no rinde. Sozu ayuda a que tu dinero gane más, desbloquee crédito cuando lo necesites y siga bajo tu control—sin la complejidad de la banca tradicional.",
     cards: [
       {
-        title: "Toma prestado sobre tus activos",
+        title: "Ganá con tu saldo",
         description:
-          "Accede a crédito on-chain usando tus criptoactivos como colateral. Sin bancos, sin papeleo — liquidez instantánea a tasas programables.",
+          "Tu saldo rinde hasta 15% APY por defecto. Estrategias personalizadas con DeFindex ponen el efectivo ocioso a trabajar solo—sin pasos extra ni rebalanceos manuales.",
       },
       {
-        title: "Genera yield con Pools DeFi modulares",
+        title: "Pedí prestado cuando haga falta",
         description:
-          "Despliega capital en pools de liquidez componibles impulsados por arquitectura defindex. Define tu estrategia y deja que los vaults automatizados optimicen el rendimiento.",
+          "Accedé a efectivo sin vender lo que ya construiste. Usá tu saldo como respaldo para crédito flexible—decisiones al instante, sin sucursales ni papeleo.",
       },
       {
-        title: "Estrategias de lending automatizadas",
+        title: "Estrategias a tu medida",
         description:
-          "Asignación dinámica en el ecosistema de préstamos DeFi de Stellar. Tus activos se componen continuamente, con parámetros de riesgo que tú controlas.",
+          "Elegí qué tan conservador o ambicioso querés ser. Sozu ajusta cómo se asigna tu dinero para equilibrar crecimiento y seguridad, sin que tengas que microgestionarlo.",
       },
       {
-        title: "Salud del colateral en tiempo real",
+        title: "Siempre claro dónde estás",
         description:
-          "Monitorea ratios loan-to-value, umbrales de liquidación y rendimiento con analítica on-chain en vivo integrada en tu dashboard.",
+          "Mirá cuánto ganás, cuánto podés pedir prestado con tranquilidad y cómo se ve tu salud financiera—actualizado en vivo en un solo dashboard.",
       },
     ],
     paymentLogos: [
@@ -1594,9 +1669,9 @@ const es: LandingCopy = {
   },
   finalCta: {
     ariaLabel: "Acceso anticipado",
-    titleLine1: "La próxima generación de",
-    titleLine2: "banca para negocios ya",
-    titleLine3: "está aquí.",
+    titleLine1: "La próxima generación",
+    titleLine2: "de banca para negocios",
+    titleLine3: "ya está aquí.",
     descriptionLine1: "Únete a Sozu y opera con dinero de internet.",
     descriptionLine2: "Toma control de tu tesorería, aprovecha tu red",
     descriptionLine3: "y avanza con claridad y velocidad.",
@@ -1607,6 +1682,51 @@ const es: LandingCopy = {
       "/figma/cta/avatar-2.jpg",
       "/figma/cta/avatar-5.jpg",
     ],
+  },
+  onboarding: {
+    ariaLabel: "Onboarding de acceso anticipado",
+    eyebrow: "Acceso anticipado",
+    titleLine1: "Ayúdanos a convertir la libertad económica",
+    titleLine2: "en un estándar de protocolo.",
+    intro:
+      "Sozu construye los rieles del dinero nativo de internet—pagos, tesorería y crédito que funcionan globalmente a la velocidad de la web. Estamos en beta privada e invitamos a un grupo selecto de early believers a definir lo que viene.",
+    mission:
+      "Llevamos DeFi a las masas—no como jerga, sino como herramientas cotidianas que cualquiera puede usar. Supporters tempranos como tú son clave.\nPara agradecerlo, reservamos beneficios especiales y premios en efectivo para miembros fundadores que se unan ahora.",
+    reservedLabel: "Reservado para ti",
+    benefitsEyebrow: "Beneficios de miembro fundador",
+    benefitsTitle: "Qué desbloquea el acceso anticipado",
+    benefits: [
+      {
+        title: "Premios en efectivo y recompensas",
+        body: "Los miembros tempranos pueden acceder a premios en efectivo y recompensas por referidos a medida que crece la red—porque tu apoyo en esta etapa importa.",
+      },
+      {
+        title: "Acceso prioritario a la beta",
+        body: "Salta la fila. Sé de los primeros en usar Sozu Pay, Sozu Tags, bóvedas y herramientas de tesorería con IA antes del lanzamiento público.",
+      },
+      {
+        title: "Estatus de miembro fundador",
+        body: "Asegura beneficios, precios e identidad reservados para quienes nos ayudan a probar el protocolo desde el día uno.",
+      },
+      {
+        title: "Moldea el producto",
+        body: "Canal directo con el equipo. Tus casos de uso se convierten en nuestro roadmap mientras hacemos DeFi usable para todos.",
+      },
+    ],
+    formEyebrow: "Únete a la lista",
+    formTitle: "Reserva tu lugar",
+    formHint: "Ingresa tu email para reservar acceso anticipado. Solo te contactaremos con novedades que te importen.",
+    emailPlaceholder: "tu@empresa.com",
+    submit: "Acceso anticipado",
+    loading: "Uniéndote…",
+    privacyNote: "Sin spam. Cancela cuando quieras. Nunca vendemos tus datos.",
+    back: "← Volver al inicio",
+    successTitle: "Ya estás en la lista.",
+    successBody:
+      "Bienvenido al cohort fundador. Te escribiremos cuando abra tu ventana de acceso anticipado—con detalles de recompensas, invitaciones beta y próximos pasos.",
+    successCta: "Volver al inicio",
+    errorJoin: "Algo salió mal. Intenta de nuevo.",
+    errorNetwork: "Error de red. Revisa tu conexión e intenta de nuevo.",
   },
   footer: {
     brand: "SOZU",

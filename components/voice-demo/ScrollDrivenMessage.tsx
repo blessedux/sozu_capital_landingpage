@@ -63,7 +63,7 @@ function ThinkingDots() {
 function DemoActionLabel({ label }: { label: string }) {
   return (
     <span
-      className="mt-2.5 inline-flex text-sm font-semibold text-[#ff8000]/85 cursor-default select-none"
+      className="mt-1 inline-flex text-xs font-semibold leading-tight text-[#ff8000]/85 cursor-default select-none"
       aria-hidden
     >
       {label}
@@ -83,14 +83,14 @@ export function ScrollDrivenMessage({ line, reveal }: Props) {
     const t = easeOutCubic(clamp01(reveal / 0.55));
     return (
       <div
-        className="w-full origin-bottom-right will-change-[transform,opacity]"
+        className="w-full origin-top-right will-change-[transform,opacity]"
         style={{
           opacity: t,
-          transform: `translateY(${(1 - t) * 22}px) scale(${0.94 + t * 0.06})`,
-          filter: `blur(${(1 - t) * 6}px)`,
+          transform: `translateY(${(1 - t) * 12}px) scale(${0.96 + t * 0.04})`,
+          filter: `blur(${(1 - t) * 4}px)`,
         }}
       >
-        <TranscriptBubble role="user" className="[&>div]:text-[14px]">
+        <TranscriptBubble role="user" className="[&>div]:py-2 [&>div]:text-[14px] [&>div]:leading-snug">
           {line.text}
         </TranscriptBubble>
       </div>
@@ -112,14 +112,14 @@ export function ScrollDrivenMessage({ line, reveal }: Props) {
       ) : null}
       {contentT > 0.01 ? (
         <div
-          className="w-full origin-bottom-left will-change-[transform,opacity]"
+          className="w-full origin-top-left will-change-[transform,opacity]"
           style={{
             opacity: contentT,
-            transform: `translateY(${(1 - contentT) * 20}px) scale(${0.95 + contentT * 0.05})`,
-            filter: `blur(${(1 - contentT) * 5}px)`,
+            transform: `translateY(${(1 - contentT) * 12}px) scale(${0.96 + contentT * 0.04})`,
+            filter: `blur(${(1 - contentT) * 4}px)`,
           }}
         >
-          <TranscriptBubble role="assistant" className="[&>div]:text-[13px]">
+          <TranscriptBubble role="assistant" className="[&>div]:py-2 [&>div]:text-[13px] [&>div]:leading-snug">
             <span>{line.text}</span>
             {line.action ? <DemoActionLabel label={line.action.label} /> : null}
           </TranscriptBubble>

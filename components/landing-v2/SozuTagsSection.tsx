@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { LandingCopy, LandingLocale } from "@/lib/landing-copy";
 import { SozuTagAvailabilitySearch } from "./SozuTagAvailabilitySearch";
 
@@ -6,6 +5,21 @@ const TAG_EXAMPLES = ["$joaquin", "$cafe.noma", "importadora.cl"] as const;
 
 const ORANGE_GLOW =
   "radial-gradient(circle, rgba(255,128,0,0.05) 0%, rgba(255,128,0,0) 70%)";
+
+function MustHaveCardCompact({
+  title,
+  body,
+}: {
+  title: string;
+  body: string;
+}) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-[#0d0d0d]/60 p-3.5">
+      <p className="mb-1 text-xs font-semibold leading-snug text-white">{title}</p>
+      <p className="text-[11px] leading-relaxed text-white/45">{body}</p>
+    </div>
+  );
+}
 
 type Props = {
   copy: LandingCopy;
@@ -15,7 +29,6 @@ type Props = {
 
 export function SozuTagsSection({ copy, basePath, locale }: Props) {
   const t = copy.sozuTags;
-  const p = (href: string) => `${basePath}${href}`;
 
   return (
     <section
@@ -68,27 +81,13 @@ export function SozuTagsSection({ copy, basePath, locale }: Props) {
               ))}
             </div>
 
-            <p className="text-sm leading-relaxed text-white/55 md:text-base">
-              {t.identityLead}{" "}
-              <span className="font-medium text-white">{t.identityLayer}</span>
-              {t.identityAnd}
-              <span className="font-medium text-white">{t.identityMoat}</span>
-              {t.identityRest}
-            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {t.mustHaves.map((item) => (
+                <MustHaveCardCompact key={item.title} title={item.title} body={item.body} />
+              ))}
+            </div>
           </div>
         </div>
-
-        <ul className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {t.mustHaves.map((item) => (
-            <li
-              key={item.title}
-              className="rounded-2xl border border-white/10 bg-[#0d0d0d]/60 p-5 text-sm"
-            >
-              <p className="mb-2 font-semibold text-white">{item.title}</p>
-              <p className="leading-relaxed text-white/45">{item.body}</p>
-            </li>
-          ))}
-        </ul>
 
         <div className="mt-12 rounded-[32px] border border-[#ff8000]/20 bg-[rgba(255,128,0,0.06)] p-6 md:p-8">
           <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#ff8000]">
@@ -99,9 +98,14 @@ export function SozuTagsSection({ copy, basePath, locale }: Props) {
           </p>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/50">
             {t.killerBody}
-            <Link href={p("#smart-receipts")} className="text-[#ff8000] hover:underline">
+            <a
+              href={t.killerReceiptsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#ff8000] hover:underline"
+            >
               {t.killerReceiptsLink}
-            </Link>
+            </a>
             {t.killerBodyAfter}
           </p>
         </div>

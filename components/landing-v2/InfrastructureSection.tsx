@@ -7,10 +7,10 @@ const LAYER_STYLES: Record<
   LandingCopy["infrastructure"]["stackLayers"][number]["variant"],
   string
 > = {
-  app: "border-[rgba(255,128,0,0.2)] bg-[rgba(255,128,0,0.05)] text-[#ff8000]",
-  intel: "border-white/10 bg-white/5 text-white/60 opacity-80",
-  trust: "border-[rgba(52,211,153,0.2)] bg-[rgba(52,211,153,0.05)] text-[#34d399] opacity-60",
-  global: "border-white/10 bg-white/5 text-white/40 opacity-40",
+  app: "border-[rgba(255,128,0,0.2)] bg-[rgba(255,128,0,0.05)]",
+  intel: "border-white/10 bg-white/5",
+  trust: "border-[rgba(52,211,153,0.2)] bg-[rgba(52,211,153,0.05)]",
+  global: "border-white/10 bg-white/5",
 };
 
 const STACK_GLOW =
@@ -21,9 +21,24 @@ export function InfrastructureSection({ copy }: Props) {
     <section
       id="infrastructure"
       aria-label={copy.ariaLabel}
-      className="bg-[#0d0d0d] px-5 py-32 md:px-20"
+      className="relative overflow-hidden bg-[#0d0d0d] px-5 py-32 md:px-20"
     >
-      <div className="mx-auto grid max-w-[75rem] grid-cols-1 items-center gap-20 lg:grid-cols-2">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        aria-hidden
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-45"
+      >
+        <source src="/sozu_coins_pingpong.webm" type="video/webm" />
+      </video>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[#0d0d0d]/45"
+      />
+
+      <div className="relative z-10 mx-auto grid max-w-[75rem] grid-cols-1 items-center gap-20 lg:grid-cols-2">
         <div>
           <p className="pb-6 text-sm font-bold uppercase tracking-[0.1875rem] text-[#df774f]">
             {copy.eyebrow}
@@ -55,24 +70,25 @@ export function InfrastructureSection({ copy }: Props) {
             className="pointer-events-none absolute inset-0"
             style={{ backgroundImage: STACK_GLOW }}
           />
-          <div className="relative w-full rounded-[48px] border border-white/5 bg-[#111] p-12">
+          <div className="relative w-full rounded-[48px] border border-white/10 bg-transparent p-12 backdrop-blur-[6px]">
             <div className="flex flex-col gap-6">
               {copy.stackLayers.map((layer) => (
                 <div
                   key={layer.label}
-                  className={`flex h-20 items-center justify-between rounded-2xl border px-6 ${LAYER_STYLES[layer.variant]}`}
+                  className={`flex min-h-20 items-center rounded-2xl border px-6 py-4 ${LAYER_STYLES[layer.variant]}`}
                 >
-                  <span className="text-xs font-bold tracking-[0.12em]">{layer.label}</span>
-                  <Image src={layer.icon} alt="" width={20} height={20} aria-hidden />
+                  <span className="text-sm font-medium leading-snug tracking-[0.02em] text-white">
+                    {layer.label}
+                  </span>
                 </div>
               ))}
             </div>
             <div className="mt-12 rounded-3xl border border-white/5 bg-black/40 p-6">
               <div className="mb-4 flex items-center justify-between">
-                <span className="text-xs font-bold tracking-[0.12em] text-white/40">
+                <span className="text-xs font-bold tracking-[0.12em] text-white">
                   {copy.uptimeLabel}
                 </span>
-                <span className="text-xs font-bold text-[#34d399]">{copy.uptimeValue}</span>
+                <span className="text-xs font-bold text-white">{copy.uptimeValue}</span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-white/10">
                 <div className="h-full w-full rounded-full bg-[#34d399]" />

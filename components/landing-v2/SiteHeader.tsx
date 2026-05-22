@@ -15,6 +15,15 @@ type SiteHeaderProps = {
 const navLinkClass =
   "font-sans text-sm font-medium uppercase tracking-[0.06em] text-white/60 transition-colors hover:text-white";
 
+function resolveNavHref(href: string, basePath: string) {
+  if (href.startsWith("http://") || href.startsWith("https://")) return href;
+  return `${basePath}${href}`;
+}
+
+function isExternalHref(href: string) {
+  return href.startsWith("http://") || href.startsWith("https://");
+}
+
 /** Nav links and actions appear shortly after scroll starts */
 function navChromeReveal(scrollProgress: number): number {
   if (scrollProgress <= 0.03) return 0;
@@ -28,7 +37,7 @@ export function SiteHeader({
   heroScrollProgress,
 }: SiteHeaderProps) {
   const [open, setOpen] = useState(false);
-  const p = (href: string) => `${basePath}${href}`;
+  const p = (href: string) => resolveNavHref(href, basePath);
   const chromeReveal =
     heroScrollProgress !== undefined ? navChromeReveal(heroScrollProgress) : 1;
 
@@ -60,11 +69,26 @@ export function SiteHeader({
           aria-label="Primary"
           aria-hidden={chromeReveal < 0.01}
         >
-          {copy.nav.map((item) => (
-            <Link key={item.href} href={p(item.href)} className={navLinkClass}>
-              {item.label}
-            </Link>
-          ))}
+          {copy.nav.map((item) => {
+            const href = p(item.href);
+            const external = isExternalHref(href);
+
+            return external ? (
+              <a
+                key={item.href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={navLinkClass}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link key={item.href} href={href} className={navLinkClass}>
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div
@@ -90,7 +114,7 @@ export function SiteHeader({
           <Link
             href={copy.lang.otherLocaleHref}
             aria-label={copy.lang.switchAria}
-            className="inline-flex h-9 min-w-[2.75rem] items-center justify-center rounded-lg border border-white/10 font-mono text-xs font-semibold uppercase tracking-wide text-white/80"
+            className="inline-flex h-9 min-w-[2.75rem] items-center justify-center font-sans text-xs font-medium normal-case tracking-[0.06em] text-white/80 transition-colors hover:text-white"
           >
             {copy.lang.otherLocaleLabel}
           </Link>
@@ -115,16 +139,32 @@ export function SiteHeader({
         aria-hidden={chromeReveal < 0.01}
       >
         <nav className="flex flex-col gap-1 px-5 py-4 md:px-12">
-          {copy.nav.map((item) => (
-            <Link
-              key={item.href}
-              href={p(item.href)}
-              className={cn(navLinkClass, "py-2")}
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {copy.nav.map((item) => {
+            const href = p(item.href);
+            const external = isExternalHref(href);
+
+            return external ? (
+              <a
+                key={item.href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(navLinkClass, "py-2")}
+                onClick={() => setOpen(false)}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link
+                key={item.href}
+                href={href}
+                className={cn(navLinkClass, "py-2")}
+                onClick={() => setOpen(false)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Link
             href={p("/onboarding")}
             className="py-2 text-sm font-medium text-white"

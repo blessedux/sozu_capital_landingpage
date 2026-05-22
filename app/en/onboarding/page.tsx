@@ -1,31 +1,47 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { OnboardingExperience } from "@/components/landing-v2/OnboardingExperience";
+import { FooterSection } from "@/components/landing-v2/FooterSection";
 import { SiteHeader } from "@/components/landing-v2/SiteHeader";
-import { getLandingCopy } from "@/lib/landing-copy";
+import { metadataEn } from "@/content/metadata-by-locale";
+import { getLandingCopy, type LandingLocale } from "@/lib/landing-copy";
 
-export default function OnboardingPageEn() {
-  const copy = getLandingCopy("en");
+export const metadata: Metadata = {
+  ...metadataEn,
+  title: "Early Access | SOZU CAPITAL",
+  description:
+    "Join Sozu's founding cohort. Reserve early access, unlock member perks, and help make economic freedom a protocol standard.",
+};
+
+const locale: LandingLocale = "en";
+
+type Props = {
+  searchParams: Promise<{ tag?: string; domain?: string }>;
+};
+
+export default async function OnboardingPageEn({ searchParams }: Props) {
+  const copy = getLandingCopy(locale);
+  const params = await searchParams;
+
+  const reserved =
+    params.tag != null
+      ? `$${params.tag.replace(/^\$/, "")}`
+      : params.domain != null
+        ? params.domain
+        : null;
+
+  const reservedKind =
+    params.tag != null ? "tag" : params.domain != null ? "domain" : null;
 
   return (
     <div className="landing-v2-grain min-h-dvh bg-background text-foreground">
       <SiteHeader copy={copy} basePath="/en" />
-      <main className="container py-20 md:py-28 max-w-2xl">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
-          Onboarding
-        </p>
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-          Wallet setup
-        </h1>
-        <p className="text-muted leading-relaxed mb-10">
-          This flow is coming soon. Here you will complete onboarding and link your Sozu
-          Tag to your non-custodial wallet.
-        </p>
-        <Link
-          href="/en"
-          className="inline-flex font-mono text-sm uppercase tracking-wide text-primary hover:text-primary/80 transition-colors"
-        >
-          ← Back to home
-        </Link>
-      </main>
+      <OnboardingExperience
+        copy={copy.onboarding}
+        basePath="/en"
+        reserved={reserved}
+        reservedKind={reservedKind}
+      />
+      <FooterSection copy={copy.footer} basePath="/en" />
     </div>
   );
 }

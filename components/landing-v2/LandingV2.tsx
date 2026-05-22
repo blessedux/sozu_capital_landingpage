@@ -10,7 +10,6 @@ import { VoiceDemoTeaser } from "@/components/voice-demo/VoiceDemoTeaser";
 import { ProblemSection } from "./ProblemSection";
 import { SolutionSection } from "./SolutionSection";
 import { SozuTagsSection } from "./SozuTagsSection";
-import { PricingSection } from "./PricingSection";
 import { NetworkLayerSection } from "./NetworkLayerSection";
 import { InfrastructureSection } from "./InfrastructureSection";
 import { StrategicFinanceSection } from "./StrategicFinanceSection";
@@ -51,9 +50,8 @@ export function LandingV2({ locale, copy }: LandingV2Props) {
           locale={locale}
           basePath={basePath}
         />
-        <NetworkLayerSection copy={copy.networkLayer} />
+        <NetworkLayerSection copy={copy.networkLayer} basePath={basePath} />
         <SozuTagsSection copy={copy} basePath={basePath} locale={locale} />
-        <PricingSection copy={copy.pricing} basePath={basePath} />
         <InfrastructureSection copy={copy.infrastructure} />
         <StrategicFinanceSection copy={copy.strategicFinance} />
         <FinalCtaSection copy={copy.finalCta} basePath={basePath} />

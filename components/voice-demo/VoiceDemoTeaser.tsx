@@ -57,6 +57,7 @@ export function VoiceDemoTeaser({ copy, locale, basePath }: Props) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [copyRevealed, setCopyRevealed] = useState(false);
   const copyRevealRef = useRef<HTMLDivElement>(null);
+  const messagesScrollRef = useRef<HTMLDivElement>(null);
 
   const allLines = useMemo((): ScrollMessageLine[] => {
     const lines: ScrollMessageLine[] = [];
@@ -161,6 +162,14 @@ export function VoiceDemoTeaser({ copy, locale, basePath }: Props) {
     };
   }, [syncProgress]);
 
+  useEffect(() => {
+    const el = messagesScrollRef.current;
+    if (!el || isEmpty) return;
+
+    const overflow = el.scrollHeight - el.clientHeight;
+    el.scrollTop = overflow > 0 ? overflow : 0;
+  }, [isEmpty, lineReveals, rawProgress]);
+
   return (
     <section
       ref={sectionRef}
@@ -220,7 +229,7 @@ export function VoiceDemoTeaser({ copy, locale, basePath }: Props) {
                 )}
               >
                 <Link
-                  href={`${basePath}/demo`}
+                  href={`${basePath}/onboarding`}
                   className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.06] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#ff8000]/50 hover:bg-[#ff8000]/10"
                 >
                   {copy.cta}
@@ -228,30 +237,24 @@ export function VoiceDemoTeaser({ copy, locale, basePath }: Props) {
 
                 <div className="flex items-center gap-2">
                   {/* Telegram */}
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Join on Telegram"
-                    className="flex size-[38px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-[#ff8000]/50 hover:bg-[#ff8000]/10"
+                  <span
+                    aria-hidden
+                    className="flex size-[38px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70"
                   >
                     <svg className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                       <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z" />
                     </svg>
-                  </a>
+                  </span>
 
                   {/* WhatsApp */}
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Message on WhatsApp"
-                    className="flex size-[38px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white transition-colors hover:border-[#ff8000]/50 hover:bg-[#ff8000]/10"
+                  <span
+                    aria-hidden
+                    className="flex size-[38px] items-center justify-center rounded-full border border-white/15 bg-white/[0.06] text-white/70"
                   >
                     <svg className="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
                     </svg>
-                  </a>
+                  </span>
 
                   {/* ElizaOS */}
                   <span className="text-[11px] font-medium text-white/40">
@@ -291,21 +294,22 @@ export function VoiceDemoTeaser({ copy, locale, basePath }: Props) {
                 </div>
 
                 <div
-                  className="relative z-10 flex-1 px-4 py-5"
+                  className="relative z-10 flex min-h-0 flex-1 flex-col px-4 pt-5 pb-4"
                   aria-live="polite"
                 >
-                  <div className="flex flex-col justify-start gap-3">
-                    {isEmpty ? (
-                      <div className="min-h-[240px]" />
-                    ) : (
-                      allLines.map((line, i) => (
-                        <ScrollDrivenMessage
-                          key={line.id}
-                          line={line}
-                          reveal={lineReveals[i] ?? 0}
-                        />
-                      ))
-                    )}
+                  <div
+                    ref={messagesScrollRef}
+                    className="flex min-h-0 flex-1 flex-col justify-start gap-2 overflow-x-hidden overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                  >
+                    {!isEmpty
+                      ? allLines.map((line, i) => (
+                          <ScrollDrivenMessage
+                            key={line.id}
+                            line={line}
+                            reveal={lineReveals[i] ?? 0}
+                          />
+                        ))
+                      : null}
                   </div>
                 </div>
               </div>

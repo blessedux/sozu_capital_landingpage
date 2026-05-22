@@ -1,14 +1,27 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { OnboardingExperience } from "@/components/landing-v2/OnboardingExperience";
+import { FooterSection } from "@/components/landing-v2/FooterSection";
 import { SiteHeader } from "@/components/landing-v2/SiteHeader";
-import { getLandingCopy } from "@/lib/landing-copy";
+import { metadataEn } from "@/content/metadata-by-locale";
+import { getLandingCopy, type LandingLocale } from "@/lib/landing-copy";
+
+export const metadata: Metadata = {
+  ...metadataEn,
+  title: "Early Access | SOZU CAPITAL",
+  description:
+    "Join Sozu's founding cohort. Reserve early access, unlock member perks, and help make economic freedom a protocol standard.",
+};
+
+const locale: LandingLocale = "en";
 
 type Props = {
   searchParams: Promise<{ tag?: string; domain?: string }>;
 };
 
 export default async function OnboardingPage({ searchParams }: Props) {
-  const copy = getLandingCopy("en");
+  const copy = getLandingCopy(locale);
   const params = await searchParams;
+
   const reserved =
     params.tag != null
       ? `$${params.tag.replace(/^\$/, "")}`
@@ -16,30 +29,19 @@ export default async function OnboardingPage({ searchParams }: Props) {
         ? params.domain
         : null;
 
+  const reservedKind =
+    params.tag != null ? "tag" : params.domain != null ? "domain" : null;
+
   return (
     <div className="landing-v2-grain min-h-dvh bg-background text-foreground">
       <SiteHeader copy={copy} basePath="" />
-      <main className="container py-20 md:py-28 max-w-2xl">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
-          Onboarding
-        </p>
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-          Create your wallet
-        </h1>
-        {reserved ? (
-          <p className="mb-4 font-mono text-lg text-[#ff8000]">{reserved}</p>
-        ) : null}
-        <p className="text-muted leading-relaxed mb-10">
-          Wallet creation is coming soon. You&apos;ll finish onboarding here and link
-          {reserved ? " this name" : " your Sozu Tag or domain"} to a non-custodial wallet.
-        </p>
-        <Link
-          href="/"
-          className="inline-flex font-mono text-sm uppercase tracking-wide text-primary hover:text-primary/80 transition-colors"
-        >
-          ← Back to home
-        </Link>
-      </main>
+      <OnboardingExperience
+        copy={copy.onboarding}
+        basePath=""
+        reserved={reserved}
+        reservedKind={reservedKind}
+      />
+      <FooterSection copy={copy.footer} basePath="" />
     </div>
   );
 }
