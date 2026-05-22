@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { motion } from "motion/react";
 import type { LandingCopy } from "@/lib/landing-copy";
 import { cn } from "@/lib/utils";
 
 const CTA_GLOW =
   "radial-gradient(circle, rgba(255,128,0,0.14) 0%, rgba(255,128,0,0) 65%)";
+
+const successEase = [0.22, 1, 0.36, 1] as const;
 
 type Props = {
   copy: LandingCopy["onboarding"];
@@ -74,24 +77,34 @@ export function OnboardingExperience({
     <div className="rounded-[32px] border border-white/10 bg-[#0c0c0f]/90 p-8 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.8)] backdrop-blur-sm md:p-10">
       {isSubmitted ? (
         <div>
-          <div
-            aria-hidden
-            className="mb-6 flex size-14 items-center justify-center rounded-full bg-emerald-400/15 ring-1 ring-emerald-400/30"
+          <motion.h2
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: successEase }}
+            className="font-display text-2xl font-bold tracking-[-0.02em] text-white md:text-[28px]"
           >
-            <span className="text-2xl text-emerald-400">✓</span>
-          </div>
-          <h2 className="font-display text-2xl font-bold tracking-[-0.02em] text-white md:text-[28px]">
             {copy.successTitle}
-          </h2>
-          <p className="mt-4 text-base leading-7 text-white/60">
-            {copy.successBody}
-          </p>
-          <Link
-            href={homeHref}
-            className="mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#ff8000] to-[#df774f] px-10 py-4 text-base font-bold text-black shadow-[0_4px_15px_rgba(255,128,0,0.35)] transition-opacity hover:opacity-95"
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.18, ease: successEase }}
+            className="mt-4 text-base leading-7 text-white/60"
           >
-            {copy.successCta}
-          </Link>
+            {copy.successBody}
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.34, ease: successEase }}
+          >
+            <Link
+              href={homeHref}
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#ff8000] to-[#df774f] px-10 py-4 text-base font-bold text-black shadow-[0_4px_15px_rgba(255,128,0,0.35)] transition-opacity hover:opacity-95"
+            >
+              {copy.successCta}
+            </Link>
+          </motion.div>
         </div>
       ) : (
         <>

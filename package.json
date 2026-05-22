@@ -11,7 +11,8 @@
   "dependencies": {
     "@dannymichel/proxima-nova": "^4.5.2",
     "@paper-design/shaders-react": "^0.0.76",
-    "@supabase/supabase-js": "^2.74.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.1",
     "autoprefixer": "^10.4.16",
     "clsx": "^2.1.1",
     "motion": "^12.23.22",
