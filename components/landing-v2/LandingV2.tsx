@@ -6,13 +6,11 @@ import { SiteHeader } from "./SiteHeader";
 import { HeroSection } from "./HeroSection";
 import { PartnersSection } from "./PartnersSection";
 import { PathwaysSection } from "./PathwaysSection";
-import { VoiceDemoTeaser } from "@/components/voice-demo/VoiceDemoTeaser";
 import { ProblemSection } from "./ProblemSection";
 import { SolutionSection } from "./SolutionSection";
+import { CoreBenefitsSection } from "./CoreBenefitsSection";
+import { CashOutSection } from "./CashOutSection";
 import { SozuTagsSection } from "./SozuTagsSection";
-import { NetworkLayerSection } from "./NetworkLayerSection";
-import { InfrastructureSection } from "./InfrastructureSection";
-import { StrategicFinanceSection } from "./StrategicFinanceSection";
 import { FinalCtaSection } from "./FinalCtaSection";
 import { FooterSection } from "./FooterSection";
 
@@ -39,21 +37,15 @@ export function LandingV2({ locale, copy }: LandingV2Props) {
           onHeroScrollProgress={setHeroScrollProgress}
         />
         <PartnersSection copy={copy.partners} />
-        <PathwaysSection copy={copy.pathways} basePath={basePath} />
         {/* Parallax curtain: Problem stays pinned while Solution slides up to cover it */}
         <div className="relative">
-          <ProblemSection copy={copy.problem} />
+          <ProblemSection copy={copy.problem} basePath={basePath} />
           <SolutionSection copy={copy.solution} />
         </div>
-        <VoiceDemoTeaser
-          copy={copy.voiceDemoTeaser}
-          locale={locale}
-          basePath={basePath}
-        />
-        <NetworkLayerSection copy={copy.networkLayer} basePath={basePath} />
+        <PathwaysSection copy={copy.pathways} basePath={basePath} />
+        <CashOutSection copy={copy.cashOut} />
+        <CoreBenefitsSection copy={copy.coreBenefits} />
         <SozuTagsSection copy={copy} basePath={basePath} locale={locale} />
-        <InfrastructureSection copy={copy.infrastructure} />
-        <StrategicFinanceSection copy={copy.strategicFinance} />
         <FinalCtaSection copy={copy.finalCta} basePath={basePath} />
       </main>
       <FooterSection copy={copy.footer} basePath={basePath} />

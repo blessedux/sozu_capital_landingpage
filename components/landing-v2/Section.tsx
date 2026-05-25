@@ -7,6 +7,7 @@ type SectionProps = {
   description?: string;
   children?: React.ReactNode;
   className?: string;
+  withVideoBackground?: boolean;
 };
 
 export function Section({
@@ -16,16 +17,38 @@ export function Section({
   description,
   children,
   className,
+  withVideoBackground = false,
 }: SectionProps) {
   return (
     <section
       id={id}
       className={cn(
-        "scroll-mt-24 border-b border-white/5 bg-[#0a0a0a] py-20 md:py-28",
+        "scroll-mt-24 border-b border-white/5 py-20 md:py-28",
+        withVideoBackground
+          ? "relative overflow-hidden bg-[#0d0d0d]"
+          : "bg-[#0a0a0a]",
         className
       )}
     >
-      <div className="mx-auto max-w-[75rem] px-5 md:px-12 xl:px-20">
+      {withVideoBackground ? (
+        <>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-hidden
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-45"
+          >
+            <source src="/sozu_coins_pingpong.webm" type="video/webm" />
+          </video>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[#0d0d0d]/45"
+          />
+        </>
+      ) : null}
+      <div className="relative z-10 mx-auto max-w-[75rem] px-5 md:px-12 xl:px-20">
         {eyebrow ? (
           <p className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
             {eyebrow}

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ...metadataEn,
   title: "Pricing | SOZU CAPITAL",
   description:
-    "Flexible capital plans to scale, save, and maximize value with Sozu.",
+    "Free forever wallet. Pay 1% only on on-ramps and off-ramps. SozuPay for NGOs at $50/month.",
 };
 
 const locale: LandingLocale = "en";

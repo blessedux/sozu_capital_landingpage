@@ -1,22 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useLayoutEffect, useRef } from "react";
 import type { LandingCopy } from "@/lib/landing-copy";
+import { VoicePoweredOrb } from "@/components/ui/voice-powered-orb";
 
-type Props = { copy: LandingCopy["problem"] };
+type Props = {
+  copy: LandingCopy["problem"];
+  basePath: string;
+};
 
 const ORANGE_GLOW =
   "radial-gradient(circle, rgba(255,128,0,0.05) 0%, rgba(255,128,0,0) 70%)";
 
-const HOOK_LINE_CLASS =
-  "max-w-[30rem] text-[24px] font-medium leading-[32px] text-white";
-const TITLE_LINE_CLASS =
-  "max-w-[30rem] text-[20px] font-normal leading-[26px] text-white";
-
-const TITLE_Y = { start: 36, end: -100 };
+const LEFT_Y = { start: 36, end: -100 };
 const BG_Y = { start: 0, end: 70 };
-const TAGLINE_Y = { start: 24, end: -80 };
+const CLOSING_Y = { start: 24, end: -80 };
 
 function lerp(start: number, end: number, t: number) {
   return start + (end - start) * t;
@@ -30,13 +30,13 @@ function sectionScrollProgress(section: HTMLElement) {
   return Math.min(1, Math.max(0, (viewport - rect.top) / span));
 }
 
-export function ProblemSection({ copy }: Props) {
+export function ProblemSection({ copy, basePath }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const bgLayerRef = useRef<HTMLDivElement>(null);
   const glowLayerRef = useRef<HTMLDivElement>(null);
-  const titleBlockRef = useRef<HTMLDivElement>(null);
-  const taglineBlockRef = useRef<HTMLDivElement>(null);
-  const titleLines = [copy.line1, copy.line2];
+  const leftBlockRef = useRef<HTMLDivElement>(null);
+  const orbBlockRef = useRef<HTMLDivElement>(null);
+  const closingBlockRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     let raf = 0;
@@ -55,22 +55,24 @@ export function ProblemSection({ copy }: Props) {
       const section = sectionRef.current;
       const bg = bgLayerRef.current;
       const glow = glowLayerRef.current;
-      const titles = titleBlockRef.current;
-      const taglines = taglineBlockRef.current;
+      const left = leftBlockRef.current;
+      const orb = orbBlockRef.current;
+      const closing = closingBlockRef.current;
 
-      if (!section || !bg || !titles || !taglines || reducedMotion) return;
+      if (!section || !bg || !left || !orb || !closing || reducedMotion) return;
 
       const t = sectionScrollProgress(section);
       const bgOffset = lerp(BG_Y.start, BG_Y.end, t);
-      const titleOffset = lerp(TITLE_Y.start, TITLE_Y.end, t);
-      const taglineOffset = lerp(TAGLINE_Y.start, TAGLINE_Y.end, t);
+      const leftOffset = lerp(LEFT_Y.start, LEFT_Y.end, t);
+      const closingOffset = lerp(CLOSING_Y.start, CLOSING_Y.end, t);
 
       bg.style.transform = `translate3d(0, ${bgOffset}px, 0)`;
       if (glow) {
         glow.style.transform = `translate3d(-50%, ${bgOffset}px, 0)`;
       }
-      titles.style.transform = `translate3d(0, ${titleOffset}px, 0)`;
-      taglines.style.transform = `translate3d(0, ${taglineOffset}px, 0)`;
+      left.style.transform = `translate3d(0, ${leftOffset}px, 0)`;
+      orb.style.transform = `translate3d(0, ${leftOffset}px, 0)`;
+      closing.style.transform = `translate3d(0, ${closingOffset}px, 0)`;
     };
 
     const onScroll = () => {
@@ -133,40 +135,51 @@ export function ProblemSection({ copy }: Props) {
 
       <div className="relative z-10 mx-auto flex min-h-[720px] max-w-[75rem] flex-col justify-between gap-16 px-6 py-24 md:px-12 lg:min-h-[880px] lg:py-32 xl:px-20">
         <div
-          ref={titleBlockRef}
-          className="flex max-w-[32rem] flex-col gap-0 will-change-transform"
+          ref={orbBlockRef}
+          aria-hidden
+          className="pointer-events-none absolute right-6 top-24 z-[1] hidden h-80 w-80 will-change-transform md:right-12 lg:block xl:right-20 xl:top-32 xl:h-[28rem] xl:w-[28rem]"
         >
-          {titleLines.map((line, index) => (
-            <p
-              key={line}
-              className={index === 0 ? HOOK_LINE_CLASS : TITLE_LINE_CLASS}
-            >
-              {line}
-            </p>
-          ))}
-
-          <ul className="mt-6 list-none space-y-2 pl-0">
-            {copy.benefits.map((benefit) => (
-              <li
-                key={benefit}
-                className="flex gap-3 text-[18px] leading-7 text-white"
-              >
-                <span className="shrink-0 text-[#ff8000]" aria-hidden>
-                  •
-                </span>
-                <span className="capitalize">{benefit}</span>
-              </li>
-            ))}
-          </ul>
+          <VoicePoweredOrb className="h-full w-full" tone="orange" />
         </div>
 
         <div
-          ref={taglineBlockRef}
-          className="mb-10 max-w-[39rem] will-change-transform self-end text-left md:mb-14 lg:mb-16 lg:text-right"
+          ref={leftBlockRef}
+          className="relative z-10 flex max-w-[34rem] flex-col will-change-transform"
         >
-          <p className="text-[20px] leading-8 text-white">{copy.taglineSimple}</p>
-          <p className="mt-4 text-[20px] font-medium leading-8 text-white">
-            {copy.taglinePowerful}
+          <h2 className="font-display text-[32px] font-bold leading-[1.15] tracking-[-0.02em] text-white md:text-[40px] md:leading-[1.12]">
+            {copy.title}
+          </h2>
+
+          <p className="mt-5 max-w-[30rem] text-lg leading-8 text-white/70 md:text-xl md:leading-[30px]">
+            {copy.subheading}
+          </p>
+
+          <ul className="mt-8 list-none space-y-3 pl-0">
+            {copy.benefits.map((benefit) => (
+              <li
+                key={benefit}
+                className="flex gap-3 text-[17px] leading-7 text-white/90 md:text-[18px]"
+              >
+                <span className="mt-[0.45rem] size-1.5 shrink-0 rounded-full bg-[#ff8000]" aria-hidden />
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            href={`${basePath}/onboarding?product=sozupay`}
+            className="mt-10 inline-flex w-fit rounded-full bg-[#ff8000] px-8 py-3.5 text-sm font-bold text-black shadow-[0_0_10px_rgba(255,128,0,0.3)] transition-colors hover:bg-[#ff8000]/90"
+          >
+            {copy.cta}
+          </Link>
+        </div>
+
+        <div
+          ref={closingBlockRef}
+          className="relative z-10 mb-20 max-w-[36rem] will-change-transform self-end text-left md:mb-28 lg:mb-32 lg:text-right"
+        >
+          <p className="font-display text-[22px] font-semibold leading-8 text-white md:text-[26px] md:leading-9">
+            {copy.closingLine}
           </p>
         </div>
       </div>

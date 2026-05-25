@@ -54,11 +54,11 @@ export type LandingCopy = {
   };
   problem: {
     ariaLabel: string;
-    line1: string;
-    line2: string;
+    title: string;
+    subheading: string;
     benefits: string[];
-    taglineSimple: string;
-    taglinePowerful: string;
+    closingLine: string;
+    cta: string;
   };
   voiceDemoTeaser: {
     ariaLabel: string;
@@ -99,21 +99,28 @@ export type LandingCopy = {
     ariaLabel: string;
     title: string;
     description: string;
-    billingToggleLabel: string;
-    monthly: string;
-    yearly: string;
-    plans: {
-      name: string;
+    model: {
+      eyebrow: string;
+      title: string;
       description: string;
+      footnote: string;
+    };
+    items: {
+      name: string;
       price: string;
-      priceYearly?: string;
       period?: string;
-      periodYearly?: string;
-      cta: string;
-      features: string[];
-      featured?: boolean;
+      description: string;
       badge?: string;
     }[];
+    cta: string;
+  };
+  cardPage: {
+    ariaLabel: string;
+    statusBadge: string;
+    title: string;
+    description: string;
+    rndCta: string;
+    rndHref: string;
   };
   smartMoney: {
     eyebrow: string;
@@ -332,7 +339,7 @@ export type LandingCopy = {
 const en: LandingCopy = {
   nav: [
     { href: "/product", label: "Product" },
-    { href: "#sozu-tags", label: "Card" },
+    { href: "/card", label: "Card" },
     { href: "/pricing", label: "Pricing" },
     { href: "https://docs.sozu.capital", label: "Docs" },
   ],
@@ -405,17 +412,19 @@ const en: LandingCopy = {
     },
   },
   problem: {
-    ariaLabel: "Why money still feels slow",
-    line1: "Money is still too slow.",
-    line2: "Payments, borders, and spreadsheets weren't built for how you earn today.",
+    ariaLabel: "Why NGO finance still breaks",
+    title: "Your program money shouldn't live in five places.",
+    subheading:
+      "Spreadsheets, bank portals, and chat threads weren't built for batch disbursements—or for tracking every beneficiary dollar.",
     benefits: [
-      "Waiting days to get paid",
-      "Complex banking systems",
-      "Broken international transfers",
-      "Confusing financial tools",
+      "Batch payouts that take days to reconcile",
+      "Grants and microcredits tracked in different tools",
+      "Beneficiary records scattered and hard to audit",
+      "Field team spend with no single source of truth",
     ],
-    taglineSimple: "SOZU turns finance into a real-time conversation.",
-    taglinePowerful: "Voice-native. Math you can trust.",
+    closingLine:
+      "Disburse at scale. Track every dollar. Run a program your donors can trust.",
+    cta: "Get SozuPay",
   },
   voiceDemoTeaser: {
     ariaLabel: "Live voice demo preview",
@@ -508,61 +517,51 @@ const en: LandingCopy = {
     ],
   },
   pricing: {
-    ariaLabel: "Pricing plans",
-    title: "Flexible Capital Solutions",
-    description: "Choose the perfect plan to scale, save, and maximize value.",
-    billingToggleLabel: "Billing period",
-    monthly: "Monthly",
-    yearly: "Yearly",
-    plans: [
+    ariaLabel: "Pricing",
+    title: "Simple, honest pricing",
+    description:
+      "No hidden tiers. No feature gates on the wallet. You pay when money crosses borders—not to hold it.",
+    model: {
+      eyebrow: "Free forever system",
+      title: "The wallet is free. You only pay at the edges.",
+      description:
+        "Sozu is built so operating in stable digital dollars doesn’t come with a monthly tax. Hold, send, and receive on-chain at no cost. When you move between bank rails and your wallet—that’s when we charge, clearly, at 1%.",
+      footnote:
+        "Rates depend on partner and jurisdiction availability. Every ramp shows its full cost before you confirm.",
+    },
+    items: [
       {
-        name: "Seed Plan",
-        description: "Perfect for startups exploring capital automation.",
-        price: "free",
-        cta: "Start a Project",
-        features: [
-          "Simple Invoicing Solutions",
-          "Comprehensive Dashboard",
-          "Expense Management",
-          "24/7 Email Assistance",
-          "Basic Reporting Features",
-        ],
+        name: "Sozu Wallet",
+        price: "Free",
+        period: "forever",
+        description:
+          "Non-custodial wallet, Sozu Tags, and peer transfers. No subscription, no seat fees—use it as your daily operating layer.",
       },
       {
-        name: "Growth Plan",
-        description: "For growing teams who need more power and flexibility.",
-        price: "$160",
-        priceYearly: "$1,280",
-        period: "/Month",
-        periodYearly: "/Year",
-        cta: "Start a Project",
-        featured: true,
-        badge: "Most Popular",
-        features: [
-          "All Features at No Cost",
-          "Endless Dashboard Options",
-          "Collaborate Seamlessly with Team",
-          "In-Depth Reporting Tools",
-          "Expedited Email Assistance",
-        ],
+        name: "On-ramp & off-ramp",
+        price: "1%",
+        description:
+          "Convert between local currency and stable digital dollars. One flat rate when money enters or exits the system—no spread buried in the quote.",
       },
       {
-        name: "Institutional Plan",
-        description: "Custom solutions for large teams and businesses.",
-        price: "$2000",
-        priceYearly: "$16,000",
-        period: "/Month",
-        periodYearly: "/Year",
-        cta: "Start a Project",
-        features: [
-          "Custom Pricing",
-          "Everything in Pro",
-          "Dedicated Account Manager",
-          "API Access & Integrations",
-          "Custom Security & Compliance",
-        ],
+        name: "SozuPay",
+        price: "$50",
+        period: "/ month",
+        badge: "For NGOs",
+        description:
+          "Program admin, disbursement workflows, and reporting for field teams and grant operators who need traceability without custodial black boxes.",
       },
     ],
+    cta: "Get Early Access",
+  },
+  cardPage: {
+    ariaLabel: "Sozu Card",
+    statusBadge: "Currently under development",
+    title: "HaLo Smart NFC Cards",
+    description:
+      "Physical payment identity on secure NFC hardware—tap to pay, sign, and verify without giving up custody. We’re building the Sozu Card experience on HaLo chips and will share R&D progress as we ship.",
+    rndCta: "Open HaLo R&D docs",
+    rndHref: "https://docs.arx.org/HaLo/overview",
   },
   smartMoney: {
     eyebrow: "In plain language",
@@ -711,8 +710,8 @@ const en: LandingCopy = {
       "Tags + receipts amplify smart money—they aren’t a substitute for global, non-custodial settlement and treasury. Lead with the money; let the UX remove the stupid parts.",
   },
   coreBenefits: {
-    eyebrow: "Problems we solve",
-    title: "Why teams switch to Sozu",
+    eyebrow: "Built for global work",
+    title: "Collect anywhere. Cash out locally. Always know your net.",
     description:
       "Most visitors aren’t browsing—they’re asking whether this beats what they use today for cross-border work from Latin America (and beyond). Here’s what we’re built to fix.",
     items: [
@@ -973,31 +972,31 @@ const en: LandingCopy = {
   onboarding: {
     ariaLabel: "Early access onboarding",
     eyebrow: "Early access",
-    titleLine1: "Help us make economic freedom",
-    titleLine2: "a protocol standard.",
+    titleLine1: "One place to run",
+    titleLine2: "program finance.",
     intro:
-      "Sozu is building the rails for internet-native money payments, treasury, and credit that work globally at the speed of the web. We're in private beta, and we're inviting a small group of early believers to shape what comes next.",
+      "SozuPay helps NGO admins disburse funds in batches, track beneficiaries and microcredits, and keep team spend auditable—without juggling spreadsheets, bank portals, and WhatsApp threads.",
     mission:
-      "We're bringing DeFi to the masses, not as jargon, but as everyday tools anyone can use. Early supporters like you are how we get there.\nTo thank you, we're reserving special benefits and cash prizes for founding members who join now.",
+      "Join the waitlist for early access at $50/month for NGOs. Founding members get priority onboarding, founding pricing, and a direct line to the team as we ship.",
     reservedLabel: "Reserved for you",
-    benefitsEyebrow: "Founding member perks",
-    benefitsTitle: "What early access unlocks",
+    benefitsEyebrow: "What you get",
+    benefitsTitle: "SozuPay for program admins",
     benefits: [
       {
-        title: "Cash prizes & rewards",
-        body: "Early members are eligible for cash prizes and referral rewards as we grow the network—because your support at this stage matters.",
+        title: "Batch disbursements",
+        body: "Pay beneficiaries and field teams in batches—with a record of every transfer your auditors and donors can follow.",
       },
       {
-        title: "Priority beta access",
-        body: "Skip the line. Get first access to Sozu Pay, Sozu Tags, vaults, and AI treasury tools before public launch.",
+        title: "Beneficiary & microcredit tracking",
+        body: "See grants, repayments, and program balances in one dashboard instead of scattered sheets and bank exports.",
       },
       {
-        title: "Founding member status",
-        body: "Lock in perks, pricing, and identity benefits reserved for the earliest users who help us stress-test the protocol.",
+        title: "Team finance in one view",
+        body: "Track contractor payouts, program spend, and restricted funds without losing the thread across tools.",
       },
       {
-        title: "Shape the product",
-        body: "Direct feedback loops with the team. Your use cases become our roadmap as we make DeFi usable for everyone.",
+        title: "Founding member access",
+        body: "Priority onboarding, $50/month NGO pricing locked at signup, and direct input on what we ship next.",
       },
     ],
     formEyebrow: "Join the waitlist",
@@ -1022,7 +1021,7 @@ const en: LandingCopy = {
       {
         title: "System",
         links: [
-          { label: "Principles", href: "/product#core-benefits" },
+          { label: "Principles", href: "#core-benefits" },
           { label: "Whitepaper", href: "/whitepaper" },
           { label: "Tactical View", href: "/product#pay-receipt-flow" },
           { label: "Vault Engine", href: "/product#financing-bnpl" },
@@ -1033,7 +1032,7 @@ const en: LandingCopy = {
         title: "Intelligence",
         links: [
           { label: "Runway Tracking", href: "#problem" },
-          { label: "Burn Optimization", href: "/product#cash-out" },
+          { label: "Burn Optimization", href: "#cash-out" },
           { label: "API Sync", href: "/product#pay-receipt-flow" },
         ],
       },
@@ -1052,7 +1051,7 @@ const en: LandingCopy = {
 const es: LandingCopy = {
   nav: [
     { href: "/product", label: "Producto" },
-    { href: "#sozu-tags", label: "Card" },
+    { href: "/card", label: "Card" },
     { href: "/pricing", label: "Precios" },
     { href: "https://docs.sozu.capital", label: "Docs" },
   ],
@@ -1125,17 +1124,19 @@ const es: LandingCopy = {
     },
   },
   problem: {
-    ariaLabel: "Por qué el dinero sigue lento",
-    line1: "El dinero sigue siendo demasiado lento.",
-    line2: "Pagos, fronteras y planillas no fueron hechos para cómo cobrás hoy.",
+    ariaLabel: "Por qué las finanzas de ONG siguen rotas",
+    title: "La plata de tu programa no debería vivir en cinco lugares.",
+    subheading:
+      "Planillas, portales bancarios y chats no fueron hechos para desembolsos en lote—ni para rastrear cada dólar de beneficiario.",
     benefits: [
-      "Esperar días para cobrar",
-      "Sistemas bancarios complejos",
-      "Transferencias internacionales rotas",
-      "Herramientas financieras confusas",
+      "Pagos en lote que tardan días en conciliarse",
+      "Grants y microcréditos en herramientas distintas",
+      "Registros de beneficiarios dispersos y difíciles de auditar",
+      "Gasto de equipos en terreno sin una sola fuente de verdad",
     ],
-    taglineSimple: "SOZU convierte las finanzas en una conversación en tiempo real.",
-    taglinePowerful: "Voz nativa. Matemática en la que podés confiar.",
+    closingLine:
+      "Desembolsá a escala. Rastreá cada dólar. Operá un programa en el que tus donantes confíen.",
+    cta: "Obtener SozuPay",
   },
   voiceDemoTeaser: {
     ariaLabel: "Vista previa demo de voz",
@@ -1228,61 +1229,51 @@ const es: LandingCopy = {
     ],
   },
   pricing: {
-    ariaLabel: "Planes de precios",
-    title: "Soluciones de capital flexibles",
-    description: "Elige el plan ideal para escalar, ahorrar y maximizar valor.",
-    billingToggleLabel: "Periodo de facturación",
-    monthly: "Mensual",
-    yearly: "Anual",
-    plans: [
+    ariaLabel: "Precios",
+    title: "Precios simples y honestos",
+    description:
+      "Sin tiers ocultos. Sin bloquear funciones en la billetera. Pagás cuando el dinero cruza fronteras—no por tenerlo.",
+    model: {
+      eyebrow: "Sistema free forever",
+      title: "La billetera es gratis. Pagás solo en los bordes.",
+      description:
+        "Sozu está hecho para que operar en dólares digitales estables no tenga impuesto mensual. Tené, enviá y recibí on-chain sin costo. Cuando movés plata entre rails bancarios y tu billetera—ahí cobramos, claro, al 1%.",
+      footnote:
+        "Las tarifas dependen de partners y jurisdicción. Cada rampa muestra el costo total antes de confirmar.",
+    },
+    items: [
       {
-        name: "Plan Seed",
-        description: "Ideal para startups explorando automatización de capital.",
-        price: "free",
-        cta: "Iniciar proyecto",
-        features: [
-          "Facturación simple",
-          "Dashboard completo",
-          "Gestión de gastos",
-          "Soporte por email 24/7",
-          "Reportes básicos",
-        ],
+        name: "Sozu Wallet",
+        price: "Gratis",
+        period: "para siempre",
+        description:
+          "Billetera no custodial, Sozu Tags y transferencias P2P. Sin suscripción ni fees por usuario—usala como capa operativa diaria.",
       },
       {
-        name: "Plan Growth",
-        description: "Para equipos en crecimiento que necesitan más potencia y flexibilidad.",
-        price: "$160",
-        priceYearly: "$1,280",
-        period: "/mes",
-        periodYearly: "/año",
-        cta: "Iniciar proyecto",
-        featured: true,
-        badge: "Más popular",
-        features: [
-          "Todas las funciones incluidas",
-          "Opciones de dashboard ilimitadas",
-          "Colaboración en equipo",
-          "Reportes avanzados",
-          "Soporte email prioritario",
-        ],
+        name: "On-ramp y off-ramp",
+        price: "1%",
+        description:
+          "Convertí entre moneda local y dólares digitales estables. Una tarifa plana cuando el dinero entra o sale del sistema—sin spread escondido en la cotización.",
       },
       {
-        name: "Plan Institucional",
-        description: "Soluciones a medida para equipos grandes y empresas.",
-        price: "$2000",
-        priceYearly: "$16,000",
-        period: "/mes",
-        periodYearly: "/año",
-        cta: "Iniciar proyecto",
-        features: [
-          "Precios personalizados",
-          "Todo en Pro",
-          "Account manager dedicado",
-          "API e integraciones",
-          "Seguridad y compliance a medida",
-        ],
+        name: "SozuPay",
+        price: "$50",
+        period: "/ mes",
+        badge: "Para ONGs",
+        description:
+          "Admin de programas, flujos de desembolso y reportes para equipos en terreno y operadores de grants que necesitan trazabilidad sin cajas negras custodiales.",
       },
     ],
+    cta: "Acceso anticipado",
+  },
+  cardPage: {
+    ariaLabel: "Sozu Card",
+    statusBadge: "Actualmente en desarrollo",
+    title: "HaLo Smart NFC Cards",
+    description:
+      "Identidad de pago física en hardware NFC seguro—toca para pagar, firmar y verificar sin ceder custodia. Estamos construyendo la experiencia Sozu Card sobre chips HaLo y compartiremos el avance de I+D conforme avancemos.",
+    rndCta: "Abrir docs de I+D HaLo",
+    rndHref: "https://docs.arx.org/HaLo/overview",
   },
   smartMoney: {
     eyebrow: "En criollo",
@@ -1431,8 +1422,8 @@ const es: LandingCopy = {
       "Tags + comprobantes amplifican el dinero smart; no sustituyen liquidación global no custodial ni tesorería. Primero la plata; el UX quita lo absurdo.",
   },
   coreBenefits: {
-    eyebrow: "Problemas que resolvemos",
-    title: "Por qué los equipos eligen Sozu",
+    eyebrow: "Hecho para operar global",
+    title: "Cobrá en cualquier lado. Retirá en local. Siempre con tu neto claro.",
     description:
       "La mayoría no está “curioseando”: pregunta si esto le gana a lo que usa hoy para trabajo cross-border desde Latinoamérica (y más allá). Esto es lo que venimos a arreglar.",
     items: [
@@ -1686,31 +1677,31 @@ const es: LandingCopy = {
   onboarding: {
     ariaLabel: "Onboarding de acceso anticipado",
     eyebrow: "Acceso anticipado",
-    titleLine1: "Ayúdanos a convertir la libertad económica",
-    titleLine2: "en un estándar de protocolo.",
+    titleLine1: "Un solo lugar para",
+    titleLine2: "finanzas de programa.",
     intro:
-      "Sozu construye los rieles del dinero nativo de internet—pagos, tesorería y crédito que funcionan globalmente a la velocidad de la web. Estamos en beta privada e invitamos a un grupo selecto de early believers a definir lo que viene.",
+      "SozuPay ayuda a admins de ONG a desembolsar fondos en lote, rastrear beneficiarios y microcréditos, y mantener el gasto de equipo auditable—sin planillas, portales bancarios y chats de WhatsApp.",
     mission:
-      "Llevamos DeFi a las masas—no como jerga, sino como herramientas cotidianas que cualquiera puede usar. Supporters tempranos como tú son clave.\nPara agradecerlo, reservamos beneficios especiales y premios en efectivo para miembros fundadores que se unan ahora.",
+      "Únete a la lista de espera con acceso anticipado a $50/mes para ONGs. Los miembros fundadores reciben onboarding prioritario, precio fundador y contacto directo con el equipo mientras lanzamos.",
     reservedLabel: "Reservado para ti",
-    benefitsEyebrow: "Beneficios de miembro fundador",
-    benefitsTitle: "Qué desbloquea el acceso anticipado",
+    benefitsEyebrow: "Lo que obtienes",
+    benefitsTitle: "SozuPay para admins de programa",
     benefits: [
       {
-        title: "Premios en efectivo y recompensas",
-        body: "Los miembros tempranos pueden acceder a premios en efectivo y recompensas por referidos a medida que crece la red—porque tu apoyo en esta etapa importa.",
+        title: "Desembolsos en lote",
+        body: "Pagá beneficiarios y equipos en terreno en batches—con registro de cada transferencia para auditores y donantes.",
       },
       {
-        title: "Acceso prioritario a la beta",
-        body: "Salta la fila. Sé de los primeros en usar Sozu Pay, Sozu Tags, bóvedas y herramientas de tesorería con IA antes del lanzamiento público.",
+        title: "Beneficiarios y microcréditos",
+        body: "Mirá grants, repagos y saldos de programa en un dashboard, no en planillas y exports bancarios dispersos.",
       },
       {
-        title: "Estatus de miembro fundador",
-        body: "Asegura beneficios, precios e identidad reservados para quienes nos ayudan a probar el protocolo desde el día uno.",
+        title: "Finanzas de equipo en una vista",
+        body: "Seguí pagos a contratistas, gasto de programa y fondos restringidos sin perder el hilo entre herramientas.",
       },
       {
-        title: "Moldea el producto",
-        body: "Canal directo con el equipo. Tus casos de uso se convierten en nuestro roadmap mientras hacemos DeFi usable para todos.",
+        title: "Acceso de miembro fundador",
+        body: "Onboarding prioritario, precio ONG de $50/mes asegurado al registrarte, e input directo sobre lo que lanzamos.",
       },
     ],
     formEyebrow: "Únete a la lista",
@@ -1735,7 +1726,7 @@ const es: LandingCopy = {
       {
         title: "Sistema",
         links: [
-          { label: "Principios", href: "/product#core-benefits" },
+          { label: "Principios", href: "#core-benefits" },
           { label: "Whitepaper", href: "/whitepaper" },
           { label: "Vista táctica", href: "/product#pay-receipt-flow" },
           { label: "Motor de bóvedas", href: "/product#financing-bnpl" },
@@ -1746,7 +1737,7 @@ const es: LandingCopy = {
         title: "Inteligencia",
         links: [
           { label: "Seguimiento de runway", href: "#problem" },
-          { label: "Optimización de burn", href: "/product#cash-out" },
+          { label: "Optimización de burn", href: "#cash-out" },
           { label: "Sync API", href: "/product#pay-receipt-flow" },
         ],
       },

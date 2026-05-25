@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   ...metadataEs,
   title: "Precios | SOZU CAPITAL",
   description:
-    "Planes flexibles de capital para escalar, ahorrar y maximizar valor con Sozu.",
+    "Billetera gratis para siempre. Pagá 1% solo en on-ramps y off-ramps. SozuPay para ONGs a $50/mes.",
 };
 
 const locale: LandingLocale = "es";

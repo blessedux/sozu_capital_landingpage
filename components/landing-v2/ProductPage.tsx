@@ -1,16 +1,16 @@
 "use client";
 
 import type { LandingCopy, LandingLocale } from "@/lib/landing-copy";
+import { VoiceDemoTeaser } from "@/components/voice-demo/VoiceDemoTeaser";
 import { SiteHeader } from "./SiteHeader";
 import { SmartDollarsSection } from "./SmartDollarsSection";
-import { SozuTagsSection } from "./SozuTagsSection";
 import { SmartReceiptsSection } from "./SmartReceiptsSection";
 import { PayReceiptFlowSection } from "./PayReceiptFlowSection";
-import { CoreBenefitsSection } from "./CoreBenefitsSection";
+import { InfrastructureSection } from "./InfrastructureSection";
+import { NetworkLayerSection } from "./NetworkLayerSection";
+import { StrategicFinanceSection } from "./StrategicFinanceSection";
 import { ProductsSection } from "./ProductsSection";
-import { CashOutSection } from "./CashOutSection";
 import { FinancingBnplSection } from "./FinancingBnplSection";
-import { WhoItsForSection } from "./WhoItsForSection";
 import { WhySozuSection } from "./WhySozuSection";
 import { FooterSection } from "./FooterSection";
 
@@ -27,14 +27,18 @@ export function ProductPage({ locale, copy }: ProductPageProps) {
       <SiteHeader copy={copy} basePath={basePath} />
       <main className="relative z-[2] pt-20">
         <SmartDollarsSection copy={copy.smartMoney} />
-        <SozuTagsSection copy={copy} basePath={basePath} locale={locale} />
+        <VoiceDemoTeaser
+          copy={copy.voiceDemoTeaser}
+          locale={locale}
+          basePath={basePath}
+        />
         <SmartReceiptsSection copy={copy.smartReceipts} />
         <PayReceiptFlowSection copy={copy.payFlow} />
-        <CoreBenefitsSection copy={copy.coreBenefits} />
+        <InfrastructureSection copy={copy.infrastructure} />
+        <NetworkLayerSection copy={copy.networkLayer} basePath={basePath} />
+        <StrategicFinanceSection copy={copy.strategicFinance} />
         <ProductsSection copy={copy.products} />
-        <CashOutSection copy={copy.cashOut} />
         <FinancingBnplSection copy={copy.financing} />
-        <WhoItsForSection copy={copy.whoItsFor} />
         <WhySozuSection copy={copy.whySozu} />
       </main>
       <FooterSection copy={copy.footer} basePath={basePath} />
