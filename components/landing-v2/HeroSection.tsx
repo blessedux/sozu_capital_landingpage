@@ -10,19 +10,22 @@ import {
   useTransform,
 } from "motion/react";
 import type { LandingCopy } from "@/lib/landing-copy";
+import { cn } from "@/lib/utils";
 import { signalLandingReady } from "@/lib/landing-ready";
-import { PARTNER_LOGOS, partnerLogoScale } from "./partner-logos";
+import { PARTNER_LOGOS, partnerLogoHideOnMobile, partnerLogoScale } from "./partner-logos";
 
 type HeroSectionProps = {
   copy: LandingCopy["hero"];
   partners: LandingCopy["partners"];
+  basePath?: string;
   onIntroComplete?: () => void;
 };
 
-/** Title + partners only — CTA lives in HeroActionPanel (sticky overlay). */
+/** Title + partners; mobile CTA inline below h1. Desktop CTA in HeroActionPanel. */
 export function HeroSection({
   copy,
   partners,
+  basePath = "",
   onIntroComplete,
 }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -86,7 +89,7 @@ export function HeroSection({
           loop
           playsInline
           poster="/hero/digital-antiquity-agora.png"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="absolute inset-0 h-full w-full object-cover object-[40%_center]"
           aria-hidden
         />
         <div
@@ -97,10 +100,22 @@ export function HeroSection({
 
       <div className="relative z-10 flex h-full w-full flex-col justify-end px-6 pb-6 pt-24 md:px-12 md:pb-8 lg:px-16">
         <div className="mb-12 grid w-full grid-cols-1 items-start gap-8 md:mb-16 md:grid-cols-2 md:gap-12 lg:gap-16">
-          <h1 className="font-display max-w-[14ch] whitespace-pre-line text-4xl font-bold leading-[1.05] tracking-[-0.02em] text-[#f5fbfc] sm:text-5xl lg:text-[3.75rem] lg:leading-[1.05]">
-            {copy.title}
-          </h1>
-          {/* Right column reserved for sticky HeroActionPanel */}
+          <div className="flex flex-col">
+            <h1 className="font-display max-w-[14ch] whitespace-pre-line text-4xl font-bold leading-[1.05] tracking-[-0.02em] text-[#f5fbfc] sm:text-5xl lg:text-[3.75rem] lg:leading-[1.05]">
+              {copy.title}
+            </h1>
+            {/* Mobile-only inline CTA — no sticky overlay on small screens */}
+            <Link
+              href={`${basePath}/onboarding`}
+              className="mt-8 mb-8 ml-auto inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-[#0b1218] shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-transform hover:scale-[1.02] md:hidden"
+            >
+              {copy.ctaPrimary}
+              <span aria-hidden className="text-lg leading-none">
+                →
+              </span>
+            </Link>
+          </div>
+          {/* Right column reserved for sticky HeroActionPanel (desktop) */}
           <div className="hidden md:block" aria-hidden />
         </div>
 
@@ -117,11 +132,11 @@ export function HeroSection({
               return (
                 <li
                   key={logo.src}
-                  className={
-                    half
-                      ? "flex h-3.5 items-center md:h-4"
-                      : "flex h-7 items-center md:h-8"
-                  }
+                  className={cn(
+                    "items-center",
+                    half ? "h-3.5 md:h-4" : "h-7 md:h-8",
+                    partnerLogoHideOnMobile(logo) ? "hidden md:flex" : "flex"
+                  )}
                 >
                   <a
                     href={logo.href}

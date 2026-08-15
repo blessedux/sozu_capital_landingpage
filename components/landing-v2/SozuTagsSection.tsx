@@ -1,7 +1,7 @@
 import type { LandingCopy, LandingLocale } from "@/lib/landing-copy";
 import { SozuTagAvailabilitySearch } from "./SozuTagAvailabilitySearch";
 
-const TAG_EXAMPLES = ["$joaquin", "$cafe.noma", "importadora.cl"] as const;
+const TAG_EXAMPLES = ["$ben.franklin", "$cafe.noma", "importadora.cl"] as const;
 
 const CYAN_GLOW =
   "radial-gradient(circle, rgba(126,184,196,0.12) 0%, rgba(126,184,196,0) 70%)";

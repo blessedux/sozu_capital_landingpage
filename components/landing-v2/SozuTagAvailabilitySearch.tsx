@@ -46,7 +46,7 @@ export function SozuTagAvailabilitySearch({
   messages,
   locale,
   onboardingHref,
-  examples = ["$joaquin", "$cafe.noma", "importadora.cl"],
+  examples = ["$ben.franklin", "$cafe.noma", "importadora.cl"],
 }: Props) {
   const id = useId();
   const [mode, setMode] = useState<CheckMode>("tag");

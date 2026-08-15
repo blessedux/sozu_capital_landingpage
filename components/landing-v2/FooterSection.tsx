@@ -58,14 +58,6 @@ export function FooterSection({ copy, basePath, lang }: Props) {
 
             return (
               <div key={column.title} className="flex flex-col gap-4">
-                {isProduct ? (
-                  <Link
-                    href={resolveHref(copy.productCta.href, basePath)}
-                    className="inline-flex w-fit rounded-full bg-primary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-primary-foreground transition-transform hover:scale-[1.02]"
-                  >
-                    {copy.productCta.label}
-                  </Link>
-                ) : null}
                 <p className="text-xs font-bold uppercase tracking-[0.125em] text-white">
                   {column.title}
                 </p>

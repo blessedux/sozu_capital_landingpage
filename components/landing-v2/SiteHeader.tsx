@@ -13,6 +13,9 @@ type SiteHeaderProps = {
 const navLinkClass =
   "font-sans text-xs font-medium tracking-[0.04em] text-neutral-600 transition-colors hover:text-neutral-950";
 
+const mobileNavLinkClass =
+  "font-sans text-2xl font-medium tracking-[-0.02em] text-[#f5fbfc] transition-opacity hover:opacity-70";
+
 function resolveNavHref(href: string, basePath: string) {
   if (href.startsWith("http://") || href.startsWith("https://")) return href;
   if (href.startsWith("#")) return href;
@@ -33,6 +36,16 @@ function scrollToHash(href: string) {
 }
 
 const GAP = "gap-2";
+
+function BurgerIcon() {
+  return (
+    <span className="relative block h-3.5 w-5" aria-hidden>
+      <span className="absolute left-0 top-0 h-[1.5px] w-full bg-current" />
+      <span className="absolute left-0 top-[5px] h-[1.5px] w-full bg-current" />
+      <span className="absolute left-0 top-[10px] h-[1.5px] w-full bg-current" />
+    </span>
+  );
+}
 
 export function SiteHeader({ copy, basePath }: SiteHeaderProps) {
   const [open, setOpen] = useState(false);
@@ -87,151 +100,206 @@ export function SiteHeader({ copy, basePath }: SiteHeaderProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const navItems = copy.nav.map((item) => {
+    const href = p(item.href);
+    const external = isExternalHref(href);
+    const hash = href.startsWith("#");
+    return { ...item, href, external, hash };
+  });
+
+  const closeMenu = () => setOpen(false);
+
   return (
     <header
       className={cn(
-        "pointer-events-none fixed top-0 left-0 right-0 flex justify-center px-3 pt-3 transition-[transform,opacity] duration-300 ease-out md:pt-4",
-        // z-5 < Tags z-10 so Tags can paint over the pill; elevate only on scroll-up
-        elevated ? "z-[200]" : "z-[5]",
-        concealed && "-translate-y-[140%] opacity-0"
+        "pointer-events-none fixed top-0 left-0 right-0 transition-[transform,opacity] duration-300 ease-out",
+        open || elevated ? "z-[200]" : "z-[5]",
+        concealed && !open && "-translate-y-[140%] opacity-0"
       )}
     >
-      <div className="pointer-events-auto relative w-auto max-w-[calc(100%-1.5rem)]">
-        <div
-          className={cn(
-            "flex items-center bg-white px-2 py-1.5 shadow-[0_6px_24px_rgba(11,18,24,0.1)]",
-            GAP,
-            open ? "rounded-2xl" : "rounded-full"
-          )}
+      {/* Mobile: logo left + burger right */}
+      <div className="pointer-events-auto relative z-[210] flex w-full items-center justify-between px-5 pt-4 lg:hidden">
+        <Link
+          href={p("#hero")}
+          className="flex shrink-0 items-center"
+          onClick={closeMenu}
         >
-          <Link
-            href={p("#hero")}
-            className="flex shrink-0 items-center"
-            onClick={() => setOpen(false)}
-          >
-            <img
-              src="/sozu-mark-black.png"
-              alt={copy.header.logoAlt}
-              className="h-7 w-7"
+          <img
+            src="/sozu-mark-black.png"
+            alt={copy.header.logoAlt}
+            className="h-7 w-7 brightness-0 invert"
+          />
+        </Link>
+
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={copy.header.menuAria}
+          className="inline-flex h-10 w-10 items-center justify-center text-[#f5fbfc]"
+          onClick={() => setOpen((o) => !o)}
+        >
+          <BurgerIcon />
+        </button>
+      </div>
+
+      {/* Mobile full-screen drawer — hero video bg, buttons only */}
+      <div
+        className={cn(
+          "pointer-events-auto fixed inset-0 z-[205] overflow-hidden bg-[var(--antiquity-charcoal,#0b1218)] transition-transform duration-300 ease-out lg:hidden",
+          open ? "translate-x-0" : "translate-x-full"
+        )}
+        aria-hidden={!open}
+      >
+        {open ? (
+          <>
+            <video
+              src="/hero/ascii-magic-6.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/hero/digital-antiquity-agora.png"
+              className="absolute inset-0 h-full w-full object-cover object-[18s%_center]"
+              aria-hidden
             />
-          </Link>
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-[rgba(11,18,24,0.85)] via-[rgba(11,18,24,0.45)] to-[rgba(11,18,24,0.35)]"
+            />
+          </>
+        ) : null}
 
-          <nav
-            className={cn("hidden items-center lg:flex", GAP)}
-            aria-label="Primary"
+        <nav
+          className="relative z-10 flex h-full flex-col justify-center gap-6 px-8 pb-16 pt-24"
+          aria-label="Primary"
+        >
+          <a
+            href="https://pay.sozu.capital"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={mobileNavLinkClass}
+            onClick={closeMenu}
           >
-            {copy.nav.map((item) => {
-              const href = p(item.href);
-              const external = isExternalHref(href);
-              const hash = href.startsWith("#");
-
-              return external ? (
-                <a
-                  key={item.href}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(navLinkClass, "px-1.5 py-1")}
-                >
-                  {item.label}
-                </a>
-              ) : hash ? (
-                <a
-                  key={item.href}
-                  href={href}
-                  className={cn(navLinkClass, "px-1.5 py-1")}
-                  onClick={(e) => {
-                    if (scrollToHash(href)) e.preventDefault();
-                  }}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={href}
-                  className={cn(navLinkClass, "px-1.5 py-1")}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-
+            Sozu Pay
+          </a>
+          {navItems.map((item) =>
+            item.external ? (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={mobileNavLinkClass}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </a>
+            ) : item.hash ? (
+              <a
+                key={item.href}
+                href={item.href}
+                className={mobileNavLinkClass}
+                onClick={(e) => {
+                  closeMenu();
+                  if (scrollToHash(item.href)) e.preventDefault();
+                }}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={mobileNavLinkClass}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </Link>
+            )
+          )}
           <Link
             href={p("/onboarding")}
-            className="hidden rounded-full bg-neutral-950 px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:inline-flex"
+            className="mt-4 text-lg font-semibold text-[#f5fbfc]"
+            onClick={closeMenu}
           >
             {copy.header.login}
           </Link>
+        </nav>
+      </div>
 
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-label={copy.header.menuAria}
-            className="inline-flex h-7 items-center justify-center rounded-full border border-neutral-200 px-2.5 font-mono text-[10px] uppercase text-neutral-800 lg:hidden"
-            onClick={() => setOpen((o) => !o)}
+      {/* Desktop: centered pill nav */}
+      <div className="pointer-events-none hidden justify-center px-3 pt-4 lg:flex">
+        <div className="pointer-events-auto relative w-auto max-w-[calc(100%-1.5rem)]">
+          <div
+            className={cn(
+              "flex items-center rounded-full bg-white px-2 py-1.5 shadow-[0_6px_24px_rgba(11,18,24,0.1)]",
+              GAP
+            )}
           >
-            {copy.header.menu}
-          </button>
-        </div>
+            <Link href={p("#hero")} className="flex shrink-0 items-center">
+              <img
+                src="/sozu-mark-black.png"
+                alt={copy.header.logoAlt}
+                className="h-7 w-7"
+              />
+            </Link>
 
-        <div
-          className={cn(
-            "overflow-hidden bg-white shadow-[0_10px_28px_rgba(11,18,24,0.1)] transition-[max-height,opacity] duration-300 ease-out lg:hidden",
-            open
-              ? "mt-2 max-h-[280px] rounded-2xl opacity-100"
-              : "max-h-0 opacity-0"
-          )}
-        >
-          <nav className="flex flex-col px-3 py-2">
-            {copy.nav.map((item) => {
-              const href = p(item.href);
-              const external = isExternalHref(href);
-              const hash = href.startsWith("#");
+            <nav className={cn("flex items-center", GAP)} aria-label="Primary">
+              {navItems.map((item) =>
+                item.external ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(navLinkClass, "px-1.5 py-1")}
+                  >
+                    {item.label}
+                  </a>
+                ) : item.hash ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className={cn(navLinkClass, "px-1.5 py-1")}
+                    onClick={(e) => {
+                      if (scrollToHash(item.href)) e.preventDefault();
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(navLinkClass, "px-1.5 py-1")}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
+            </nav>
 
-              return external ? (
-                <a
-                  key={item.href}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(navLinkClass, "py-2")}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ) : hash ? (
-                <a
-                  key={item.href}
-                  href={href}
-                  className={cn(navLinkClass, "py-2")}
-                  onClick={(e) => {
-                    setOpen(false);
-                    if (scrollToHash(href)) e.preventDefault();
-                  }}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={href}
-                  className={cn(navLinkClass, "py-2")}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
             <Link
               href={p("/onboarding")}
-              className="py-2 text-xs font-semibold text-neutral-950"
-              onClick={() => setOpen(false)}
+              className="inline-flex rounded-full bg-neutral-950 px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90"
             >
               {copy.header.login}
             </Link>
-          </nav>
+          </div>
         </div>
       </div>
     </header>
