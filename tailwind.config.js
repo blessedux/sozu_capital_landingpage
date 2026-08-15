@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -16,6 +17,14 @@ module.exports = {
         border: 'var(--border)',
         surface: 'var(--surface)',
         'surface-elevated': 'var(--surface-elevated)',
+        antiquity: {
+          cyan: 'var(--antiquity-cyan)',
+          sky: 'var(--antiquity-sky)',
+          lavender: 'var(--antiquity-lavender)',
+          fog: 'var(--antiquity-fog)',
+          bloom: 'var(--antiquity-bloom)',
+          charcoal: 'var(--antiquity-charcoal)',
+        },
       },
       fontFamily: {
         sans: [

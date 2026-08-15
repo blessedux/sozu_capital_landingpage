@@ -6,7 +6,9 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export async function updateSession(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-locale", "en");
+  const pathname = request.nextUrl.pathname;
+  const locale = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
+  requestHeaders.set("x-locale", locale);
 
   let supabaseResponse = NextResponse.next({
     request: {

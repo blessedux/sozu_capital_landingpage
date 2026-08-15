@@ -1,47 +1,127 @@
+"use client";
+
 import Link from "next/link";
 import type { LandingCopy } from "@/lib/landing-copy";
 
 type Props = {
   copy: LandingCopy["footer"];
   basePath: string;
+  lang?: LandingCopy["lang"];
 };
 
-export function FooterSection({ copy, basePath }: Props) {
-  const p = (href: string) => `${basePath}${href}`;
+function resolveHref(href: string, basePath: string) {
+  if (href.startsWith("http://") || href.startsWith("https://")) return href;
+  // Same-page anchors: keep hash-only so smooth scroll stays on this page
+  if (href.startsWith("#")) return href;
+  return `${basePath}${href}`;
+}
 
+function isExternal(href: string) {
+  return href.startsWith("http://") || href.startsWith("https://");
+}
+
+function isHashHref(href: string) {
+  return href.startsWith("#") || href.includes("/#") || /\/en?#/.test(href);
+}
+
+function hashId(href: string) {
+  const i = href.indexOf("#");
+  return i >= 0 ? href.slice(i + 1) : "";
+}
+
+function scrollToHash(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  history.replaceState(null, "", `#${id}`);
+  return true;
+}
+
+export function FooterSection({ copy, basePath, lang }: Props) {
   return (
     <footer
       id="footer"
-      className="relative z-[2] border-t border-white/5 bg-[#0a0a0a] px-6 py-20 md:px-[7.5rem]"
+      className="relative z-[2] border-t border-border bg-background px-6 py-20 md:px-[7.5rem]"
     >
       <div className="mx-auto flex max-w-[75rem] flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-6">
-          <span className="font-display text-xl font-bold tracking-[-0.02em] text-white">
+          <span className="font-display text-xl font-bold tracking-[-0.02em] text-foreground">
             {copy.brand}
           </span>
-          <p className="text-sm leading-[21px] text-white/30">{copy.copyright}</p>
+          <p className="text-sm leading-[21px] text-muted">{copy.copyright}</p>
         </div>
 
         <nav className="flex flex-wrap gap-12" aria-label="Footer">
-          {copy.columns.map((column) => (
-            <div key={column.title} className="flex flex-col gap-4">
-              <p className="text-xs font-bold uppercase tracking-[0.125em] text-white/20">
-                {column.title}
-              </p>
-              <ul className="flex flex-col gap-4">
-                {column.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={p(link.href)}
-                      className="text-sm leading-[21px] text-white/50 transition-colors hover:text-white"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {copy.columns.map((column) => {
+            const isProduct =
+              column.title === "Product" || column.title === "Producto";
+
+            return (
+              <div key={column.title} className="flex flex-col gap-4">
+                {isProduct ? (
+                  <Link
+                    href={resolveHref(copy.productCta.href, basePath)}
+                    className="inline-flex w-fit rounded-full bg-primary px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-primary-foreground transition-transform hover:scale-[1.02]"
+                  >
+                    {copy.productCta.label}
+                  </Link>
+                ) : null}
+                <p className="text-xs font-bold uppercase tracking-[0.125em] text-white">
+                  {column.title}
+                </p>
+                <ul className="flex flex-col gap-4">
+                  {column.links.map((link) => {
+                    const href = resolveHref(link.href, basePath);
+                    const hash = isHashHref(href);
+
+                    return (
+                      <li key={link.label}>
+                        {isExternal(href) ? (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm leading-[21px] text-muted transition-colors hover:text-foreground"
+                          >
+                            {link.label}
+                          </a>
+                        ) : hash ? (
+                          <a
+                            href={href.startsWith("#") ? href : `#${hashId(href)}`}
+                            className="text-sm leading-[21px] text-muted transition-colors hover:text-foreground"
+                            onClick={(e) => {
+                              const id = hashId(href);
+                              if (id && scrollToHash(id)) e.preventDefault();
+                            }}
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <Link
+                            href={href}
+                            className="text-sm leading-[21px] text-muted transition-colors hover:text-foreground"
+                          >
+                            {link.label}
+                          </Link>
+                        )}
+                      </li>
+                    );
+                  })}
+                  {isProduct && lang ? (
+                    <li>
+                      <Link
+                        href={lang.otherLocaleHref}
+                        aria-label={lang.switchAria}
+                        className="text-sm font-semibold leading-[21px] text-foreground transition-colors hover:text-primary"
+                      >
+                        {lang.otherLocaleLabel.toUpperCase()}
+                      </Link>
+                    </li>
+                  ) : null}
+                </ul>
+              </div>
+            );
+          })}
         </nav>
       </div>
     </footer>
