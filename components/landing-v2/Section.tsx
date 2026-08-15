@@ -23,10 +23,8 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "scroll-mt-24 border-b border-white/5 py-20 md:py-28",
-        withVideoBackground
-          ? "relative overflow-hidden bg-[#0d0d0d]"
-          : "bg-[#0a0a0a]",
+        "scroll-mt-24 border-b border-border bg-background py-20 md:py-28",
+        withVideoBackground && "relative overflow-hidden",
         className
       )}
     >
@@ -38,27 +36,27 @@ export function Section({
             muted
             playsInline
             aria-hidden
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-45"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30 dark:opacity-45"
           >
             <source src="/sozu_coins_pingpong.webm" type="video/webm" />
           </video>
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[#0d0d0d]/45"
+            className="pointer-events-none absolute inset-0 bg-background/45"
           />
         </>
       ) : null}
       <div className="relative z-10 mx-auto max-w-[75rem] px-5 md:px-12 xl:px-20">
         {eyebrow ? (
-          <p className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-[#ff8000]">
+          <p className="mb-4 text-xs font-bold uppercase tracking-[0.1875rem] text-primary">
             {eyebrow}
           </p>
         ) : null}
-        <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-white md:text-[48px] md:leading-[1.1]">
+        <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-foreground md:text-[48px] md:leading-[1.1]">
           {title}
         </h2>
         {description ? (
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/60">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
             {description}
           </p>
         ) : null}

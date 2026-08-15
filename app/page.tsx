@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { LandingV2 } from "@/components/landing-v2/LandingV2";
-import { metadataEn } from "@/content/metadata-by-locale";
+import { metadataEs } from "@/content/metadata-by-locale";
 import { getLandingCopy, type LandingLocale } from "@/lib/landing-copy";
 
-export const metadata: Metadata = metadataEn;
+export const metadata: Metadata = metadataEs;
 
-const locale: LandingLocale = "en";
+const locale: LandingLocale = "es";
 
 export default function HomePage() {
   return <LandingV2 locale={locale} copy={getLandingCopy(locale)} />;

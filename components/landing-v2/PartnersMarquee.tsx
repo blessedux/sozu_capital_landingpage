@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { PartnerLogo } from "./partner-logos";
+import { partnerLogoScale, type PartnerLogo } from "./partner-logos";
 
 const ITEM_GAP_PX = 64;
 const PIXELS_PER_FRAME = 1.25;
@@ -74,18 +74,30 @@ export function PartnersMarquee({
     return (
       <div className={className}>
         <ul className="flex flex-wrap items-center justify-center gap-12 px-6">
-          {logos.map((logo) => (
-            <li key={logo.src} className="flex shrink-0 items-center">
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                width={logo.width}
-                height={logo.height}
-                className="h-9 w-auto"
-                draggable={false}
-              />
-            </li>
-          ))}
+          {logos.map((logo) => {
+            const scale = partnerLogoScale(logo);
+            return (
+              <li key={logo.src} className="flex shrink-0 items-center">
+                <a
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={logo.alt}
+                  className="transition-opacity hover:opacity-80"
+                >
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    className="w-auto"
+                    style={{ height: `${2.25 * scale}rem` }}
+                    draggable={false}
+                  />
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </div>
     );
@@ -133,26 +145,38 @@ export function PartnersMarquee({
               willChange: "transform",
             }}
           >
-            {rendered.map((logo, i) => (
-              <div
-                key={`${logo.src}-${i}`}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  flexShrink: 0,
-                  paddingRight: ITEM_GAP_PX,
-                }}
-              >
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={logo.width}
-                  height={logo.height}
-                  className="h-9 w-auto opacity-100"
-                  draggable={false}
-                />
-              </div>
-            ))}
+            {rendered.map((logo, i) => {
+              const scale = partnerLogoScale(logo);
+              return (
+                <div
+                  key={`${logo.src}-${i}`}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    flexShrink: 0,
+                    paddingRight: ITEM_GAP_PX,
+                  }}
+                >
+                  <a
+                    href={logo.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={logo.alt}
+                    className="transition-opacity hover:opacity-80"
+                  >
+                    <Image
+                      src={logo.src}
+                      alt={logo.alt}
+                      width={logo.width}
+                      height={logo.height}
+                      className="w-auto opacity-100"
+                      style={{ height: `${2.25 * scale}rem` }}
+                      draggable={false}
+                    />
+                  </a>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

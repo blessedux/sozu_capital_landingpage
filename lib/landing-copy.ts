@@ -201,10 +201,38 @@ export type LandingCopy = {
   cashOut: {
     eyebrow: string;
     title: string;
+    subtitle: string;
     description: string;
     p1: string;
     p2: string;
     disclaimer: string;
+    cta: string;
+  };
+  roadmapPage: {
+    ariaLabel: string;
+    eyebrow: string;
+    title: string;
+    description: string;
+    shipped: {
+      label: string;
+      title: string;
+      description: string;
+      items: { title: string; body: string }[];
+    };
+    building: {
+      label: string;
+      title: string;
+      description: string;
+      items: { title: string; body: string }[];
+    };
+    upcoming2026: {
+      label: string;
+      title: string;
+      description: string;
+      items: { title: string; body: string; timing: string }[];
+    };
+    disclaimer: string;
+    backCta: string;
   };
   financing: {
     eyebrow: string;
@@ -332,15 +360,15 @@ export type LandingCopy = {
   footer: {
     brand: string;
     copyright: string;
+    productCta: { label: string; href: string };
     columns: { title: string; links: { label: string; href: string }[] }[];
   };
 };
 
 const en: LandingCopy = {
   nav: [
-    { href: "/product", label: "Product" },
-    { href: "/card", label: "Card" },
-    { href: "/pricing", label: "Pricing" },
+    { href: "#sozu-tags", label: "Tags" },
+    { href: "#cash-out", label: "Cash" },
     { href: "https://docs.sozu.capital", label: "Docs" },
   ],
   lang: {
@@ -359,8 +387,8 @@ const en: LandingCopy = {
   hero: {
     scrollHint: "Scroll",
     betaBadge: "Private beta",
-    title: "Global\npayments\nat internet speed.",
-    body: "Get paid globally in seconds. Track spending privately. Move money instantly. Manage your finances with AI.",
+    title: "Internet Money you can trust.",
+    body: "Hold, send, cash out.\nBuilt to grow, not erode.",
     ctaPrimary: "Get Early Access",
     ctaSecondary: "Try the Demo",
     stats: {
@@ -374,7 +402,7 @@ const en: LandingCopy = {
   },
   partners: {
     ariaLabel: "Institutional partners",
-    heading: "Trusted by leading institutional partners",
+    heading: "Built with",
   },
   pathways: {
     ariaLabel: "Personal and business pathways",
@@ -757,14 +785,112 @@ const en: LandingCopy = {
     ],
   },
   cashOut: {
-    eyebrow: "Local when you need it",
-    title: "Cash out to real-world rails",
+    eyebrow: "Hold & cash out",
+    title: "Money designed with stablecoins to resist inflation.",
+    subtitle:
+      "Save, withdraw, or put your money to work on autopilot",
     description:
-      "Ideal state for our customers: earn and hold in stable digital dollars, then convert to local currency when life or suppliers demand it—without giving up visibility on fees or FX.",
-    p1: "We're designing ramps and partner paths so moving between on-system balances and bank or cash-out endpoints stays predictable—fewer surprises than opaque P2P marketplaces, fewer days lost to correspondent banking.",
-    p2: "If you import, sell online, or run payroll across countries, the question is always the same: what do I actually receive after fees and spread? Sozu is being built so that answer is legible, not buried.",
+      "Hold stable digital dollars, send them instantly, and cash out to local rails when you need real-world money. Built so value compounds instead of quietly eroding.",
+    p1: "Keep balances on-system when you want growth and speed. Move to bank or cash-out endpoints when life or suppliers demand local currency — with fees and FX you can actually read.",
+    p2: "No opaque P2P spreads. No multi-day correspondent black boxes. Hold, send, cash out — one Internet Money stack.",
     disclaimer:
-      "Availability depends on jurisdiction, partners, and compliance—we'll ship ramps progressively and publish clear states in-product.",
+      "Ramp availability depends on jurisdiction, partners, and compliance. We ship progressively with clear in-product states.",
+    cta: "Get Early Access",
+  },
+  roadmapPage: {
+    ariaLabel: "On-ramp and off-ramp roadmap",
+    eyebrow: "Roadmap",
+    title: "Ramps & local rails",
+    description:
+      "What we've shipped, what we're building now, and what's landing through 2026—on-ramps, off-ramps, and the partner paths that connect stable digital dollars to real-world money.",
+    shipped: {
+      label: "Shipped",
+      title: "Already live",
+      description:
+        "Foundation pieces that make ramps possible—wallet, pricing, and the flows that move money today.",
+      items: [
+        {
+          title: "Non-custodial wallet & Sozu Tags",
+          body: "Hold, send, and receive USDC on Stellar with payment identities ($tags, @handles) and peer transfers at no subscription cost.",
+        },
+        {
+          title: "Transparent pricing model",
+          body: "Free wallet forever. A flat 1% when money crosses bank rails—full cost shown before you confirm any ramp.",
+        },
+        {
+          title: "Smart receipts & pay flows",
+          body: "Automatic digital receipts, payment links, and merchant dashboards so every transaction stays traceable on both sides.",
+        },
+        {
+          title: "Waitlist & onboarding",
+          body: "Early-access onboarding with Supabase-backed waitlist—founding cohort gets first access as ramps open by jurisdiction.",
+        },
+        {
+          title: "Docs & federation architecture",
+          body: "Sozu Tags federation docs, availability search, and technical guides for teams integrating on non-custodial rails.",
+        },
+      ],
+    },
+    building: {
+      label: "In progress",
+      title: "What we're building now",
+      description:
+        "Active engineering on the bridge between fiat and stablecoins—partner integrations, compliance paths, and in-product status.",
+      items: [
+        {
+          title: "On-ramp partner integrations",
+          body: "Bank and payment-partner paths so local currency converts to USDC with predictable fees—not opaque P2P spreads.",
+        },
+        {
+          title: "Off-ramp to CLP & local fiat",
+          body: "Payout infrastructure to move from on-system balances to bank accounts and cash-out endpoints in supported markets.",
+        },
+        {
+          title: "Jurisdiction rollout & compliance",
+          body: "Progressive ramp availability with clear in-product states—what's live, what's pending, and what's blocked by regulation.",
+        },
+        {
+          title: "FX & fee transparency layer",
+          body: "Quote breakdowns that answer the real question: what do I actually receive after fees, spread, and partner costs?",
+        },
+      ],
+    },
+    upcoming2026: {
+      label: "2026",
+      title: "Coming this year",
+      description:
+        "The next wave—expanded coverage, deeper local rails, and products that sit on top of ramp infrastructure.",
+      items: [
+        {
+          title: "Multi-country ramp expansion",
+          body: "Roll out on-ramps and off-ramps across Latin America beyond initial corridors—partners and compliance permitting.",
+          timing: "H2 2026",
+        },
+        {
+          title: "Instant bank-to-wallet on-ramp",
+          body: "Pay from a traditional bank transfer and receive digital dollars automatically—no manual steps, no forcing users to care about crypto.",
+          timing: "Q3 2026",
+        },
+        {
+          title: "SII electronic boleta / factura (Chile)",
+          body: "Align Smart Receipts with Servicio de Impuestos Internos rules so digital receipts match what regulators expect for retail.",
+          timing: "Q4 2026",
+        },
+        {
+          title: "Programmatic ramp API",
+          body: "Open endpoints for merchants and NGOs to automate on-ramp/off-ramp flows inside their own products and disbursement workflows.",
+          timing: "Q4 2026",
+        },
+        {
+          title: "Financing on ramp activity",
+          body: "Working-capital and BNPL products tied to how money already moves on-platform—credit that follows your cash flow, not a disconnected loan app.",
+          timing: "2026",
+        },
+      ],
+    },
+    disclaimer:
+      "Timelines shift as partners and regulators move. We publish live status in-product and update this page when milestones ship.",
+    backCta: "Back to home",
   },
   financing: {
     eyebrow: "Growth",
@@ -1016,31 +1142,31 @@ const en: LandingCopy = {
   },
   footer: {
     brand: "SOZU",
-    copyright: "© 2026 Sozu Capital Design System v1.0",
+    copyright: "© 2026 Sozu Capital",
+    productCta: {
+      label: "Sozu Pay",
+      href: "/onboarding?product=sozupay",
+    },
     columns: [
       {
-        title: "System",
+        title: "Product",
         links: [
-          { label: "Principles", href: "#core-benefits" },
-          { label: "Whitepaper", href: "/whitepaper" },
-          { label: "Tactical View", href: "/product#pay-receipt-flow" },
-          { label: "Vault Engine", href: "/product#financing-bnpl" },
-          { label: "Sozu Tags & Federation", href: "/docs/sozu-tags" },
+          { label: "Sozu Tags", href: "#sozu-tags" },
+          { label: "Hold & cash out", href: "#cash-out" },
+          { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },
       {
-        title: "Intelligence",
+        title: "Start",
         links: [
-          { label: "Runway Tracking", href: "#problem" },
-          { label: "Burn Optimization", href: "#cash-out" },
-          { label: "API Sync", href: "/product#pay-receipt-flow" },
+          { label: "Early access", href: "/onboarding" },
+          { label: "Tag docs", href: "/docs/sozu-tags" },
         ],
       },
       {
         title: "Legal",
         links: [
           { label: "Privacy", href: "#footer" },
-          { label: "Non-Custodial Policy", href: "#footer" },
           { label: "Terms", href: "#footer" },
         ],
       },
@@ -1050,9 +1176,8 @@ const en: LandingCopy = {
 
 const es: LandingCopy = {
   nav: [
-    { href: "/product", label: "Producto" },
-    { href: "/card", label: "Card" },
-    { href: "/pricing", label: "Precios" },
+    { href: "#sozu-tags", label: "Tags" },
+    { href: "#cash-out", label: "Cash" },
     { href: "https://docs.sozu.capital", label: "Docs" },
   ],
   lang: {
@@ -1071,8 +1196,8 @@ const es: LandingCopy = {
   hero: {
     scrollHint: "Desliza",
     betaBadge: "Beta privado",
-    title: "Tu sistema financiero para la economía de internet",
-    body: "Cobrá global en segundos. Seguí gastos en privado. Mové plata al instante. Gestioná tus finanzas con IA.",
+    title: "Dinero online\nque te pertenece.",
+    body: "Ahorrar, enviar, retirar.\nHecho para crecer, sin erosión.",
     ctaPrimary: "Acceso anticipado",
     ctaSecondary: "Probar demo",
     stats: {
@@ -1086,7 +1211,7 @@ const es: LandingCopy = {
   },
   partners: {
     ariaLabel: "Socios institucionales",
-    heading: "Con la confianza de socios institucionales",
+    heading: "Construido con",
   },
   pathways: {
     ariaLabel: "Rutas para personas y negocios",
@@ -1469,14 +1594,112 @@ const es: LandingCopy = {
     ],
   },
   cashOut: {
-    eyebrow: "Local cuando lo necesitas",
-    title: "Salida a rieles del mundo real",
+    eyebrow: "Guardar y retirar",
+    title: "Dinero diseñado con stablecoins para resistir a la inflación.",
+    subtitle:
+      "Ahorra, retira, o pon tu plata a trabajar en piloto automático",
     description:
-      "Estado ideal: ganas y guardas en dólares digitales estables, y conviertes a moneda local cuando la vida o tus proveedores lo exigen—sin perder de vista fees ni FX.",
-    p1: "Estamos diseñando rampas y partners para que mover saldos on-system a banco o cash-out sea predecible—menos sorpresas que marketplaces P2P opacos, menos días perdidos en banca corresponsal.",
-    p2: "Si importas, vendes online o pagas nómina transfronteriza, la pregunta es siempre la misma: ¿cuánto me queda después de fees y spread? Sozu se construye para que esa respuesta sea legible, no enterrada.",
+      "Guardá dólares digitales estables, envialos al instante y retirá a rieles locales cuando necesites plata del mundo real. Hecho para que el valor crezca en vez de erosionarse en silencio.",
+    p1: "Mantené saldos on-system cuando querés crecimiento y velocidad. Pasá a banco o cash-out cuando la vida o tus proveedores exigen moneda local — con fees y FX que podés leer.",
+    p2: "Sin spreads P2P opacos. Sin cajas negras de banca corresponsal. Guardar, enviar, retirar — un solo stack de Internet Money.",
     disclaimer:
-      "La disponibilidad depende de jurisdicción, partners y compliance—iremos lanzando rampas de forma progresiva y con estados claros en producto.",
+      "La disponibilidad de rampas depende de jurisdicción, partners y compliance. Lanzamos de forma progresiva con estados claros en producto.",
+    cta: "Acceso anticipado",
+  },
+  roadmapPage: {
+    ariaLabel: "Roadmap de on-ramp y off-ramp",
+    eyebrow: "Roadmap",
+    title: "Rampas y rieles locales",
+    description:
+      "Qué ya shippeamos, qué estamos construyendo ahora y qué llega durante 2026—on-ramps, off-ramps y los partners que conectan dólares digitales estables con plata del mundo real.",
+    shipped: {
+      label: "Shippeado",
+      title: "Ya en producción",
+      description:
+        "Piezas base que hacen posibles las rampas—billetera, precios y flujos que mueven plata hoy.",
+      items: [
+        {
+          title: "Billetera no custodial y Sozu Tags",
+          body: "Guardá, enviá y recibí USDC en Stellar con identidades de pago ($tags, @handles) y transferencias P2P sin suscripción.",
+        },
+        {
+          title: "Modelo de precios transparente",
+          body: "Billetera gratis para siempre. 1% plano cuando la plata cruza rieles bancarios—costo total visible antes de confirmar cualquier rampa.",
+        },
+        {
+          title: "Recibos smart y flujos de pago",
+          body: "Comprobantes digitales automáticos, links de pago y dashboards merchant para que cada transacción quede trazable en ambos lados.",
+        },
+        {
+          title: "Waitlist y onboarding",
+          body: "Onboarding de acceso anticipado con waitlist en Supabase—la cohorte fundadora entra primero cuando abran rampas por jurisdicción.",
+        },
+        {
+          title: "Docs y arquitectura de federación",
+          body: "Documentación de federación Sozu Tags, búsqueda de disponibilidad y guías técnicas para equipos que integran sobre rieles no custodiales.",
+        },
+      ],
+    },
+    building: {
+      label: "En construcción",
+      title: "Lo que estamos armando ahora",
+      description:
+        "Ingeniería activa en el puente entre fiat y stablecoins—integraciones con partners, caminos de compliance y estados claros en producto.",
+      items: [
+        {
+          title: "Integraciones de on-ramp con partners",
+          body: "Caminos con bancos y partners de pago para convertir moneda local a USDC con fees predecibles—no spreads opacos de P2P.",
+        },
+        {
+          title: "Off-ramp a CLP y fiat local",
+          body: "Infraestructura de payout para mover saldos on-system a cuentas bancarias y puntos de cash-out en mercados soportados.",
+        },
+        {
+          title: "Rollout por jurisdicción y compliance",
+          body: "Disponibilidad progresiva de rampas con estados en producto—qué está live, qué está pendiente y qué bloquea regulación.",
+        },
+        {
+          title: "Capa de transparencia FX y fees",
+          body: "Desglose de cotizaciones que responde la pregunta real: ¿cuánto me queda después de fees, spread y costos de partner?",
+        },
+      ],
+    },
+    upcoming2026: {
+      label: "2026",
+      title: "Próximo en el año",
+      description:
+        "La siguiente ola—cobertura ampliada, rieles locales más profundos y productos que se apoyan en la infra de rampas.",
+      items: [
+        {
+          title: "Expansión multi-país de rampas",
+          body: "Desplegar on-ramps y off-ramps en Latinoamérica más allá de los corredores iniciales—según partners y compliance.",
+          timing: "H2 2026",
+        },
+        {
+          title: "On-ramp instantáneo banco → billetera",
+          body: "Pagá desde transferencia bancaria tradicional y recibí dólares digitales automáticamente—sin pasos manuales ni obligar a entender cripto.",
+          timing: "Q3 2026",
+        },
+        {
+          title: "Boleta / factura electrónica SII (Chile)",
+          body: "Alinear Smart Receipts con normas del Servicio de Impuestos Internos para que el comprobante digital calce con lo que reguladores esperan en retail.",
+          timing: "Q4 2026",
+        },
+        {
+          title: "API programática de rampas",
+          body: "Endpoints abiertos para merchants y ONGs que automaticen flujos on-ramp/off-ramp dentro de sus productos y desembolsos.",
+          timing: "Q4 2026",
+        },
+        {
+          title: "Financiamiento sobre actividad en rampas",
+          body: "Capital de trabajo y BNPL atados a cómo ya mueves plata en plataforma—crédito que sigue tu flujo de caja, no un préstamo desconectado.",
+          timing: "2026",
+        },
+      ],
+    },
+    disclaimer:
+      "Los plazos cambian según partners y reguladores. Publicamos estado live en producto y actualizamos esta página cuando shippeamos hitos.",
+    backCta: "Volver al inicio",
   },
   financing: {
     eyebrow: "Crecimiento",
@@ -1721,31 +1944,31 @@ const es: LandingCopy = {
   },
   footer: {
     brand: "SOZU",
-    copyright: "© 2026 Sozu Capital Design System v1.0",
+    copyright: "© 2026 Sozu Capital",
+    productCta: {
+      label: "Sozu Pay",
+      href: "/onboarding?product=sozupay",
+    },
     columns: [
       {
-        title: "Sistema",
+        title: "Producto",
         links: [
-          { label: "Principios", href: "#core-benefits" },
-          { label: "Whitepaper", href: "/whitepaper" },
-          { label: "Vista táctica", href: "/product#pay-receipt-flow" },
-          { label: "Motor de bóvedas", href: "/product#financing-bnpl" },
-          { label: "Sozu Tags y federación", href: "/docs/sozu-tags" },
+          { label: "Sozu Tags", href: "#sozu-tags" },
+          { label: "Guardar y retirar", href: "#cash-out" },
+          { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },
       {
-        title: "Inteligencia",
+        title: "Empezar",
         links: [
-          { label: "Seguimiento de runway", href: "#problem" },
-          { label: "Optimización de burn", href: "#cash-out" },
-          { label: "Sync API", href: "/product#pay-receipt-flow" },
+          { label: "Acceso anticipado", href: "/onboarding" },
+          { label: "Docs de Tags", href: "/docs/sozu-tags" },
         ],
       },
       {
         title: "Legal",
         links: [
           { label: "Privacidad", href: "#footer" },
-          { label: "Política no custodial", href: "#footer" },
           { label: "Términos", href: "#footer" },
         ],
       },
