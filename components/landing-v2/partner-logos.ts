@@ -14,24 +14,6 @@ export const PARTNER_LOGOS = [
     height: 124,
   },
   {
-    src: "/partners/bitcoin-design-foundation.svg",
-    alt: "Bitcoin Design Foundation",
-    href: "https://bitcoindesignfoundation.org/",
-    width: 372,
-    height: 173,
-    scale: 0.5,
-    hideOnMobile: true,
-  },
-  {
-    src: "/partners/unblck_pfp_nobg.svg",
-    alt: "Unblck",
-    href: "https://www.unblck.cl/",
-    width: 1254,
-    height: 1254,
-    scale: 0.5,
-    hideOnMobile: true,
-  },
-  {
     src: "/partners/stellar.svg",
     alt: "Stellar",
     href: "https://stellar.org/",
@@ -44,8 +26,4 @@ export type PartnerLogo = (typeof PARTNER_LOGOS)[number];
 
 export function partnerLogoScale(logo: PartnerLogo): number {
   return "scale" in logo && typeof logo.scale === "number" ? logo.scale : 1;
-}
-
-export function partnerLogoHideOnMobile(logo: PartnerLogo): boolean {
-  return "hideOnMobile" in logo && logo.hideOnMobile === true;
 }

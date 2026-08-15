@@ -10,7 +10,7 @@ type HeroActionPanelProps = {
   className?: string;
 };
 
-/** Subtitle + CTA — sticky above Tags, covered by CashOut */
+/** Subtitle + CTA — sticky above Tags, covered by CashOut (z-20). */
 export function HeroActionPanel({
   copy,
   basePath,

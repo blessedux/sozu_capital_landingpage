@@ -1146,9 +1146,9 @@ const en: LandingCopy = {
       {
         title: "Product",
         links: [
+          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Sozu Tags", href: "#sozu-tags" },
           { label: "Hold & cash out", href: "#cash-out" },
-          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },
@@ -1476,7 +1476,7 @@ const es: LandingCopy = {
     killerEyebrow: "El puente",
     killerTitle: "Alguien puede pagarte desde una transferencia bancaria tradicional mientras tú recibes dólares digitales. Automáticamente.",
     killerBody:
-      "Este es el puente entre el mundo fiat y el mundo de las stablecoins — sin forzar a los usuarios a que les importe. El on-ramping rápido y la liquidación global ocurren entre bastidores. Menos fricción, menos pagos fallidos, acceso más rápido a fondos. Ver ",
+      "Este es el puente entre el mundo fiat y el mundo de las stablecoins sin forzar a los usuarios a que les importe. El on-ramping rápido y la liquidación global ocurren entre bastidores. Menos fricción, menos pagos fallidos, acceso más rápido a fondos. Ver ",
     killerReceiptsLink: "Smart Receipts",
     killerReceiptsHref: "https://docs.sozu.capital/smart-receipts",
     killerBodyAfter: " para saber cómo ambos lados se mantienen sincronizados.",
@@ -1945,9 +1945,9 @@ const es: LandingCopy = {
       {
         title: "Producto",
         links: [
+          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Sozu Tags", href: "#sozu-tags" },
           { label: "Guardar y retirar", href: "#cash-out" },
-          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },

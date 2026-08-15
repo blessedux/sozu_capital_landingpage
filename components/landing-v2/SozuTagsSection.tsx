@@ -6,6 +6,43 @@ const TAG_EXAMPLES = ["$ben.franklin", "$cafe.noma", "importadora.cl"] as const;
 const CYAN_GLOW =
   "radial-gradient(circle, rgba(126,184,196,0.12) 0%, rgba(126,184,196,0) 70%)";
 
+/** Split on ". " keeping the period with each sentence. */
+function splitAfterPeriods(text: string): string[] {
+  const parts = text
+    .split(/(?<=\.)\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return parts.length > 0 ? parts : [text];
+}
+
+/** Mobile: one sentence per line. Desktop: natural inline flow. */
+function MobilePeriodBreaks({
+  text,
+  className,
+  as: Tag = "span",
+  id,
+}: {
+  text: string;
+  className?: string;
+  as?: "span" | "p" | "h2";
+  id?: string;
+}) {
+  const sentences = splitAfterPeriods(text);
+
+  return (
+    <Tag id={id} className={className}>
+      <span className="md:hidden">
+        {sentences.map((sentence, i) => (
+          <span key={i} className="block">
+            {sentence}
+          </span>
+        ))}
+      </span>
+      <span className="hidden md:inline">{text}</span>
+    </Tag>
+  );
+}
+
 function MustHaveCardCompact({
   title,
   body,
@@ -29,6 +66,10 @@ type Props = {
 
 export function SozuTagsSection({ copy, basePath, locale }: Props) {
   const t = copy.sozuTags;
+  const bridgeBodySentences = splitAfterPeriods(t.killerBody);
+  const bridgeBodyLead = bridgeBodySentences.slice(0, -1);
+  const bridgeBodyTail =
+    bridgeBodySentences[bridgeBodySentences.length - 1] ?? "";
 
   return (
     <section
@@ -50,12 +91,12 @@ export function SozuTagsSection({ copy, basePath, locale }: Props) {
               {t.eyebrow}
             </p>
           </div>
-          <h2
+          <MobilePeriodBreaks
+            as="h2"
             id="sozu-tags-heading"
-            className="font-display mb-6 text-4xl font-bold tracking-[-0.02em] text-foreground md:text-[56px] md:leading-[64px] text-balance"
-          >
-            {t.title}
-          </h2>
+            text={t.title}
+            className="font-display mb-6 text-4xl font-bold tracking-[-0.02em] text-foreground md:text-[56px] md:leading-[64px] md:text-balance"
+          />
           <p className="mx-auto max-w-[42rem] text-lg leading-[30px] text-muted md:text-xl">
             {t.description}
           </p>
@@ -93,21 +134,45 @@ export function SozuTagsSection({ copy, basePath, locale }: Props) {
           <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
             {t.killerEyebrow}
           </p>
-          <p className="text-lg font-semibold text-foreground text-balance md:text-xl">
-            {t.killerTitle}
-          </p>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-            {t.killerBody}
-            <a
-              href={t.killerReceiptsHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--antiquity-cyan)] hover:underline"
-            >
-              {t.killerReceiptsLink}
-            </a>
-            {t.killerBodyAfter}
-          </p>
+          <MobilePeriodBreaks
+            as="p"
+            text={t.killerTitle}
+            className="text-lg font-semibold text-foreground md:text-xl md:text-balance"
+          />
+          {/* Mobile: one sentence per line. Desktop: single flowing paragraph. */}
+          <div className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
+            <div className="md:hidden">
+              {bridgeBodyLead.map((sentence) => (
+                <span key={sentence} className="block">
+                  {sentence}
+                </span>
+              ))}
+              <span className="block">
+                {bridgeBodyTail}
+                <a
+                  href={t.killerReceiptsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--antiquity-cyan)] hover:underline"
+                >
+                  {t.killerReceiptsLink}
+                </a>
+                {t.killerBodyAfter}
+              </span>
+            </div>
+            <p className="hidden md:block">
+              {t.killerBody}
+              <a
+                href={t.killerReceiptsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--antiquity-cyan)] hover:underline"
+              >
+                {t.killerReceiptsLink}
+              </a>
+              {t.killerBodyAfter}
+            </p>
+          </div>
         </div>
       </div>
     </section>
