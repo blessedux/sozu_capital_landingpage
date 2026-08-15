@@ -41,14 +41,16 @@ export function FooterSection({ copy, basePath, lang }: Props) {
   return (
     <footer
       id="footer"
-      className="relative z-[2] border-t border-border bg-background px-6 py-20 md:px-[7.5rem]"
+      className="relative z-[2] border-t border-border bg-background px-6 pb-6 pt-20 md:flex md:min-h-0 md:flex-col md:px-[7.5rem] md:pb-3 md:pt-20"
     >
-      <div className="mx-auto flex max-w-[75rem] flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+      <div className="mx-auto flex w-full max-w-[75rem] flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-6">
           <span className="font-display text-xl font-bold tracking-[-0.02em] text-foreground">
             {copy.brand}
           </span>
-          <p className="text-sm leading-[21px] text-muted">{copy.copyright}</p>
+          <p className="text-sm leading-[21px] text-muted md:hidden">
+            {copy.copyright}
+          </p>
         </div>
 
         <nav className="flex flex-wrap gap-12" aria-label="Footer">
@@ -58,7 +60,7 @@ export function FooterSection({ copy, basePath, lang }: Props) {
 
             return (
               <div key={column.title} className="flex flex-col gap-4">
-                <p className="text-xs font-bold uppercase tracking-[0.125em] text-white">
+                <p className="text-xs font-bold uppercase tracking-[0.125em] text-foreground">
                   {column.title}
                 </p>
                 <ul className="flex flex-col gap-4">
@@ -116,6 +118,10 @@ export function FooterSection({ copy, basePath, lang }: Props) {
           })}
         </nav>
       </div>
+
+      <p className="mx-auto mt-12 hidden w-full max-w-[75rem] text-center text-xs tracking-[0.02em] text-muted md:mt-auto md:block md:pt-16">
+        Sozu Capital LLC - All Rights Reserved
+      </p>
     </footer>
   );
 }

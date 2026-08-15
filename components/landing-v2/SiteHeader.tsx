@@ -176,7 +176,7 @@ export function SiteHeader({ copy, basePath }: SiteHeaderProps) {
         ) : null}
 
         <nav
-          className="relative z-10 flex h-full flex-col justify-center gap-6 px-8 pb-16 pt-24"
+          className="relative z-10 flex h-full flex-col justify-center gap-6 px-8 pb-24 pt-24"
           aria-label="Primary"
         >
           <a
@@ -231,6 +231,10 @@ export function SiteHeader({ copy, basePath }: SiteHeaderProps) {
             {copy.header.login}
           </Link>
         </nav>
+
+        <p className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-center text-[10px] leading-tight tracking-[0.02em] text-white/80 whitespace-nowrap">
+          sozu capital llc - all rights reserved 2026
+        </p>
       </div>
 
       {/* Desktop: centered pill nav */}

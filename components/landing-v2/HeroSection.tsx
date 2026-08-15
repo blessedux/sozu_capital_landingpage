@@ -80,7 +80,7 @@ export function HeroSection({
         />
       </motion.div>
 
-      <div className="relative z-10 flex h-full w-full flex-col justify-end px-6 pb-[max(4.5rem,calc(env(safe-area-inset-bottom)+2.5rem))] pt-24 md:px-12 md:pb-8 lg:px-16">
+      <div className="relative z-10 flex h-full w-full flex-col justify-end px-6 pb-[max(5.5rem,calc(env(safe-area-inset-bottom)+2.5rem+10svh))] pt-24 md:px-12 md:pb-8 lg:px-16">
         <div className="mb-8 grid w-full grid-cols-1 items-start gap-8 md:mb-16 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="flex flex-col">
             <h1 className="font-display max-w-[14ch] whitespace-pre-line text-4xl font-bold leading-[1.05] tracking-[-0.02em] text-[#f5fbfc] sm:text-5xl lg:text-[3.75rem] lg:leading-[1.05]">
