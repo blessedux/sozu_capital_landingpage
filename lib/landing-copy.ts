@@ -360,7 +360,6 @@ export type LandingCopy = {
   footer: {
     brand: string;
     copyright: string;
-    productCta: { label: string; href: string };
     columns: { title: string; links: { label: string; href: string }[] }[];
   };
 };
@@ -619,14 +618,14 @@ const en: LandingCopy = {
     modeDomain: "Domain",
     labelTag: "Sozu Tag",
     labelDomain: "Domain handle",
-    placeholderTag: "joaquin",
+    placeholderTag: "ben.franklin",
     placeholderDomain: "cafe.noma or tienda.cl",
     hintTag: "Letters, numbers, and dots. We add the $ prefix.",
     hintDomain: "Your public handle or domain-style name (e.g. cafe.noma).",
     checking: "Checking…",
     errorGeneric: "Couldn’t check right now. Try again.",
     errorNetwork: "Network error. Try again.",
-    createWalletCta: "Create wallet",
+    createWalletCta: "Create account",
     createWalletHint: "Onboarding links your tag or domain to a non-custodial wallet.",
     examplesLabel: "Examples",
   },
@@ -1143,16 +1142,13 @@ const en: LandingCopy = {
   footer: {
     brand: "SOZU",
     copyright: "© 2026 Sozu Capital",
-    productCta: {
-      label: "Sozu Pay",
-      href: "/onboarding?product=sozupay",
-    },
     columns: [
       {
         title: "Product",
         links: [
           { label: "Sozu Tags", href: "#sozu-tags" },
           { label: "Hold & cash out", href: "#cash-out" },
+          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },
@@ -1428,14 +1424,14 @@ const es: LandingCopy = {
     modeDomain: "Dominio",
     labelTag: "Sozu Tag",
     labelDomain: "Dominio",
-    placeholderTag: "joaquin",
+    placeholderTag: "ben.franklin",
     placeholderDomain: "cafe.noma o tienda.cl",
     hintTag: "Letras, números y puntos. Nosotros agregamos el $.",
     hintDomain: "Tu handle público o estilo dominio (ej. cafe.noma).",
     checking: "Buscando…",
     errorGeneric: "No pudimos verificar ahora. Intenta de nuevo.",
     errorNetwork: "Error de red. Intenta de nuevo.",
-    createWalletCta: "Crear billetera",
+    createWalletCta: "Abrir cuenta",
     createWalletHint: "El onboarding vincula tu tag o dominio a una billetera no custodial.",
     examplesLabel: "Ejemplos",
   },
@@ -1945,16 +1941,13 @@ const es: LandingCopy = {
   footer: {
     brand: "SOZU",
     copyright: "© 2026 Sozu Capital",
-    productCta: {
-      label: "Sozu Pay",
-      href: "/onboarding?product=sozupay",
-    },
     columns: [
       {
         title: "Producto",
         links: [
           { label: "Sozu Tags", href: "#sozu-tags" },
           { label: "Guardar y retirar", href: "#cash-out" },
+          { label: "SozuPay", href: "https://pay.sozu.capital" },
           { label: "Docs", href: "https://docs.sozu.capital" },
         ],
       },

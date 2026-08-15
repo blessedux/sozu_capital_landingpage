@@ -31,7 +31,8 @@ export function LandingV2({ locale, copy }: LandingV2Props) {
       <SiteHeader copy={copy} basePath={basePath} />
       <main>
         <div className="relative">
-          <div className="pointer-events-none sticky top-0 z-[15] h-0 overflow-visible">
+          {/* Sticky CTA overlay — desktop only */}
+          <div className="pointer-events-none sticky top-0 z-[15] hidden h-0 overflow-visible md:block">
             <div className="flex h-[100svh] w-full flex-col justify-end px-6 pb-6 md:px-12 md:pb-8 lg:px-16">
               <div className="mb-12 grid w-full grid-cols-1 items-start gap-8 md:mb-16 md:grid-cols-2 md:gap-12 lg:gap-16">
                 <div className="hidden md:block" aria-hidden />
@@ -53,7 +54,11 @@ export function LandingV2({ locale, copy }: LandingV2Props) {
             </div>
           </div>
 
-          <HeroSection copy={copy.hero} partners={copy.partners} />
+          <HeroSection
+            copy={copy.hero}
+            partners={copy.partners}
+            basePath={basePath}
+          />
 
           <div className="relative z-10 dark">
             <SozuTagsSection
