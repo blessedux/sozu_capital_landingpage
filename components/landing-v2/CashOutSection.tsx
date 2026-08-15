@@ -34,10 +34,10 @@ function CashOutCopy({
   basePath: string;
 }) {
   return (
-    <div className="flex h-full min-h-[min(92svh,56rem)] items-start px-5 pt-16 sm:px-10 md:min-h-[40rem] md:items-center md:px-12 md:pt-0 xl:px-20">
+    <div className="flex h-full min-h-[min(92svh,56rem)] items-start px-5 pt-20 sm:px-10 md:min-h-[40rem] md:items-center md:px-12 md:pt-16 xl:px-20">
       <div className="mx-auto w-full max-w-[75rem]">
         <div className="max-w-xl">
-          <h2 className="font-display text-3xl font-bold tracking-[-0.02em] text-foreground md:text-[48px] md:leading-[1.1]">
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-foreground md:mt-8 md:text-[48px] md:leading-[1.1]">
             {copy.title}
           </h2>
           <p className="mt-4 max-w-xl text-lg font-medium leading-8 text-white md:text-xl md:leading-8">

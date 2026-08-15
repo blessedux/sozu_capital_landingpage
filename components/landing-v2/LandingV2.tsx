@@ -18,8 +18,9 @@ export type LandingV2Props = {
  * - Header fixed z-5 (below Tags) / z-200 when elevated on scroll-up
  * - Hero sticky z-0
  * - Action panel sticky z-15 (above Tags while scrolling past hero)
- * - Tags + Cash are static document flow (no Tags↔Cash parallax)
- * - Footer z-30 (above sticky CTA so it paints on top at the seam)
+ * - Tags z-10 (CTA stays visible over Tags)
+ * - CashOut z-20 (covers/hides sticky CTA on desktop)
+ * - Footer z-30 (above sticky CTA at the seam)
  *
  * Do not put z-index on <main> — it would trap Tags below the fixed header.
  */
@@ -66,6 +67,9 @@ export function LandingV2({ locale, copy }: LandingV2Props) {
               basePath={basePath}
               locale={locale}
             />
+          </div>
+
+          <div className="relative z-20 dark">
             <CashOutSection copy={copy.cashOut} basePath={basePath} />
           </div>
         </div>

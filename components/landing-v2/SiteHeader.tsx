@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { LandingCopy } from "@/lib/landing-copy";
 import { cn } from "@/lib/utils";
+import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
 
 type SiteHeaderProps = {
   copy: LandingCopy;
@@ -166,16 +167,7 @@ export function SiteHeader({ copy, basePath }: SiteHeaderProps) {
       >
         {open ? (
           <>
-            <video
-              src="/hero/ascii-magic-6.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/hero/digital-antiquity-agora.png"
-              className="absolute inset-0 h-full w-full object-cover object-[18s%_center]"
-              aria-hidden
-            />
+            <HeroBackgroundVideo active={open} />
             <div
               aria-hidden
               className="absolute inset-0 bg-gradient-to-t from-[rgba(11,18,24,0.85)] via-[rgba(11,18,24,0.45)] to-[rgba(11,18,24,0.35)]"
