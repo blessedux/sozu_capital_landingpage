@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogCopy } from "@/content/og";
 
 const base = "https://sozu.capital";
 
@@ -34,9 +35,8 @@ const shared: Pick<
 
 export const metadataEs: Metadata = {
   ...shared,
-  title: "SOZU CAPITAL | Dinero smart para Latinoamérica",
-  description:
-    "Dinero smart para personas y negocios en Latinoamérica: pagos y financiamiento en dólares digitales estables (USDC en Stellar)—billetera no custodial, flujos globales y crédito integrado. Cobra, paga y finánciate con menos fricción y custodia tuya.",
+  title: ogCopy.es.pageTitle,
+  description: ogCopy.es.pageDescription,
   keywords: [
     "DeFi",
     "Latinoamérica",
@@ -53,17 +53,13 @@ export const metadataEs: Metadata = {
     locale: "es_CL",
     url: base,
     siteName: "SOZU CAPITAL",
-    title: "SOZU CAPITAL | Dinero smart para Latinoamérica",
-    description:
-      "Infraestructura de pagos y financiamiento no custodial en USDC (Stellar): billetera, flujo de caja, rampas y crédito en un solo stack.",
-    images: [{ url: "/android-chrome-192x192.png", width: 192, height: 192, alt: "SOZU CAPITAL" }],
+    title: ogCopy.es.title,
+    description: ogCopy.es.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "SOZU CAPITAL | Dinero smart",
-    description:
-      "Dinero smart en Latinoamérica: Sozu—pagos USDC (Stellar) no custodial, billetera, rampas y financiamiento en un solo lugar.",
-    images: ["/android-chrome-192x192.png"],
+    title: ogCopy.es.title,
+    description: ogCopy.es.description,
     creator: "@sozucapital",
   },
   alternates: {
@@ -74,9 +70,8 @@ export const metadataEs: Metadata = {
 
 export const metadataEn: Metadata = {
   ...shared,
-  title: "SOZU CAPITAL | Smart money for Latin America",
-  description:
-    "Smart money for people and businesses in Latin America: payments and financing on stable digital dollars (USDC on Stellar)—non-custodial wallet, global flows, and integrated credit. Collect, pay, and finance with less friction and custody that stays yours.",
+  title: ogCopy.en.pageTitle,
+  description: ogCopy.en.pageDescription,
   keywords: [
     "decentralized finance",
     "Latin America",
@@ -92,17 +87,13 @@ export const metadataEn: Metadata = {
     locale: "en_US",
     url: `${base}/en`,
     siteName: "SOZU CAPITAL",
-    title: "SOZU CAPITAL | Smart money for Latin America",
-    description:
-      "Smart money for Latin America and beyond: non-custodial payments and financing on USDC (Stellar)—wallet, cash flow, ramps, and credit in one stack.",
-    images: [{ url: "/android-chrome-192x192.png", width: 192, height: 192, alt: "SOZU CAPITAL" }],
+    title: ogCopy.en.title,
+    description: ogCopy.en.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Economy of the Future | SOZU CAPITAL",
-    description:
-      "Smart money for Latin America: Sozu—non-custodial USDC (Stellar) payments, wallet, ramps, and financing in one place.",
-    images: ["/android-chrome-192x192.png"],
+    title: ogCopy.en.title,
+    description: ogCopy.en.description,
     creator: "@sozucapital",
   },
   alternates: {
